@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Martin A. Myung — Operations & Analytics Leader</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── THEME VARIABLES ── */
+    :root {
+      --ink:        #09121f;
+      --ink-lt:     #1a2638;
+      --gold:       #c4a26a;
+      --gold-dim:   rgba(196,162,106,0.15);
+      --gold-line:  rgba(196,162,106,0.28);
+      --bg:         #ffffff;
+      --bg-alt:     #fafaf9;
+      --surface:    #f2f2f0;
+      --fg:         #111827;
+      --fg-2:       #3d4f62;
+      --fg-3:       #4a5a6e;
+      --muted:      #7a8799;
+      --border:     #e8e8e4;
+      --nav-bg:     rgba(255,255,255,0.96);
+      --nav-border: #e8e8e4;
+      --title-col:  #09121f;
+    }
+
+    body.dark {
+      --bg:         #0d1829;
+      --bg-alt:     #0a1422;
+      --surface:    #0f1e30;
+      --fg:         #dde6f0;
+      --fg-2:       #8fa5bc;
+      --fg-3:       #7a95ab;
+      --muted:      #556980;
+      --border:     rgba(255,255,255,0.08);
+      --nav-bg:     rgba(9,18,31,0.97);
+      --nav-border: rgba(255,255,255,0.07);
+      --title-col:  #dde6f0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.65;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── SCROLL PROGRESS ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; z-index: 200;
+      height: 2px; width: 0;
+      background: linear-gradient(to right, var(--gold), rgba(196,162,106,0.4));
+      transition: width 0.1s linear;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--nav-border);
+      padding: 0 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    nav .logo {
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--fg); letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-right {
+      display: flex; align-items: center; gap: 2rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex; gap: 2rem;
+    }
+    nav ul a {
+      color: var(--muted);
+      text-decoration: none; font-size: 0.7rem;
+      font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative; padding-bottom: 3px;
+    }
+    nav ul a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width 0.2s ease;
+    }
+    nav ul a:hover { color: var(--fg); }
+    nav ul a:hover::after { width: 100%; }
+    .nav-actions {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .theme-toggle {
+      background: none; border: 1px solid var(--border);
+      border-radius: 50%; width: 32px; height: 32px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--muted); transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    .theme-toggle svg { width: 14px; height: 14px; }
+    .icon-moon { display: none; }
+    body.dark .icon-sun { display: none; }
+    body.dark .icon-moon { display: block; }
+    .nav-pdf {
+      background: none; border: 1px solid var(--gold-line);
+      color: var(--gold); font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.4rem 0.9rem; border-radius: 2px;
+      cursor: pointer; display: flex; align-items: center; gap: 0.4rem;
+      transition: background 0.2s, color 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .nav-pdf:hover { background: var(--gold-dim); color: var(--gold); }
+    .nav-pdf svg { width: 12px; height: 12px; }
+
+    /* ── FADE-IN ANIMATION ── */
+    .fade-in {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--ink);
+      display: flex; align-items: center;
+      padding: 110px 2.5rem 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 65% 35%, rgba(196,162,106,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 70% at 5% 85%, rgba(196,162,106,0.04) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 860px; margin: 0 auto; width: 100%;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 0.67rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--gold);
+      font-weight: 500; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 7.5vw, 5.5rem);
+      font-weight: 700; line-height: 1.0;
+      color: #fff; margin-bottom: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero-tagline {
+      font-size: 1rem; font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      max-width: 520px; margin-bottom: 2.5rem;
+      line-height: 1.85;
+    }
+    .hero-contact {
+      display: flex; flex-wrap: wrap; gap: 2rem;
+    }
+    .hero-contact a {
+      color: rgba(255,255,255,0.5); text-decoration: none;
+      font-size: 0.8rem; font-weight: 400;
+      display: flex; align-items: center; gap: 0.45rem;
+      transition: color 0.2s; letter-spacing: 0.01em;
+    }
+    .hero-contact a:hover { color: rgba(255,255,255,0.9); }
+    .hero-contact a svg { width: 13px; height: 13px; opacity: 0.5; }
+    .hero-divider {
+      width: 48px; height: 1px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin: 3rem 0;
+    }
+    .competencies-bar {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .chip {
+      border: 1px solid var(--gold-line);
+      background: var(--gold-dim);
+      color: rgba(255,255,255,0.6); font-size: 0.67rem;
+      font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem; border-radius: 2px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .chip:hover { background: rgba(196,162,106,0.28); color: rgba(255,255,255,0.88); }
+
+    /* ── STATS ── */
+    #stats {
+      background: var(--ink);
+      padding: 0 2.5rem;
+      border-top: 1px solid rgba(196,162,106,0.12);
+    }
+    .stats-inner {
+      max-width: 860px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4,1fr);
+      border-left: 1px solid rgba(196,162,106,0.12);
+    }
+    .stat {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid rgba(196,162,106,0.12);
+      transition: background 0.2s;
+    }
+    .stat:hover { background: rgba(196,162,106,0.04); }
+    .stat-number {
+      display: block;
+      font-size: 2.2rem; font-weight: 700;
+      color: var(--gold); letter-spacing: -0.04em;
+      line-height: 1; margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      display: block;
+      font-size: 0.7rem; font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      line-height: 1.5;
+    }
+    @media (max-width: 640px) {
+      .stats-inner { grid-template-columns: repeat(2,1fr); }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 110px 2.5rem; }
+    .container { max-width: 860px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.63rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--gold);
+      font-weight: 600; margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: 2.1rem; font-weight: 700;
+      color: var(--title-col); margin-bottom: 3.5rem;
+      letter-spacing: -0.04em; line-height: 1.15;
+      transition: color 0.3s;
+    }
+
+    /* ── SUMMARY ── */
+    #summary { background: var(--bg); transition: background 0.3s; }
+    .summary-text {
+      font-size: 1.05rem; font-weight: 300;
+      line-height: 1.95; max-width: 680px;
+      color: var(--fg-2); transition: color 0.3s;
+    }
+
+    /* ── HOW I WORK ── */
+    #approach { background: var(--bg-alt); transition: background 0.3s; }
+    .principles-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+    }
+    @media (max-width: 720px) { .principles-grid { grid-template-columns: 1fr; } }
+    .principle {
+      padding: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: var(--bg);
+      transition: border-color 0.25s, background 0.3s, transform 0.25s;
+    }
+    .principle:hover {
+      border-color: var(--gold-line);
+      transform: translateY(-3px);
+    }
+    .principle-number {
+      display: block;
+      font-size: 0.65rem; font-weight: 600;
+      color: var(--gold); letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+    .principle h3 {
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--title-col); letter-spacing: -0.02em;
+      margin-bottom: 0.65rem;
+      transition: color 0.3s;
+    }
+    .principle p {
+      font-size: 0.85rem; line-height: 1.75;
+      color: var(--fg-3); font-weight: 300;
+      transition: color 0.3s;
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--bg); transition: background 0.3s; }
+
+    .company-block { margin-bottom: 4rem; }
+    .company-header {
+      display: flex; align-items: baseline;
+      justify-content: space-between; flex-wrap: wrap;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--gold-line);
+      padding-bottom: 0.8rem; margin-bottom: 2rem;
+      transition: border-color 0.3s;
+    }
+    .company-name {
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--fg); letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .company-location {
+      font-size: 0.7rem; color: var(--muted);
+      font-weight: 400; letter-spacing: 0.04em;
+      transition: color 0.3s;
+    }
+
+    .role { margin-bottom: 2.25rem; }
+    .role-header {
+      display: flex; align-items: baseline;
+      justify-content: space-between; flex-wrap: wrap;
+      gap: 0.5rem; margin-bottom: 1rem;
+    }
+    .role-title {
+      font-size: 0.92rem; font-weight: 600;
+      color: var(--fg); letter-spacing: -0.01em;
+      transition: color 0.3s;
+    }
+    .role-dates {
+      font-size: 0.68rem; color: var(--muted);
+      font-weight: 400; white-space: nowrap;
+      letter-spacing: 0.06em;
+      transition: color 0.3s;
+    }
+    .role ul {
+      list-style: none; padding: 0;
+      display: flex; flex-direction: column; gap: 0.7rem;
+    }
+    .role ul li {
+      font-size: 0.875rem; line-height: 1.78;
+      color: var(--fg-3);
+      padding-left: 1.2rem; position: relative;
+      transition: color 0.3s;
+    }
+    .role ul li::before {
+      content: '';
+      position: absolute; left: 0; top: 0.65em;
+      width: 4px; height: 1px;
+      background: var(--gold);
+    }
+
+    /* ── EDUCATION & CERTS ── */
+    #education { background: var(--ink); }
+    #education .section-title { color: #fff; }
+    #education .section-label { color: var(--gold); }
+
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+    @media (max-width: 640px) { .edu-grid { grid-template-columns: 1fr; } }
+
+    .edu-block h3 {
+      font-size: 0.95rem; font-weight: 600;
+      color: rgba(255,255,255,0.88);
+      letter-spacing: -0.01em; margin-bottom: 0.45rem;
+    }
+    .edu-block p {
+      font-size: 0.82rem; color: rgba(255,255,255,0.4);
+      line-height: 1.65;
+    }
+    .edu-block .degree {
+      font-size: 0.86rem; color: rgba(255,255,255,0.65);
+      margin-bottom: 0.3rem;
+    }
+    .cert-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .cert-list li {
+      border-left: 1px solid var(--gold-line);
+      padding-left: 1.1rem;
+      transition: border-color 0.2s;
+    }
+    .cert-list li:hover { border-color: var(--gold); }
+    .cert-list li strong {
+      display: block; font-size: 0.83rem;
+      font-weight: 500; color: rgba(255,255,255,0.75);
+    }
+    .cert-list li span {
+      font-size: 0.7rem; color: rgba(255,255,255,0.3);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--bg-alt); transition: background 0.3s; }
+    .skills-group { margin-bottom: 2.25rem; }
+    .skills-group-label {
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted);
+      font-weight: 600; margin-bottom: 0.8rem;
+      transition: color 0.3s;
+    }
+    .skills-grid {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .skill-tag {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--fg-2); font-size: 0.77rem;
+      font-weight: 500; letter-spacing: 0.01em;
+      padding: 0.4rem 1rem; border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s, background 0.3s;
+    }
+    .skill-tag:hover { border-color: var(--gold-line); color: var(--fg); }
+
+    /* ── CONTACT CTA ── */
+    #contact {
+      background: var(--ink);
+      text-align: center;
+    }
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+    #contact .section-label { justify-content: center; display: block; }
+    .contact-heading {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700; color: #fff;
+      letter-spacing: -0.04em; line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .contact-sub {
+      font-size: 0.95rem; font-weight: 300;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.8; margin-bottom: 2.5rem;
+      max-width: 480px; margin-left: auto; margin-right: auto;
+    }
+    .contact-sub { margin-bottom: 2.5rem; }
+    .cta-button {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: none;
+      border: 1px solid var(--gold);
+      color: var(--gold); font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.9rem 2.2rem; border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cta-button:hover { background: var(--gold); color: var(--ink); }
+    .cta-button svg { width: 14px; height: 14px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      text-align: center; padding: 2.5rem 1rem;
+      border-top: 1px solid rgba(196,162,106,0.1);
+    }
+    footer p {
+      font-size: 0.7rem; color: rgba(255,255,255,0.18);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    footer a {
+      color: inherit; text-decoration: none;
+      border-bottom: 1px solid rgba(196,162,106,0.2);
+      padding-bottom: 1px;
+      transition: border-color 0.2s;
+    }
+    footer a:hover { border-color: var(--gold); }
+
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column; justify-content: center; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      padding: 4px; z-index: 110;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--fg);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    body.menu-open .hamburger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    body.menu-open .hamburger span:nth-child(2) { opacity: 0; }
+    body.menu-open .hamburger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 60px; left: 0; right: 0; z-index: 98;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--nav-border);
+      padding: 1.25rem 1.75rem 1.75rem;
+      flex-direction: column;
+      transition: background 0.3s;
+    }
+    body.menu-open .mobile-menu { display: flex; }
+    .mobile-menu nav-links { display: flex; flex-direction: column; }
+    .mobile-menu a {
+      color: var(--fg); text-decoration: none;
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-menu-actions {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding-top: 1.25rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      /* Nav */
+      .hamburger { display: flex; }
+      nav ul { display: none; }
+      .nav-actions { display: none; }
+      nav { padding: 0 1.5rem; }
+
+      /* Hero */
+      .hero { padding: 90px 1.5rem 60px; min-height: auto; }
+      .hero-divider { margin: 2rem 0; }
+      .hero-contact { gap: 1.1rem; flex-direction: column; }
+
+      /* Stats */
+      #stats { padding: 0; }
+      .stat { padding: 1.6rem 1.25rem; }
+      .stat-number { font-size: 1.75rem; }
+      .stat-label { font-size: 0.65rem; }
+
+      /* Sections */
+      section { padding: 65px 1.5rem; }
+
+      /* Principles */
+      .principle { padding: 1.5rem; }
+
+      /* Contact */
+      .contact-heading { font-size: 2rem; }
+      .contact-sub { font-size: 0.875rem; }
+
+      /* Role header stacks nicely */
+      .role-header { flex-direction: column; gap: 0.2rem; }
+      .company-header { flex-direction: column; gap: 0.25rem; }
+
+      /* Education */
+      .edu-grid { gap: 2.5rem; }
+
+      /* Footer */
+      footer { padding: 2rem 1rem; }
+    }
+
+    @media (max-width: 400px) {
+      .hero h1 { letter-spacing: -0.03em; }
+      .stat-number { font-size: 1.5rem; }
+      .cta-button { padding: 0.8rem 1.5rem; font-size: 0.72rem; }
+    }
+
+    /* ── PRINT STYLESHEET (targets 2 pages) ── */
+    @media print {
+      @page { size: letter; margin: 0.55in 0.7in; }
+
+      /* Hide everything web-only */
+      #progress-bar, nav, .mobile-menu, #stats, #approach,
+      #contact, footer, .hero-tagline, .competencies-bar,
+      .hero-divider, .section-label { display: none !important; }
+
+      /* Base reset */
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .fade-in { opacity: 1 !important; transform: none !important; }
+      body { background: #fff !important; color: #111 !important;
+             font-size: 8pt; line-height: 1.4; }
+
+      /* ── HEADER (was hero) ── */
+      .hero {
+        min-height: unset !important;
+        background: #fff !important;
+        padding: 0 0 0.2in !important;
+        border-bottom: 1.5pt solid #09121f;
+        margin-bottom: 0.18in;
+      }
+      .hero::before { display: none !important; }
+      .hero-inner { max-width: 100% !important; }
+      .hero-eyebrow {
+        font-size: 7pt !important; color: #c4a26a !important;
+        margin-bottom: 4pt !important;
+      }
+      .hero h1 {
+        font-size: 20pt !important; color: #09121f !important;
+        margin-bottom: 6pt !important; letter-spacing: -0.02em;
+      }
+      .hero-contact { flex-direction: row !important; gap: 1.2rem !important; flex-wrap: wrap; }
+      .hero-contact a { color: #444 !important; font-size: 7.5pt !important; }
+      .hero-contact a svg { display: none !important; }
+
+      /* ── SECTIONS ── */
+      section { padding: 0.12in 0 !important; }
+      .container { max-width: 100% !important; padding: 0 !important; }
+
+      .section-title {
+        font-size: 9.5pt !important; font-weight: 700;
+        color: #09121f !important; letter-spacing: 0.06em;
+        text-transform: uppercase; margin-bottom: 0.1in !important;
+        border-bottom: 0.5pt solid #ddd; padding-bottom: 3pt;
+      }
+
+      /* ── SUMMARY ── */
+      #summary { padding: 0.1in 0 !important; }
+      .summary-text {
+        font-size: 7.5pt !important; line-height: 1.45 !important;
+        color: #333 !important; max-width: 100% !important;
+      }
+
+      /* ── EXPERIENCE ── */
+      #experience { padding: 0.1in 0 !important; background: #fff !important; }
+      .company-block { margin-bottom: 0.1in !important; page-break-inside: avoid; }
+      .company-header {
+        border-bottom: 0.5pt solid #c4a26a !important;
+        padding-bottom: 2pt !important; margin-bottom: 5pt !important;
+      }
+      .company-name {
+        font-size: 7pt !important; font-weight: 700;
+        color: #09121f !important; letter-spacing: 0.08em;
+      }
+      .company-location { font-size: 6.5pt !important; color: #888 !important; }
+      .role { margin-bottom: 6pt !important; }
+      .role-header { margin-bottom: 3pt !important; flex-direction: row !important; }
+      .role-title { font-size: 8pt !important; color: #09121f !important; font-weight: 600; }
+      .role-dates { font-size: 7pt !important; color: #777 !important; }
+      .role ul { gap: 2pt !important; }
+      .role ul li {
+        font-size: 7.5pt !important; line-height: 1.38 !important;
+        color: #333 !important; padding-left: 0.8rem !important;
+      }
+      .role ul li::before { top: 0.55em !important; width: 3px !important; }
+
+      /* Limit bullets: recent roles get more, older get fewer */
+      /* Hilton (1st): all 6  — Sensei (2nd): 3  — all others: 2 */
+      .company-block:nth-child(2) .role ul li:nth-child(n+4) { display: none !important; }
+      .company-block:nth-child(n+3) .role ul li:nth-child(n+3) { display: none !important; }
+
+      /* ── EDUCATION ── */
+      #education {
+        background: #f7f7f7 !important;
+        padding: 0.1in 0.15in !important;
+        margin: 0 -0.15in;
+      }
+      #education .section-title { color: #09121f !important; }
+      .edu-grid { gap: 1.5rem !important; grid-template-columns: 1fr 1fr !important; }
+      .edu-block h3 { font-size: 8pt !important; color: #09121f !important; margin-bottom: 2pt !important; }
+      .edu-block .degree { font-size: 7.5pt !important; color: #444 !important; }
+      .edu-block p { font-size: 7pt !important; color: #777 !important; }
+      .cert-list { gap: 5pt !important; }
+      .cert-list li { padding-left: 7pt !important; }
+      .cert-list li strong { font-size: 7.5pt !important; color: #09121f !important; }
+      .cert-list li span { font-size: 6.5pt !important; color: #888 !important; }
+
+      /* ── SKILLS ── */
+      #skills { padding: 0.1in 0 !important; background: #fff !important; }
+      .skills-group { margin-bottom: 6pt !important; }
+      .skills-group-label { font-size: 6pt !important; margin-bottom: 4pt !important; }
+      .skills-grid { gap: 3pt !important; }
+      .skill-tag {
+        font-size: 6.5pt !important; padding: 2pt 5pt !important;
+        background: #f5f5f5 !important; border-color: #ddd !important;
+        color: #333 !important; border-radius: 1px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Martin A. Myung</div>
+  <div class="nav-right">
+    <ul>
+      <li><a href="#summary">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+      <button class="nav-pdf" onclick="window.print()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Resume
+      </button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#summary"    onclick="closeMenu()">About</a>
+  <a href="#experience" onclick="closeMenu()">Experience</a>
+  <a href="#education"  onclick="closeMenu()">Education</a>
+  <a href="#skills"     onclick="closeMenu()">Skills</a>
+  <a href="#contact"    onclick="closeMenu()">Contact</a>
+  <div class="mobile-menu-actions">
+    <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+    <button class="nav-pdf" onclick="window.print(); closeMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Resume
+    </button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <p class="hero-eyebrow fade-in">Operations &amp; Analytics Leader · Los Angeles, CA</p>
+    <h1 class="fade-in">Martin A. <span>Myung</span></h1>
+    <p class="hero-tagline fade-in">
+      Hospitality analytics and operations leader with 10+ years driving performance across luxury hotels —
+      currently optimizing revenue, labor, and guest metrics across two major Hilton properties.
+    </p>
+    <div class="hero-contact fade-in">
+      <a href="tel:4356023106">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        435-602-3106
+      </a>
+      <a href="mailto:martin.myung@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        martin.myung@gmail.com
+      </a>
+      <a href="https://www.linkedin.com/in/martin-myung" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        linkedin.com/in/martin-myung
+      </a>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="competencies-bar fade-in">
+      <span class="chip">Leadership</span>
+      <span class="chip">Customer Service</span>
+      <span class="chip">Budget Management</span>
+      <span class="chip">Project Management</span>
+      <span class="chip">Data Analysis</span>
+      <span class="chip">Technology</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stats-inner">
+    <div class="stat fade-in">
+      <span class="stat-number">10+</span>
+      <span class="stat-label">Years Leading Teams</span>
+    </div>
+    <div class="stat fade-in">
+      <span class="stat-number">$8M+</span>
+      <span class="stat-label">Procurement Managed</span>
+    </div>
+    <div class="stat fade-in">
+      <span class="stat-number">400+</span>
+      <span class="stat-label">Rooms Pre-Opened</span>
+    </div>
+    <div class="stat fade-in">
+      <span class="stat-number">70+</span>
+      <span class="stat-label">Staff Led</span>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<section id="summary">
+  <div class="container">
+    <p class="section-label">Profile</p>
+    <h2 class="section-title fade-in">About Me</h2>
+    <p class="summary-text fade-in">
+      I'm an operations and analytics leader with 10+ years of experience building teams, designing
+      performance systems, and driving results in complex, high-service environments. Currently overseeing
+      performance analytics across two large properties, I specialize in translating data into clear
+      decisions — from revenue optimization and labor efficiency to cross-departmental reporting and
+      variance analysis. I'm passionate about closing performance gaps, developing people, and building
+      scalable systems. My background spans pre-launch operations, P&amp;L ownership, training program
+      design, and multi-site analytics, giving me a perspective that's both strategically broad and
+      deeply hands-on.
+    </p>
+  </div>
+</section>
+
+<!-- HOW I WORK -->
+<section id="approach">
+  <div class="container">
+    <p class="section-label">Philosophy</p>
+    <h2 class="section-title fade-in">How I Work</h2>
+    <div class="principles-grid">
+      <div class="principle fade-in">
+        <span class="principle-number">01</span>
+        <h3>Data Before Decisions</h3>
+        <p>Recommendations should be anchored in numbers. I root every operational and financial suggestion in actual performance data — not instinct, not convention.</p>
+      </div>
+      <div class="principle fade-in">
+        <span class="principle-number">02</span>
+        <h3>Systems Over Heroics</h3>
+        <p>Good operations don't rely on one person working harder. I build scalable processes and documentation so teams perform consistently, regardless of who's in the room.</p>
+      </div>
+      <div class="principle fade-in">
+        <span class="principle-number">03</span>
+        <h3>Develop People Deliberately</h3>
+        <p>Talent development is an operational function, not an afterthought. I treat career planning as seriously as budget planning — because the two are inseparable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="section-label">Career</p>
+    <h2 class="section-title fade-in">Experience</h2>
+
+    <div class="company-block fade-in">
+      <div class="company-header">
+        <span class="company-name">Hilton Anaheim &amp; Hilton Los Angeles Airport</span>
+        <span class="company-location">Anaheim &amp; Los Angeles, CA</span>
+      </div>
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Complex Hotel Performance Analytics Manager</span>
+          <span class="role-dates">Jun 2024 – Present</span>
+        </div>
+        <ul>
+          <li>Oversee performance analytics for two large full-service Hilton properties, providing leadership with the data and insights needed to make informed operational and financial decisions.</li>
+          <li>Build and maintain dashboards tracking key hotel metrics including RevPAR, ADR, occupancy, labor cost, and cost per occupied room, used in regular P&amp;L reviews and forecasting cycles.</li>
+          <li>Analyze trends across departments to identify performance gaps and opportunities, translating findings into actionable recommendations for department heads and senior leadership.</li>
+          <li>Partner with Revenue Management, Finance, and Operations teams to align reporting cadence and ensure data accuracy and consistency across both properties.</li>
+          <li>Support budget planning and variance analysis, helping leaders understand performance drivers and course-correct in real time.</li>
+          <li>Develop standardized reporting tools and processes that reduce manual work and improve the speed and reliability of performance data across the complex.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="company-block fade-in">
+      <div class="company-header">
+        <span class="company-name">Sensei Porcupine Creek</span>
+        <span class="company-location">Rancho Mirage, CA</span>
+      </div>
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Special Events &amp; Operations Manager — Task Force</span>
+          <span class="role-dates">Mar 2023 – May 2023</span>
+        </div>
+        <ul>
+          <li>Coordinated between sales and catering to maximize function space utilization and revenue; standardized procedures for group contracts and Banquet Event Orders across all upcoming events.</li>
+          <li>Managed client relationships end-to-end from post-contract through billing, executing all event details with precision — resulting in at least one client rebooking and bringing an additional group.</li>
+          <li>Oversaw food and beverage operations, collaborating with servers, bartenders, and the culinary team to deliver an excellent guest experience.</li>
+          <li>Implemented a wine and spirits inventory management system that established optimal par levels, reduced stockouts, improved guest satisfaction, and lowered cost of goods — a model subsequently adopted by other departments.</li>
+          <li>Built a centralized digital resource hub in Asana, streamlining onboarding for new hires and upskilling existing staff on key administrative, collaborative, and people management tools.</li>
+          <li>Developed the company's goal-setting framework from scratch, aligning 2023 objectives and enabling progress tracking — later replicated across all locations, saving significant time and resources.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="company-block fade-in">
+      <div class="company-header">
+        <span class="company-name">Fairmont Century Plaza</span>
+        <span class="company-location">Los Angeles, CA</span>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Director of Training &amp; Development</span>
+          <span class="role-dates">May 2022 – Nov 2022</span>
+        </div>
+        <ul>
+          <li>Redesigned the onboarding program to improve content quality and new-hire experience while reducing time-to-productivity.</li>
+          <li>Partnered with department heads and senior executives to identify learning gaps and align training initiatives with hotel business goals.</li>
+          <li>Delivered professional development programs — both in-person and virtual — for leaders across multiple hotels in North and Central America.</li>
+          <li>Built the 2023 Training &amp; Development budget, encompassing talent acquisition, employee benefits, and employee relations.</li>
+          <li>Led the simultaneous rollout of a new internal communications platform across two hotels, replacing fragmented workflows with a unified system.</li>
+          <li>Partnered with regional leadership to identify high-potential talent, assess skill levels, and evaluate readiness for advancement.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Director of Rooms — Back of House Operations</span>
+          <span class="role-dates">Dec 2021 – Apr 2022</span>
+        </div>
+        <ul>
+          <li>Owned full operational and budgetary responsibility for Housekeeping &amp; Laundry, Security, Residences, and Royal Service &amp; Reservations.</li>
+          <li>Created career development plans for 11 department leaders, directly contributing to recent promotions and salary increases.</li>
+          <li>Designed and delivered training on the Emergency Management Plan, with a focused module on cybersecurity risk mitigation.</li>
+          <li>Collaborated with the labor relations legal team to help successfully negotiate a collective bargaining agreement.</li>
+          <li>Launched preventative maintenance routines for public spaces and guest rooms.</li>
+          <li>Trained leaders on P&amp;L forecasting and monthly financial reviews, optimizing Excel reporting tools to improve accuracy and consistency month-over-month.</li>
+          <li>Partnered with a third-party vendor to develop a custom telephone agent training program focused on signature touchpoints and value propositions, leading to increased conversion rates and upsell revenue.</li>
+          <li>Contributed to committees advancing safer work practices, emergency preparedness, and corporate sustainability initiatives.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Director of Housekeeping</span>
+          <span class="role-dates">Oct 2019 – Dec 2021</span>
+        </div>
+        <ul>
+          <li>Core member of the pre-opening team for a property comprising 400 guest rooms, 63 branded residential condos, 25,000 sq. ft. of event space, and a 14,000 sq. ft. spa.</li>
+          <li>Built the Housekeeping department from the ground up — systems, processes, and team — reducing costs while elevating the guest experience.</li>
+          <li>Recruited, trained, and managed 6 leaders overseeing 70 staff; wrote job descriptions, facilitated onboarding, built career plans, and mentored leaders.</li>
+          <li>Authored comprehensive training manuals, SOPs, and standards of conduct for Housekeeping, Laundry, and overnight cleaning operations.</li>
+          <li>Championed the adoption of RFID technology to track uniform and linen inventory.</li>
+          <li>Restructured the team's OS&amp;E budget and supply inventory to account for new COVID-19 risks, updating corporate SOPs accordingly.</li>
+          <li>Collaborated with general contractors, project managers, and hotel designers via Bluebeam to ensure accurate, on-time turnover.</li>
+          <li>Oversaw purchasing and receiving of hotel goods exceeding $8M, working closely with procurement professionals.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="company-block fade-in">
+      <div class="company-header">
+        <span class="company-name">Montage Beverly Hills</span>
+        <span class="company-location">Beverly Hills, CA</span>
+      </div>
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Director of Housekeeping</span>
+          <span class="role-dates">May 2018 – Sep 2019</span>
+        </div>
+        <ul>
+          <li>Led housekeeping and in-house laundry operations for a 202-room Forbes 5-Star hotel in the heart of Beverly Hills.</li>
+          <li>Improved room attendant productivity by 0.08 hours per unit by redistributing workload based on historical data analysis.</li>
+          <li>Overhauled the guest incident tracking and reporting process, implementing standardized audits that produced consistent reporting and faster resolution times.</li>
+          <li>Built a productivity dashboard tracking departmental output, wages, budget, and cost per occupied room — an invaluable tool for P&amp;L reviews, forecasting, and annual budgeting.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="company-block fade-in">
+      <div class="company-header">
+        <span class="company-name">InterContinental Los Angeles Downtown</span>
+        <span class="company-location">Los Angeles, CA</span>
+      </div>
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Assistant Director of Housekeeping</span>
+          <span class="role-dates">Jul 2017 – May 2018</span>
+        </div>
+        <ul>
+          <li>Developed a staffing model and organizational structure for an 889-room housekeeping operation.</li>
+          <li>Led the training and system conversion to REX and HotSOS Mobile.</li>
+          <li>Conducted weekly leadership meetings to align objectives, mentor managers, and drive follow-through.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="company-block fade-in">
+      <div class="company-header">
+        <span class="company-name">Montage Deer Valley</span>
+        <span class="company-location">Park City, UT</span>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Assistant Director of Housekeeping</span>
+          <span class="role-dates">Jan 2016 – Jul 2017</span>
+        </div>
+        <ul>
+          <li>Managed labor, productivity, performance, and budget in strict alignment with Montage International service standards and leading hotel rating organizations.</li>
+          <li>Played a key role in planning and executing a $5M soft-goods renovation, requiring cross-functional coordination at scale.</li>
+          <li>Authored monthly, quarterly, and year-end financial statements for the executive committee.</li>
+          <li>Task-forced at Montage Palmetto Bluff for 8 weeks during a rebranding effort, supporting the addition of a 150-room hotel on a 20,000-acre community.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Guest Reception / Front Desk Manager</span>
+          <span class="role-dates">Jun 2014 – Dec 2015</span>
+        </div>
+        <ul>
+          <li>Managed day-to-day front desk operations.</li>
+          <li>Rewrote the training manual to incorporate brand and third-party service standards.</li>
+          <li>Authored the department's labor and expense budget.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <span class="role-title">Housekeeping Manager</span>
+          <span class="role-dates">Feb 2011 – Jun 2014</span>
+        </div>
+        <ul>
+          <li>Created a 10-day training manual covering standards, safety, job processes, and step-by-step learning for every department position, including a dedicated revision for department trainers.</li>
+          <li>Introduced new systems and structure to Housekeeping and residential operations, significantly improving organization and efficiency.</li>
+          <li>Led the adoption of the OnTrack labor management system, training department heads across the Rooms division and establishing the forecast and budget formulas used in the platform.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EDUCATION & CERTIFICATIONS -->
+<section id="education">
+  <div class="container">
+    <p class="section-label">Background</p>
+    <h2 class="section-title fade-in">Education &amp; Certifications</h2>
+    <div class="edu-grid">
+      <div class="edu-block fade-in">
+        <h3>California State Polytechnic University, Pomona</h3>
+        <p class="degree">B.S. in Hotel &amp; Restaurant Management</p>
+        <p>The Collins School of Hospitality Management</p>
+      </div>
+      <div class="fade-in">
+        <ul class="cert-list">
+          <li>
+            <strong>Developing Managers in Organizations</strong>
+            <span>LinkedIn Learning · August 2022</span>
+          </li>
+          <li>
+            <strong>Employee Experience</strong>
+            <span>LinkedIn Learning · August 2022</span>
+          </li>
+          <li>
+            <strong>HR as a Business Partner</strong>
+            <span>LinkedIn Learning · August 2022</span>
+          </li>
+          <li>
+            <strong>Human Resources: Running Company Onboarding</strong>
+            <span>LinkedIn Learning · August 2022</span>
+          </li>
+          <li>
+            <strong>Responsible Beverage Service</strong>
+            <span>CA Dept. of Alcoholic Beverage Control · June 2022</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label">Tools &amp; Technology</p>
+    <h2 class="section-title fade-in">Skills</h2>
+
+    <div class="skills-group fade-in">
+      <p class="skills-group-label">Analytics &amp; Reporting</p>
+      <div class="skills-grid">
+        <span class="skill-tag">Microsoft Excel</span>
+        <span class="skill-tag">Power BI</span>
+        <span class="skill-tag">Data Analysis</span>
+        <span class="skill-tag">P&amp;L Reporting</span>
+        <span class="skill-tag">Budgeting &amp; Forecasting</span>
+      </div>
+    </div>
+
+    <div class="skills-group fade-in">
+      <p class="skills-group-label">Property Management &amp; Operations</p>
+      <div class="skills-grid">
+        <span class="skill-tag">Opera PMS</span>
+        <span class="skill-tag">HotSOS / HotSOS Mobile</span>
+        <span class="skill-tag">OnTrack &amp; Unifocus</span>
+        <span class="skill-tag">Bluebeam</span>
+      </div>
+    </div>
+
+    <div class="skills-group fade-in">
+      <p class="skills-group-label">HR, Talent &amp; Workforce</p>
+      <div class="skills-grid">
+        <span class="skill-tag">Workday</span>
+        <span class="skill-tag">Dayforce</span>
+        <span class="skill-tag">ADP</span>
+        <span class="skill-tag">Greenhouse</span>
+        <span class="skill-tag">HireVue</span>
+      </div>
+    </div>
+
+    <div class="skills-group fade-in">
+      <p class="skills-group-label">Productivity &amp; Collaboration</p>
+      <div class="skills-grid">
+        <span class="skill-tag">Microsoft 365</span>
+        <span class="skill-tag">Google Workspace</span>
+        <span class="skill-tag">Asana</span>
+        <span class="skill-tag">Slack</span>
+        <span class="skill-tag">Zoom</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT CTA -->
+<section id="contact">
+  <div class="contact-inner fade-in">
+    <p class="section-label">Get in Touch</p>
+    <h2 class="contact-heading">Open to new opportunities.</h2>
+    <p class="contact-sub">
+      Whether you're looking for an operations leader, an analytics partner, or someone who bridges both —
+      I'd love to connect.
+    </p>
+    <a href="mailto:martin.myung@gmail.com" class="cta-button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Send a Message
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>Martin A. Myung · Los Angeles, CA · <a href="mailto:martin.myung@gmail.com">martin.myung@gmail.com</a></p>
+</footer>
+
+<script>
+  // ── THEME TOGGLE ──
+  function applyTheme(dark) {
+    document.body.classList.toggle('dark', dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  }
+  if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    applyTheme(!document.body.classList.contains('dark'));
+  });
+  document.getElementById('themeToggleMobile').addEventListener('click', () => {
+    applyTheme(!document.body.classList.contains('dark'));
+  });
+
+  // ── HAMBURGER ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.body.classList.toggle('menu-open');
+  });
+  function closeMenu() {
+    document.body.classList.remove('menu-open');
+  }
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('nav') && !e.target.closest('.mobile-menu')) {
+      closeMenu();
+    }
+  });
+
+  // ── SCROLL PROGRESS ──
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (scrolled / total * 100) + '%';
+  }, { passive: true });
+
+  // ── FADE-IN ON SCROLL ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Trigger hero elements immediately
+  document.querySelectorAll('.hero .fade-in').forEach(el => {
+    setTimeout(() => el.classList.add('visible'), 100);
+  });
+</script>
+
+</body>
+</html>
