@@ -421,6 +421,106 @@
     }
     .skill-tag:hover { border-color: var(--gold-line); color: var(--fg); }
 
+    /* ── FEATURED WORK ── */
+    #work { background: var(--bg); transition: background 0.3s; }
+    .work-grid {
+      display: flex; flex-direction: column; gap: 3rem;
+    }
+    .work-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.25s, background 0.3s;
+      background: var(--bg);
+    }
+    .work-card:hover { border-color: var(--gold-line); }
+    .work-card-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 1.5rem;
+      padding: 1.75rem 2rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      transition: border-color 0.3s;
+    }
+    .work-tag {
+      display: inline-block;
+      font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold-line);
+      padding: 0.2rem 0.6rem; border-radius: 2px;
+      margin-bottom: 0.6rem;
+    }
+    .work-card-header h3 {
+      font-size: 1rem; font-weight: 700;
+      color: var(--title-col); letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+      transition: color 0.3s;
+    }
+    .work-card-header p {
+      font-size: 0.85rem; color: var(--fg-3);
+      line-height: 1.65; max-width: 560px;
+      transition: color 0.3s;
+    }
+    .work-open-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: var(--gold); text-decoration: none;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border: 1px solid var(--gold-line);
+      padding: 0.5rem 1rem; border-radius: 2px;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .work-open-btn:hover { background: var(--gold-dim); }
+    .work-open-btn svg { width: 12px; height: 12px; }
+
+    /* Browser chrome frame */
+    .work-preview {
+      background: var(--bg-alt);
+      transition: background 0.3s;
+    }
+    .browser-bar {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.6rem 1rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .browser-dots {
+      display: flex; gap: 5px; flex-shrink: 0;
+    }
+    .browser-dots span {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--border);
+    }
+    .browser-dots span:nth-child(1) { background: #ff5f57; }
+    .browser-dots span:nth-child(2) { background: #febc2e; }
+    .browser-dots span:nth-child(3) { background: #28c840; }
+    .browser-url {
+      font-size: 0.72rem; color: var(--muted);
+      letter-spacing: 0.02em; truncate: ellipsis;
+    }
+    .work-preview iframe {
+      width: 100%; height: 480px;
+      border: none; display: block;
+    }
+
+    /* Placeholder card */
+    .work-preview--placeholder {
+      height: 200px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .work-preview--placeholder p {
+      font-size: 0.78rem; color: var(--muted);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      .work-card-header { padding: 1.25rem 1.25rem; }
+      .work-preview iframe { height: 360px; }
+    }
+
     /* ── CONTACT CTA ── */
     #contact {
       background: var(--ink);
@@ -687,6 +787,7 @@
       <li><a href="#experience">Experience</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#skills">Skills</a></li>
+      <li><a href="#work">Work</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-actions">
@@ -711,6 +812,7 @@
   <a href="#experience" onclick="closeMenu()">Experience</a>
   <a href="#education"  onclick="closeMenu()">Education</a>
   <a href="#skills"     onclick="closeMenu()">Skills</a>
+  <a href="#work"       onclick="closeMenu()">Work</a>
   <a href="#contact"    onclick="closeMenu()">Contact</a>
   <div class="mobile-menu-actions">
     <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">
@@ -1101,6 +1203,53 @@
         <span class="skill-tag">Slack</span>
         <span class="skill-tag">Zoom</span>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED WORK -->
+<section id="work">
+  <div class="container">
+    <p class="section-label">Portfolio</p>
+    <h2 class="section-title fade-in">Featured Work</h2>
+    <div class="work-grid">
+
+      <!-- Presheet Tool -->
+      <div class="work-card fade-in">
+        <div class="work-card-header">
+          <div>
+            <span class="work-tag">Live Tool</span>
+            <h3>Hilton Anaheim — Daily Pre-Sheet</h3>
+            <p>Replaced a manual, handwritten daily presheet process across both properties — reducing team preparation time by 80%. Built using prompt engineering and generative AI to convert an Excel-based workflow into a fully interactive web application.</p>
+          </div>
+          <a href="presheet-tool.html" target="_blank" class="work-open-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open Tool
+          </a>
+        </div>
+        <div class="work-preview">
+          <div class="browser-bar">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <span class="browser-url">Hilton Anaheim – Daily Pre-Sheet</span>
+          </div>
+          <iframe src="presheet-tool.html" title="Hilton Anaheim Daily Pre-Sheet Tool" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <!-- F&B Forecast Tool — placeholder -->
+      <div class="work-card fade-in">
+        <div class="work-card-header">
+          <div>
+            <span class="work-tag">Coming Soon</span>
+            <h3>F&amp;B Forecasting Tool</h3>
+            <p>A multi-source forecasting tool used by hotel management for weekly scheduling, monthly forecasts, and annual budgets across F&amp;B outlets. Pulls live data to project revenue, covers, and average check — improving forecast accuracy and enabling teams to schedule appropriately for business demand. Currently live at one property, with a roadmap to scale across both.</p>
+          </div>
+        </div>
+        <div class="work-preview work-preview--placeholder">
+          <p>Preview coming soon</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>

@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Hilton Anaheim – Daily Pre-Sheet</title>
+<style>
+:root {
+  --font-ui: "Segoe UI", Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --bg-page:       #e8e4dc;
+  --bg-nav:        #003087;
+  --nav-text:      rgba(255,255,255,0.75);
+  --nav-active:    #f0c040;
+  --pad-bg:        #fefae8;
+  --pad-line:      #b8d0e8;
+  --pad-margin:    #e05555;
+  --pad-binding:   #e0cc78;
+  --pad-shadow:    rgba(0,0,0,0.18);
+  --ink:           #1a1a2e;
+  --ink-secondary: #2a3a6a;
+  --ink-muted:     #6a7a9a;
+  --hilton-blue:   #003087;
+  --hilton-gold:   #b5922a;
+  --border:        #d0d8e8;
+  --surface:       #ffffff;
+  --surface-alt:   #f6f8fc;
+  --input-border:  rgba(0,0,0,0.22);
+  --input-focus:   #003087;
+  --dropdown-bg:   #ffffff;
+  --dropdown-border:#003087;
+  --row-hover:     rgba(181,146,42,0.07);
+  --tag-gf-bg:#d4edda; --tag-gf-fg:#1a7a35;
+  --tag-v-bg: #d1ecf1; --tag-v-fg: #0a7a8a;
+  --tag-vg-bg:#e8dcf8; --tag-vg-fg:#5a20b0;
+  --tag-df-bg:#fff3cd; --tag-df-fg:#c06000;
+  --btn-ghost-border: #003087;
+  --btn-ghost-color:  #003087;
+  --modal-bg:     #ffffff;
+  --confirm-bg:   #ffffff;
+  --table-head:   #003087;
+  --table-head-fg:#ffffff;
+  --db-row-hover: #f8f9ff;
+  --scroll-track: #f0f0f0;
+  --scroll-thumb: #c0c8d8;
+}
+
+[data-theme="dark"] {
+  --bg-page:       #111827;
+  --bg-nav:        #0a1628;
+  --nav-text:      rgba(255,255,255,0.65);
+  --nav-active:    #f0c040;
+  --pad-bg:        #1e2a3a;
+  --pad-line:      #2a3d52;
+  --pad-margin:    #c04444;
+  --pad-binding:   #253520;
+  --pad-shadow:    rgba(0,0,0,0.5);
+  --ink:           #e8eaf0;
+  --ink-secondary: #a8c0d8;
+  --ink-muted:     #6a8aaa;
+  --hilton-blue:   #4a80d0;
+  --hilton-gold:   #d4aa44;
+  --border:        #2a3a50;
+  --surface:       #1a2535;
+  --surface-alt:   #1e2d40;
+  --input-border:  rgba(255,255,255,0.18);
+  --input-focus:   #4a80d0;
+  --dropdown-bg:   #1e2d40;
+  --dropdown-border:#4a80d0;
+  --row-hover:     rgba(74,128,208,0.08);
+  --tag-gf-bg:#1a3a22; --tag-gf-fg:#5ad080;
+  --tag-v-bg: #0d2a30; --tag-v-fg: #40c0d0;
+  --tag-vg-bg:#1e1440; --tag-vg-fg:#9a70e0;
+  --tag-df-bg:#2a200a; --tag-df-fg:#d09040;
+  --btn-ghost-border: #4a80d0;
+  --btn-ghost-color:  #8ab4e8;
+  --modal-bg:     #1e2d40;
+  --confirm-bg:   #1e2d40;
+  --table-head:   #0a1e38;
+  --table-head-fg:#c8d8f0;
+  --db-row-hover: #1e2d42;
+  --scroll-track: #1a2535;
+  --scroll-thumb: #2a3d52;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-page);
+  min-height: 100vh;
+  color: var(--ink);
+  transition: background 0.25s, color 0.25s;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--scroll-track); }
+::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 4px; }
+
+/* ── NAV ── */
+nav {
+  background: var(--bg-nav);
+  display: flex;
+  align-items: center;
+  padding: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background 0.25s;
+}
+.nav-brand {
+  padding: 13px 24px;
+  color: var(--nav-active);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  white-space: nowrap;
+}
+.nav-tabs { display: flex; flex: 1; }
+.nav-tab {
+  padding: 13px 22px;
+  color: var(--nav-text);
+  cursor: pointer;
+  font-size: 0.87rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all 0.18s;
+  border-bottom: 3px solid transparent;
+  text-decoration: none;
+  display: flex; align-items: center; gap: 5px;
+}
+.nav-tab:hover { color: #fff; background: rgba(255,255,255,0.07); }
+.nav-tab.active { color: var(--nav-active); border-bottom-color: var(--nav-active); background: rgba(255,255,255,0.05); }
+
+.nav-actions { display: flex; align-items: center; gap: 8px; margin-right: 14px; }
+.nav-action-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  border-radius: 18px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  display: flex; align-items: center; gap: 5px;
+  transition: background 0.18s;
+  white-space: nowrap;
+}
+.nav-action-btn:hover { background: rgba(255,255,255,0.2); }
+
+/* ── PAGES ── */
+.page { display: none; padding: 26px 20px 60px; max-width: 1100px; margin: 0 auto; }
+.page.active { display: block; }
+#page-presheet { max-width: 1380px; }
+
+/* ── PRE-SHEET LAYOUT ── */
+.presheet-layout { display: block; }
+.presheet-main { width: 100%; }
+
+/* ── SAVED SHEETS (below save button) ── */
+.saved-sheets-panel {
+  margin-top: 18px;
+  background: var(--surface); border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.09); border: 1px solid var(--border);
+  overflow: hidden;
+}
+.saved-sidebar-hdr {
+  padding: 11px 16px 10px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.saved-sidebar-hdr-title {
+  font-size: 0.74rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--ink-muted);
+}
+/* Horizontal card grid for saved sheets */
+#saved-list {
+  display: flex; flex-wrap: wrap; gap: 12px; padding: 14px 16px;
+}
+.saved-empty {
+  padding: 10px 0; color: var(--ink-muted); font-size: 0.82rem; font-style: italic;
+}
+.saved-sheet-item {
+  width: 200px; flex-shrink: 0;
+  background: var(--bg-page); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 13px; cursor: default; transition: box-shadow 0.15s;
+}
+.saved-sheet-item:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+.saved-sheet-title {
+  font-size: 0.84rem; font-weight: 600; color: var(--ink-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.saved-sheet-meta { font-size: 0.71rem; color: var(--ink-muted); margin-top: 2px; }
+.saved-sheet-expires { font-size: 0.67rem; color: var(--ink-muted); font-style: italic; margin-top: 1px; }
+.saved-sheet-actions { display: flex; gap: 5px; margin-top: 8px; }
+.saved-load-btn {
+  font-size: 0.71rem; background: var(--hilton-blue); color: #fff;
+  border: none; border-radius: 4px; padding: 3px 9px; cursor: pointer;
+  font-family: var(--font-ui); font-weight: 600; transition: opacity 0.15s;
+}
+.saved-load-btn:hover { opacity: 0.82; }
+.saved-del-btn {
+  font-size: 0.71rem; background: none; border: 1px solid #ffcdd2;
+  color: #e57373; border-radius: 4px; padding: 3px 7px; cursor: pointer;
+  font-family: var(--font-ui); transition: all 0.15s;
+}
+.saved-del-btn:hover { background: #ffebee; color: #c62828; border-color: #e53935; }
+.saved-dup-btn {
+  font-size: 0.71rem; background: none; border: 1px solid var(--border);
+  color: var(--ink-muted); border-radius: 4px; padding: 3px 7px; cursor: pointer;
+  font-family: var(--font-ui); transition: all 0.15s;
+}
+.saved-dup-btn:hover { background: var(--db-row-hover); color: var(--ink-secondary); }
+
+/* Expiry warning colours */
+.saved-sheet-item.expiry-warn  { border-color: #f9a825; background: #fffde7; }
+.saved-sheet-item.expiry-urgent{ border-color: #e53935; background: #ffebee; }
+.saved-sheet-item.expiry-warn  .saved-sheet-expires { color: #f57f17; font-weight: 600; }
+.saved-sheet-item.expiry-urgent .saved-sheet-expires { color: #c62828; font-weight: 700; }
+
+/* Filter bar above saved sheets */
+.saved-filter-bar {
+  padding: 8px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.saved-filter-input {
+  flex: 1; font-size: 0.78rem; font-family: var(--font-ui);
+  border: 1px solid var(--border); border-radius: 5px;
+  padding: 4px 9px; background: var(--bg-page); color: var(--ink-primary);
+  outline: none;
+}
+.saved-filter-input:focus { border-color: var(--hilton-blue); }
+.saved-filter-clear {
+  font-size: 0.72rem; color: var(--ink-muted); background: none;
+  border: none; cursor: pointer; padding: 2px 5px; font-family: var(--font-ui);
+}
+.saved-filter-clear:hover { color: var(--ink-secondary); }
+
+/* Auto-draft indicator */
+.draft-indicator {
+  font-size: 0.7rem; color: var(--ink-muted); font-style: italic;
+  text-align: center; padding: 4px 0 8px; opacity: 0;
+  transition: opacity 0.4s;
+}
+.draft-indicator.show { opacity: 1; }
+.save-presheet-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: none; border: 2px solid var(--hilton-gold); color: var(--hilton-gold);
+  font-family: var(--font-ui); font-size: 0.82rem; font-weight: 700;
+  padding: 7px 18px; border-radius: 6px; cursor: pointer;
+  margin: 14px auto 0; transition: all 0.18s; letter-spacing: 0.2px;
+}
+.save-presheet-btn:hover { background: var(--hilton-gold); color: #fff; }
+
+/* ── LEGAL PAD ── */
+.legal-pad {
+  background: var(--pad-bg);
+  border-radius: 6px 6px 4px 4px;
+  box-shadow: 3px 5px 20px var(--pad-shadow), 6px 8px 36px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: background 0.25s;
+}
+.pad-binding {
+  background: linear-gradient(180deg, var(--pad-binding) 0%, #c0a830 100%);
+  height: 32px;
+  display: flex; align-items: center; gap: 20px; padding: 0 26px;
+  border-bottom: 2px solid #9a8020;
+}
+.binding-hole {
+  width: 15px; height: 15px; border-radius: 50%;
+  background: #b0c8e8; border: 2px solid #7aaac8;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); flex-shrink: 0;
+}
+.pad-body { position: relative; }
+.pad-lines {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 31px, var(--pad-line) 31px, var(--pad-line) 32px
+  );
+  background-position: 0 44px;
+  opacity: 0.5;
+}
+.pad-content {
+  padding: 14px 28px 30px 76px;
+  position: relative;
+}
+.pad-content::before {
+  content: '';
+  position: absolute;
+  left: 58px; top: 0; bottom: 0; width: 2px;
+  background: var(--pad-margin); opacity: 0.65;
+}
+
+/* ── PAD HEADER ── */
+.pad-header {
+  text-align: center; padding: 8px 0 12px;
+  border-bottom: 2px solid var(--pad-line); margin-bottom: 14px;
+}
+.pad-title {
+  font-size: 1.2rem; font-weight: 800; color: var(--hilton-blue);
+  letter-spacing: 2.5px; text-transform: uppercase;
+}
+.pad-title .gold { color: var(--hilton-gold); }
+.pad-meta {
+  display: flex; justify-content: center; gap: 36px; margin-top: 8px; flex-wrap: wrap;
+}
+.pad-meta-field { display: flex; align-items: center; gap: 8px; }
+.pad-meta-field label {
+  font-size: 0.8rem; font-weight: 700; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.pad-meta-field input {
+  border: none; border-bottom: 1.5px solid var(--input-border);
+  background: transparent; font-family: var(--font-ui);
+  font-size: 0.9rem; color: var(--ink-secondary); outline: none;
+  width: 155px; padding: 2px 4px; transition: border-color 0.2s;
+}
+.pad-meta-field input:focus { border-bottom-color: var(--input-focus); }
+
+/* ── TABLE ── */
+.presheet-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.presheet-table thead th {
+  font-size: 0.72rem; font-weight: 700; color: var(--hilton-blue);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 5px 7px; border-bottom: 2px solid var(--ink); text-align: left;
+}
+.presheet-table thead th.center { text-align: center; }
+.beo-block { border-bottom: 1px solid var(--pad-line); }
+.beo-top-row td { padding: 9px 7px 2px; vertical-align: top; }
+.beo-item-row td { padding: 3px 7px; vertical-align: top; }
+.beo-item-row.has-item { background: var(--row-hover); }
+
+.beo-input {
+  border: none; border-bottom: 1px solid var(--input-border);
+  background: transparent; font-family: var(--font-ui);
+  font-size: 0.88rem; color: var(--ink-secondary); outline: none;
+  width: 100%; padding: 2px 3px; transition: border-color 0.18s, background 0.18s;
+}
+.beo-input:focus { border-bottom-color: var(--input-focus); background: var(--row-hover); }
+.beo-num-input { font-size: 0.95rem; font-weight: 700; }
+
+.menu-item-section { margin: 3px 0; }
+.menu-item-label {
+  font-size: 0.72rem; font-weight: 700; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-right: 5px;
+}
+.menu-item-desc { font-size: 0.82rem; color: var(--ink-muted); font-style: italic; line-height: 1.35; }
+
+.tag {
+  font-size: 0.66rem; font-weight: 700; padding: 1px 6px;
+  border-radius: 9px; letter-spacing: 0.4px; text-transform: uppercase;
+  display: inline-block;
+}
+.tag-GF { background: var(--tag-gf-bg); color: var(--tag-gf-fg); border: 1px solid var(--tag-gf-fg); }
+.tag-V  { background: var(--tag-v-bg);  color: var(--tag-v-fg);  border: 1px solid var(--tag-v-fg); }
+.tag-VG { background: var(--tag-vg-bg); color: var(--tag-vg-fg); border: 1px solid var(--tag-vg-fg); }
+.tag-DF { background: var(--tag-df-bg); color: var(--tag-df-fg); border: 1px solid var(--tag-df-fg); }
+
+/* ── DATE PICKER ── */
+.date-wrapper { position: relative; display: inline-flex; align-items: center; gap: 4px; }
+.cal-trigger-btn {
+  background: none; border: none; cursor: pointer; font-size: 1rem;
+  padding: 2px 3px; color: var(--ink-muted); line-height: 1;
+  transition: color 0.15s; vertical-align: middle;
+}
+.cal-trigger-btn:hover { color: var(--hilton-blue); }
+.cal-popup {
+  position: absolute; top: calc(100% + 8px); left: 0; z-index: 300;
+  background: var(--surface); border: 1.5px solid var(--dropdown-border);
+  border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.22);
+  width: 268px; padding: 14px; display: none; font-family: var(--font-ui);
+}
+.cal-popup.open { display: block; }
+.cal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.cal-nav-btn {
+  background: none; border: 1px solid var(--border); cursor: pointer;
+  font-size: 1rem; color: var(--ink-secondary); padding: 3px 9px;
+  border-radius: 6px; transition: background 0.12s; line-height: 1.4;
+}
+.cal-nav-btn:hover { background: var(--row-hover); }
+.cal-month-label { font-weight: 700; color: var(--hilton-blue); font-size: 0.92rem; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.cal-dow {
+  text-align: center; font-size: 0.64rem; font-weight: 700;
+  color: var(--ink-muted); padding: 4px 0; text-transform: uppercase;
+}
+.cal-day {
+  text-align: center; padding: 6px 2px; border-radius: 6px;
+  cursor: pointer; font-size: 0.82rem; color: var(--ink);
+  transition: background 0.1s, color 0.1s;
+}
+.cal-day:hover { background: var(--row-hover); color: var(--hilton-blue); }
+.cal-day.is-today { font-weight: 700; color: var(--hilton-gold); }
+.cal-day.is-selected { background: var(--hilton-blue) !important; color: #fff !important; font-weight: 700; }
+.cal-day.is-empty { cursor: default; pointer-events: none; }
+
+/* Auto-fill category display */
+.beo-auto-field {
+  font-size: 0.88rem; color: var(--ink-secondary);
+  border-bottom: 1px solid var(--input-border);
+  display: inline-block; width: 190px; padding: 2px 3px;
+}
+.beo-auto-placeholder {
+  font-size: 0.78rem; color: var(--ink-muted); font-style: italic;
+}
+
+/* Time picker */
+.time-picker-input {
+  width: 110px; padding: 2px 3px;
+  color-scheme: light dark;
+}
+.time-print-display { display: none; }
+
+.search-area { position: relative; display: flex; align-items: center; gap: 5px; }
+.search-input {
+  border: none; border-bottom: 1.5px dashed var(--input-border);
+  background: transparent; font-family: var(--font-ui);
+  font-size: 0.88rem; color: var(--ink-secondary); outline: none;
+  width: 260px; padding: 4px 5px; transition: border-color 0.18s;
+}
+.search-input:focus { border-bottom-color: var(--input-focus); border-bottom-style: solid; }
+.search-dropdown {
+  position: absolute; top: calc(100% + 4px); left: 0; width: 400px;
+  background: var(--dropdown-bg); border: 1.5px solid var(--dropdown-border);
+  border-radius: 8px; box-shadow: 0 10px 28px rgba(0,0,0,0.2);
+  z-index: 50; max-height: 260px; overflow-y: auto; display: none;
+}
+.search-dropdown.open { display: block; }
+.dropdown-item {
+  padding: 9px 13px; cursor: pointer;
+  border-bottom: 1px solid var(--border); transition: background 0.12s;
+}
+.dropdown-item:last-child { border-bottom: none; }
+.dropdown-item:hover { background: var(--db-row-hover); }
+.dropdown-item-name { font-size: 0.9rem; font-weight: 600; color: var(--ink-secondary); }
+.dropdown-item-cat { font-size: 0.74rem; color: var(--ink-muted); margin-top: 2px; }
+.dropdown-item-price { float: right; font-weight: 700; color: var(--hilton-gold); font-size: 0.8rem; }
+
+.clear-btn, .remove-row-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--ink-muted); font-size: 0.9rem; padding: 2px 5px;
+  transition: color 0.18s; line-height: 1;
+}
+.clear-btn:hover, .remove-row-btn:hover { color: #e05555; }
+
+.add-beo-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: none; border: 2px dashed var(--btn-ghost-border);
+  color: var(--btn-ghost-color); font-family: var(--font-ui);
+  font-size: 0.85rem; font-weight: 600; padding: 8px 18px; border-radius: 6px;
+  cursor: pointer; margin: 16px auto; transition: all 0.2s; opacity: 0.6; letter-spacing: 0.2px;
+}
+.add-beo-btn:hover { opacity: 1; background: var(--row-hover); }
+
+.pad-footer-note {
+  text-align: center; font-style: italic; color: var(--ink-muted);
+  font-size: 0.78rem; margin-top: 12px; padding-top: 10px;
+  border-top: 1px dashed var(--pad-line);
+}
+
+/* ── DATABASE ── */
+.db-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+.db-header-actions { display: flex; align-items: center; gap: 8px; }
+.db-title { font-size: 1.35rem; font-weight: 800; color: var(--hilton-blue); }
+.db-title .gold { color: var(--hilton-gold); }
+.add-item-btn {
+  background: var(--hilton-blue); color: #fff; border: none;
+  font-family: var(--font-ui); font-size: 0.85rem; font-weight: 600;
+  padding: 8px 18px; border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: opacity 0.18s; box-shadow: 0 2px 8px rgba(0,48,135,0.22);
+}
+.add-item-btn:hover { opacity: 0.87; }
+.reset-menu-btn {
+  background: none; border: 1px solid #e0e0e0; color: var(--ink-muted);
+  font-family: var(--font-ui); font-size: 0.78rem; font-weight: 600;
+  padding: 7px 13px; border-radius: 6px; cursor: pointer;
+  transition: all 0.18s;
+}
+.reset-menu-btn:hover { border-color: #e53935; color: #c62828; background: #ffebee; }
+.db-filters { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.filter-search, .filter-select {
+  padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 6px;
+  font-family: var(--font-ui); font-size: 0.87rem;
+  background: var(--surface); color: var(--ink); outline: none; transition: border-color 0.18s;
+}
+.filter-search { flex: 1; min-width: 200px; }
+.filter-search:focus, .filter-select:focus { border-color: var(--hilton-blue); }
+.db-table-wrap {
+  background: var(--surface); border-radius: 10px;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid var(--border);
+}
+.db-table { width: 100%; border-collapse: collapse; }
+.db-table thead th {
+  background: var(--table-head); color: var(--table-head-fg);
+  padding: 10px 12px; text-align: left;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.7px;
+  text-transform: uppercase; position: sticky; top: 0;
+}
+.db-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+.db-table tbody tr:hover { background: var(--db-row-hover); }
+.db-table tbody td { padding: 10px 12px; font-size: 0.86rem; color: var(--ink); vertical-align: top; }
+.db-table tbody td.desc { font-style: italic; color: var(--ink-muted); font-size: 0.8rem; max-width: 250px; }
+.db-table tbody td.price { font-weight: 700; color: var(--hilton-gold); }
+.db-table tbody td.actions { text-align: center; white-space: nowrap; }
+.trash-btn {
+  background: none; border: 1px solid #ffcdd2; color: #e57373;
+  border-radius: 5px; padding: 4px 9px; cursor: pointer; font-size: 0.85rem; transition: all 0.18s;
+}
+.trash-btn:hover { background: #ffebee; border-color: #e53935; color: #c62828; }
+.edit-btn {
+  background: none; border: 1px solid #c5cae9; color: #3949ab;
+  border-radius: 5px; padding: 4px 9px; cursor: pointer; font-size: 0.85rem;
+  transition: all 0.18s; margin-right: 5px;
+}
+.edit-btn:hover { background: #e8eaf6; border-color: #3949ab; color: #1a237e; }
+[data-theme="dark"] .edit-btn { border-color: #4a5faa; color: #7b96e8; }
+[data-theme="dark"] .edit-btn:hover { background: #1e2a50; border-color: #7b96e8; color: #aac0ff; }
+.copy-btn {
+  background: none; border: 1px solid #b2dfdb; color: #00796b;
+  border-radius: 5px; padding: 4px 9px; cursor: pointer; font-size: 0.85rem;
+  transition: all 0.18s; margin-right: 5px;
+}
+.copy-btn:hover { background: #e0f2f1; border-color: #00796b; color: #004d40; }
+[data-theme="dark"] .copy-btn { border-color: #2a5f5a; color: #4db6ac; }
+[data-theme="dark"] .copy-btn:hover { background: #0d2e2a; border-color: #4db6ac; color: #80cbc4; }
+.save-toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #2e7d32; color: #fff; padding: 10px 20px;
+  border-radius: 8px; font-size: 0.86rem; font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25); z-index: 999;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.25s, transform 0.25s; pointer-events: none;
+}
+.save-toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── SYNC BANNER ── */
+.sync-banner {
+  position: fixed; top: 50px; left: 0; right: 0; z-index: 150;
+  background: #1565c0; color: #fff;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  padding: 10px 20px; font-size: 0.88rem; font-weight: 600;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.sync-banner.show { opacity: 1; visibility: visible; pointer-events: all; }
+.sync-banner-dismiss {
+  background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+  color: #fff; border-radius: 5px; padding: 3px 10px; cursor: pointer;
+  font-size: 0.8rem; font-family: var(--font-ui); font-weight: 600;
+  transition: background 0.15s;
+}
+.sync-banner-dismiss:hover { background: rgba(255,255,255,0.35); }
+
+/* ── LOADING OVERLAY ── */
+.db-loading {
+  text-align: center; padding: 60px 20px; color: var(--ink-muted);
+  font-size: 0.95rem; letter-spacing: 0.3px;
+}
+.db-loading::before {
+  content: ''; display: block; width: 32px; height: 32px; margin: 0 auto 14px;
+  border: 3px solid var(--border); border-top-color: var(--hilton-blue);
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.db-count { padding: 8px 13px; font-size: 0.78rem; color: var(--ink-muted); border-top: 1px solid var(--border); }
+
+/* Category badges */
+.cat-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 11px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3px;
+}
+.cat-Breakfast { background:#fff8e1; color:#c47000; border:1px solid #ffe082; }
+.cat-Daytime   { background:#e8f5e9; color:#1a7a32; border:1px solid #a5d6a7; }
+.cat-Lunch     { background:#e3f2fd; color:#1050b0; border:1px solid #90caf9; }
+.cat-Dinner    { background:#fce4ec; color:#880e4f; border:1px solid #f48fb1; }
+.cat-Reception { background:#f3e5f5; color:#5a0a9a; border:1px solid #ce93d8; }
+.cat-Bar       { background:#e8eaf6; color:#203090; border:1px solid #9fa8da; }
+[data-theme="dark"] .cat-Breakfast { background:#2a1e00; color:#f0c060; border-color:#c89020; }
+[data-theme="dark"] .cat-Daytime   { background:#0a2012; color:#60c080; border-color:#2a8040; }
+[data-theme="dark"] .cat-Lunch     { background:#06183a; color:#60a0e0; border-color:#2060a8; }
+[data-theme="dark"] .cat-Dinner    { background:#2a0a14; color:#e060a0; border-color:#882060; }
+[data-theme="dark"] .cat-Reception { background:#180826; color:#c080e0; border-color:#7030a0; }
+[data-theme="dark"] .cat-Bar       { background:#0a0e2a; color:#8090e0; border-color:#3040a0; }
+
+/* Modal */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--modal-bg); border-radius: 12px; padding: 28px; width: 90%; max-width: 550px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35); max-height: 90vh; overflow-y: auto;
+  border: 1px solid var(--border);
+}
+.modal h2 {
+  font-size: 1.1rem; font-weight: 800; color: var(--hilton-blue);
+  margin-bottom: 18px; padding-bottom: 11px; border-bottom: 2px solid var(--border);
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label {
+  font-size: 0.7rem; font-weight: 700; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.6px;
+}
+.form-group input, .form-group select, .form-group textarea {
+  padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 6px;
+  font-family: var(--font-ui); font-size: 0.88rem; outline: none;
+  transition: border-color 0.18s; color: var(--ink); background: var(--surface-alt);
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--hilton-blue); }
+.form-group textarea { resize: vertical; min-height: 76px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.btn-cancel {
+  padding: 8px 18px; background: var(--surface-alt); border: 1.5px solid var(--border);
+  border-radius: 6px; font-family: var(--font-ui); font-size: 0.86rem; font-weight: 600;
+  cursor: pointer; color: var(--ink); transition: background 0.18s;
+}
+.btn-cancel:hover { background: var(--border); }
+.btn-save {
+  padding: 8px 22px; background: var(--hilton-blue); color: #fff;
+  border: none; border-radius: 6px; font-family: var(--font-ui);
+  font-size: 0.86rem; font-weight: 600; cursor: pointer;
+  transition: opacity 0.18s; box-shadow: 0 2px 8px rgba(0,48,135,0.28);
+}
+.btn-save:hover { opacity: 0.85; }
+
+/* Confirm */
+.confirm-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55); z-index: 300; align-items: center; justify-content: center;
+}
+.confirm-overlay.open { display: flex; }
+.confirm-box {
+  background: var(--confirm-bg); border-radius: 10px; padding: 26px 28px; width: 330px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3); text-align: center; border: 1px solid var(--border);
+}
+.confirm-box h3 { font-size: 1.05rem; font-weight: 800; color: #c62828; margin-bottom: 9px; }
+.confirm-box p { color: var(--ink-muted); font-size: 0.86rem; margin-bottom: 18px; line-height: 1.5; }
+.confirm-actions { display: flex; gap: 10px; justify-content: center; }
+.btn-confirm-delete {
+  padding: 8px 18px; background: #c62828; color: #fff; border: none;
+  border-radius: 6px; cursor: pointer; font-family: var(--font-ui);
+  font-size: 0.86rem; font-weight: 600; transition: background 0.18s;
+}
+.btn-confirm-delete:hover { background: #a02020; }
+.no-results { text-align: center; padding: 44px 0; color: var(--ink-muted); font-style: italic; }
+
+@media (max-width: 700px) {
+  .pad-content { padding-left: 48px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .pad-meta { flex-wrap: wrap; gap: 12px; }
+  .nav-brand { display: none; }
+}
+
+/* ═══════════════════════════════════════════
+   PRINT STYLES
+═══════════════════════════════════════════ */
+.print-header { display: none; }
+
+@media print {
+  @page {
+    size: letter;
+    margin: 12mm 12mm 20mm 12mm;
+    background: white;
+  }
+
+  /* Hide all UI chrome */
+  nav,
+  .pad-binding,
+  .add-beo-btn,
+  .pad-footer-note,
+  .remove-row-btn,
+  .clear-btn,
+  .search-dropdown,
+  .save-toast,
+  .page:not(#page-presheet) { display: none !important; }
+
+  /* Reset page — force white background on every element */
+  html, body, #page-presheet, .page, .legal-pad, .pad-body, .pad-content {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  html, body {
+    font-family: Arial, "Helvetica Neue", sans-serif !important;
+    font-size: 10.5pt !important;
+  }
+
+  #page-presheet {
+    display: block !important;
+    max-width: 100% !important;
+  }
+
+  /* ── Print header: property + printed datetime ── */
+  .print-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 0 8pt;
+    border-bottom: 2pt solid #000;
+    margin-bottom: 10pt;
+    page-break-inside: avoid;
+  }
+  .print-header-left {
+    font-size: 13pt; font-weight: 800;
+    letter-spacing: 1.5px; text-transform: uppercase; color: #000;
+  }
+  .print-header-left .gold-text { color: #7a5800; }
+  .print-header-right { font-size: 8.5pt; color: #444; text-align: right; line-height: 1.7; }
+  .print-header-right strong { font-size: 9pt; display: block; }
+
+  /* ── Pad cleanup ── */
+  .legal-pad { box-shadow: none !important; border-radius: 0 !important; border: none !important; }
+  .pad-lines  { display: none !important; }
+  .pad-content::before { display: none !important; }
+
+  /* ── Pad header ── */
+  .pad-header { padding: 4pt 0 10pt !important; margin-bottom: 8pt !important; border-bottom: 1pt solid #999 !important; }
+  .pad-title { font-size: 13pt !important; color: #000 !important; letter-spacing: 2px !important; }
+  .pad-title .gold { color: #7a5800 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pad-meta { gap: 32pt !important; }
+  .pad-meta-field label { color: #444 !important; font-size: 8pt !important; }
+  .pad-meta-field input { color: #000 !important; font-size: 9pt !important; border-bottom: 0.75pt solid #666 !important; }
+
+  /* ── Table ── */
+  .presheet-table { font-size: 9.5pt !important; border-collapse: collapse !important; width: 100% !important; }
+  .presheet-table thead th {
+    font-size: 7.5pt !important; color: #000 !important; font-weight: 700 !important;
+    border-bottom: 1.5pt solid #000 !important; padding: 3pt 5pt !important;
+    background: #efefef !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .beo-block { border-bottom: 0.5pt solid #ccc !important; break-inside: avoid; }
+  .beo-top-row td { padding: 5pt 5pt 2pt !important; }
+  .beo-item-row td { padding: 2pt 5pt !important; }
+  .beo-item-row.has-item {
+    background: #f8f6ee !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .beo-input { border-bottom: 0.5pt solid #aaa !important; color: #000 !important; font-size: 9.5pt !important; }
+  .menu-item-label { color: #555 !important; font-size: 7pt !important; }
+  .menu-item-desc  { color: #333 !important; font-size: 8pt !important; }
+  .search-input    { border-bottom: 0.5pt solid #aaa !important; color: #000 !important; font-size: 9.5pt !important; }
+  .beo-auto-field  { color: #000 !important; border-bottom: 0.5pt solid #aaa !important; font-size: 9.5pt !important; }
+  .beo-auto-placeholder { display: none !important; }
+  /* Hide the time picker on print, show the formatted 12h text instead */
+  .time-picker-input   { display: none !important; }
+  .time-print-display  { display: inline !important; font-size: 9.5pt; color: #000; }
+  /* Hide calendar trigger and popup on print */
+  .cal-trigger-btn, .cal-popup { display: none !important; }
+  /* Hide saved panel and save button — print only the pre-sheet content */
+  .saved-sheets-panel, .save-presheet-btn { display: none !important; }
+  .presheet-layout { display: block !important; }
+  .presheet-main { width: 100% !important; }
+
+  .tag { font-size: 6.5pt !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tag-GF { background:#d4edda !important; color:#1a7a35 !important; }
+  .tag-V  { background:#d1ecf1 !important; color:#0a7a8a !important; }
+  .tag-VG { background:#e8dcf8 !important; color:#5a20b0 !important; }
+  .tag-DF { background:#fff3cd !important; color:#c06000 !important; }
+
+  tr { page-break-inside: avoid; break-inside: avoid; }
+
+  /* ── Print footer: page number ──
+     Uses CSS counter via a fixed-position element trick */
+  body::after {
+    content: "Page " counter(page) " of " counter(pages);
+    position: fixed;
+    bottom: 5mm;
+    right: 12mm;
+    font-size: 8pt;
+    color: #666;
+    font-family: Arial, sans-serif;
+  }
+  /* Fallback single-page footer */
+  .print-page-footer {
+    display: block !important;
+    text-align: right;
+    font-size: 8pt;
+    color: #888;
+    margin-top: 14pt;
+    padding-top: 6pt;
+    border-top: 0.5pt solid #ccc;
+    font-family: Arial, sans-serif;
+  }
+}
+
+/* ── PASSWORD SCREEN ── */
+#pw-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg-nav);
+  display: flex; align-items: center; justify-content: center;
+}
+#pw-box {
+  background: var(--surface); border-radius: 14px;
+  padding: 38px 40px; width: 340px; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+#pw-logo {
+  font-size: 1.05rem; font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--nav-active); margin-bottom: 6px;
+}
+#pw-subtitle {
+  font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 26px; letter-spacing: 0.3px;
+}
+#pw-input {
+  width: 100%; padding: 10px 14px; border-radius: 7px;
+  border: 1.5px solid var(--border); background: var(--surface-alt);
+  font-family: var(--font-ui); font-size: 0.95rem; color: var(--ink);
+  outline: none; text-align: center; letter-spacing: 3px;
+  transition: border-color 0.2s; margin-bottom: 12px;
+}
+#pw-input:focus { border-color: var(--hilton-blue); }
+#pw-btn {
+  width: 100%; padding: 10px; border-radius: 7px;
+  background: var(--hilton-blue); color: #fff; border: none;
+  font-family: var(--font-ui); font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; transition: opacity 0.18s; letter-spacing: 0.3px;
+}
+#pw-btn:hover { opacity: 0.85; }
+#pw-error {
+  color: #e57373; font-size: 0.78rem; margin-top: 10px;
+  display: none;
+}
+</style>
+<!-- Firebase SDK (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="pw-overlay">
+  <div id="pw-box">
+    <div id="pw-logo">⬡ Hilton Anaheim</div>
+    <div id="pw-subtitle">Banquet Pre-Sheet — Staff Access Only</div>
+    <input type="password" id="pw-input" placeholder="Enter password"
+      onkeydown="if(event.key==='Enter')checkPassword()">
+    <button id="pw-btn" onclick="checkPassword()">Enter</button>
+    <div id="pw-error">Incorrect password — please try again</div>
+  </div>
+</div>
+
+<!-- Remote update notification banner -->
+<div class="sync-banner" id="sync-banner">
+  📡 Database updated by another user — changes are now live
+  <button class="sync-banner-dismiss" onclick="dismissSyncBanner()">Dismiss</button>
+</div>
+
+<nav>
+  <div class="nav-brand">⬡ HILTON ANAHEIM</div>
+  <div class="nav-tabs">
+    <a class="nav-tab active" onclick="showPage('presheet')" href="#">📋 Daily Pre-Sheet</a>
+    <a class="nav-tab" onclick="showPage('database')" href="#">🗄️ Menu Database</a>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-action-btn" onclick="triggerPrint()" id="print-btn">🖨️ Print</button>
+    <button class="nav-action-btn" onclick="toggleTheme()" id="theme-btn">🌙 Dark Mode</button>
+  </div>
+</nav>
+
+<!-- ════════════════ PRE-SHEET ════════════════ -->
+<div id="page-presheet" class="page active">
+<div class="presheet-layout">
+
+<!-- ── MAIN PRE-SHEET CONTENT ── -->
+<div class="presheet-main">
+
+  <!-- Shown only when printing -->
+  <div class="print-header" id="print-header">
+    <div class="print-header-left">
+      HILTON <span class="gold-text">ANAHEIM</span> — DAILY PRE-SHEET
+    </div>
+    <div class="print-header-right" id="print-timestamp">
+      <strong>Printed:</strong>
+    </div>
+  </div>
+
+  <div class="legal-pad">
+    <div class="pad-binding">
+      <div class="binding-hole"></div><div class="binding-hole"></div>
+      <div class="binding-hole"></div><div class="binding-hole"></div>
+      <div class="binding-hole"></div><div class="binding-hole"></div>
+    </div>
+    <div class="pad-body">
+      <div class="pad-lines"></div>
+      <div class="pad-content">
+
+        <div class="pad-header">
+          <div class="pad-title">HILTON <span class="gold">ANAHEIM</span> — DAILY PRE-SHEET</div>
+          <div class="pad-meta">
+            <div class="pad-meta-field">
+              <label>Date:</label>
+              <div class="date-wrapper">
+                <input type="text" id="sheet-date" placeholder="mm/dd/yyyy"
+                  oninput="updateDayFromDate()" autocomplete="off" style="width:120px">
+                <button class="cal-trigger-btn" onclick="toggleCalendar(event)" title="Pick a date">📅</button>
+                <div class="cal-popup" id="cal-popup"></div>
+              </div>
+            </div>
+            <div class="pad-meta-field">
+              <label>Day:</label>
+              <input type="text" id="sheet-day" placeholder="Monday">
+            </div>
+          </div>
+        </div>
+
+        <table class="presheet-table">
+          <thead>
+            <tr>
+              <th style="width:88px">B.E.O. #</th>
+              <th class="center" style="width:48px">PPL</th>
+              <th class="center" style="width:44px">Ct</th>
+              <th>Menu Items</th>
+              <th style="width:112px">Equipment</th>
+              <th style="width:92px">Ready Time</th>
+              <th style="width:28px"></th>
+            </tr>
+          </thead>
+          <tbody id="presheet-body"></tbody>
+        </table>
+
+        <button class="add-beo-btn" onclick="addBeoBlock()">＋ Add B.E.O. Entry</button>
+
+        <div class="pad-footer-note">
+          Type or select a menu item above — dietary tags &amp; description populate automatically.
+        </div>
+
+        <!-- Print page number fallback -->
+        <div class="print-page-footer" id="print-page-footer"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <button class="save-presheet-btn" onclick="openSaveSheetModal()">💾 Save Pre-Sheet</button>
+
+  <!-- ── SAVED SHEETS PANEL ── -->
+  <div class="saved-sheets-panel" id="saved-sidebar">
+    <div class="saved-sidebar-hdr">
+      <span class="saved-sidebar-hdr-title">💾 Saved Sheets</span>
+      <span class="draft-indicator" id="draft-indicator">Draft auto-saved</span>
+    </div>
+    <div class="saved-filter-bar">
+      <input class="saved-filter-input" id="saved-filter" type="text"
+        placeholder="🔍  Filter by title or date…" oninput="filterSavedSheets()">
+      <button class="saved-filter-clear" onclick="clearSavedFilter()" title="Clear filter">✕</button>
+    </div>
+    <div id="saved-list"><div class="saved-empty">No saved pre-sheets yet.</div></div>
+  </div>
+
+</div><!-- end .presheet-main -->
+</div><!-- end .presheet-layout -->
+</div><!-- end #page-presheet -->
+
+<!-- ════════════════ DATABASE ════════════════ -->
+<div id="page-database" class="page">
+  <div class="db-header">
+    <div class="db-title">Menu <span class="gold">Database</span></div>
+    <div class="db-header-actions">
+      <button class="reset-menu-btn" onclick="resetToFullMenu()" title="Overwrite Firebase with all 439 built-in items">↺ Reset to Full Menu</button>
+      <button class="add-item-btn" onclick="openAddModal()">＋ Add Menu Item</button>
+    </div>
+  </div>
+  <div class="db-filters">
+    <input class="filter-search" type="text" id="db-search" placeholder="🔍  Search items…" oninput="renderDatabase()">
+    <select class="filter-select" id="db-filter-cat" onchange="renderDatabase()">
+      <option value="">All Categories</option>
+      <option>Breakfast</option><option>Daytime Break</option>
+      <option>Lunch</option><option>Dinner</option>
+      <option>Reception</option><option>Bar</option>
+    </select>
+  </div>
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead>
+        <tr>
+          <th>Category</th><th>Sub-Category</th><th>Item Name</th>
+          <th>Description</th><th>Price</th><th>Unit</th>
+          <th>Dietary</th><th>Notes</th><th style="text-align:center">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="db-body"></tbody>
+    </table>
+    <div class="db-count" id="db-count"></div>
+  </div>
+</div>
+
+<!-- SAVE PRE-SHEET MODAL -->
+<div class="modal-overlay" id="save-sheet-modal">
+  <div class="modal" style="max-width:420px">
+    <h2>💾 Save Pre-Sheet</h2>
+    <div class="form-group full">
+      <label>Title</label>
+      <input type="text" id="save-sheet-title" placeholder="e.g. Monday Conference – April 15"
+        onkeydown="if(event.key==='Enter')savePreSheet()">
+    </div>
+    <p style="font-size:0.76rem;color:var(--ink-muted);margin-top:10px;line-height:1.5">
+      Saved sheets are stored for <strong>15 days</strong> then removed automatically.
+    </p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSaveSheetModal()">Cancel</button>
+      <button class="btn-save" onclick="savePreSheet()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-overlay" id="item-modal">
+  <div class="modal">
+    <h2 id="modal-title">Add Menu Item</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Category *</label>
+        <select id="f-category">
+          <option value="">Select…</option>
+          <option>Breakfast</option><option>Daytime Break</option>
+          <option>Lunch</option><option>Dinner</option>
+          <option>Reception</option><option>Bar</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Sub-Category</label><input type="text" id="f-subcategory" placeholder="e.g. Plated Breakfast"></div>
+      <div class="form-group full"><label>Item Name *</label><input type="text" id="f-name" placeholder="e.g. American Breakfast"></div>
+      <div class="form-group full"><label>Description</label><textarea id="f-description" placeholder="Ingredients, preparation details…"></textarea></div>
+      <div class="form-group"><label>Price ($)</label><input type="number" id="f-price" min="0" step="0.01" placeholder="0.00"></div>
+      <div class="form-group"><label>Price Unit</label><input type="text" id="f-unit" placeholder="e.g. per person"></div>
+      <div class="form-group"><label>Dietary Tags</label><input type="text" id="f-dietary" placeholder="GF, V, VG, DF"></div>
+      <div class="form-group"><label>Notes</label><input type="text" id="f-notes" placeholder="Min 25 ppl…"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveItem()">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-overlay" id="confirm-modal">
+  <div class="confirm-box">
+    <h3>🗑️ Delete Item?</h3>
+    <p id="confirm-text">Are you sure?</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-confirm-delete" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="save-toast" id="save-toast"></div>
+
+<script>
+// ── SEED DATA ──
+const SEED=[["Breakfast", "Plated Breakfast", "American Breakfast", "Free range scrambled eggs, breakfast potatoes, applewood smoked bacon, oven roasted tomato", "50", "per person", "GF", ""], ["Breakfast", "Plated Breakfast", "Quinoa Bowl", "Free range poached eggs, cherry tomato, spinach, red pepper and almond romesco, grilled asparagus", "52", "per person", "GF, V", ""], ["Breakfast", "Plated Breakfast", "Santa Barbara Smoked Salmon", "Philadelphia cream cheese, heirloom tomato, sliced onion, capers, plain bagel", "50", "per person", "", ""], ["Breakfast", "Plated Breakfast", "Garden Frittata", "Mushroom, spinach & swiss cheese, whole egg frittata served with baby green salad, poppy seed vinaigrette", "55", "per person", "GF", ""], ["Breakfast", "Plated Breakfast", "Cinnamon French Toast", "Braided brioche, vanilla, orange zest, maple syrup, whipped cream, fresh berry compote", "50", "per person", "V", ""], ["Breakfast", "Plated Breakfast", "Just Egg Bowl", "Scrambled vegan eggs, seasonal vegetable hash, beluga lentil, sundried tomato pesto", "52", "per person", "GF, VG", ""], ["Breakfast", "Breakfast Buffet", "Fresh Start Buffet", "Cold selections: muffins, breakfast breads & croissants, fruits, yogurts, cereals. Beverages: OJ, apple juice, coffee, tea", "55", "per person", "", "Min 25 ppl, 90 min service"], ["Breakfast", "Breakfast Buffet", "High Energy Buffet", "Cold selections + hard-boiled eggs, steel-cut oatmeal with raisins & brown sugar. Beverages: OJ, cranberry juice, coffee, tea", "57", "per person", "", "Min 25 ppl, 90 min service"], ["Breakfast", "Breakfast Buffet", "Rise & Shine – 2 Hot Entrées", "Buffet base + choice of 2 hot entrées, 1 side, 1 breakfast meat", "64", "per person", "", "Min 25 ppl, 90 min service"], ["Breakfast", "Breakfast Buffet", "Rise & Shine – 3 Hot Entrées", "Buffet base + choice of 3 hot entrées, 1 side, 1 breakfast meat", "68", "per person", "", "Min 25 ppl, 90 min service"], ["Breakfast", "Buffet Enhancement", "Baja Breakfast Burrito", "Free range scrambled eggs, chorizo, pepperjack cheese, bell peppers, crispy potatoes, roasted tomato salsa", "15", "each", "", ""], ["Breakfast", "Buffet Enhancement", "Brioche Breakfast Sandwich", "Scrambled eggs, applewood smoked bacon, swiss cheese, tomato, mayonnaise, brioche bun", "14", "each", "", ""], ["Breakfast", "Buffet Enhancement", "Egg Sandwich", "Free range baked egg, canadian bacon, cheddar cheese blend, sour dough bread", "14", "each", "", ""], ["Breakfast", "Buffet Enhancement", "Bagel & Lox", "Whipped cream, sliced tomato and capers", "14", "each", "", ""], ["Breakfast", "Buffet Enhancement", "Individual Greek Yogurt Parfait", "Vanilla greek yogurt, wild berry compote, homemade granola", "17", "each", "GF", ""], ["Breakfast", "Buffet Enhancement", "Overnight Oats", "Chia seeds, rolled oats, coconut milk, dates, berry compote", "10", "each", "VG, GF", ""], ["Breakfast", "Buffet Enhancement", "The OC Sandwich", "Free Range baked egg, arugula, tomato, mozzarella cheese blend, gluten free brioche bun", "14", "each", "GF", ""], ["Breakfast", "Buffet Enhancement", "Croissantwich", "Free range whole egg patty with bacon, pepperjack cheese & tomato, croissant", "14", "each", "", ""], ["Breakfast", "Buffet Enhancement", "Cinnamon French Toast (Enhancement)", "Braided brioche, vanilla, orange zest, warm syrup, whipped cream, fresh berry compote", "14", "each", "V", ""], ["Breakfast", "Action Station", "Eggs Cooked to Order", "Free range whole eggs and egg whites, ham, mushroom, tomato, spinach, onion, cheddar cheese, red peppers, asparagus, bacon", "20", "per person", "GF", "Chef attendant required: $250/station/90 min"], ["Breakfast", "Action Station", "Pancake Station", "Buttermilk pancake, strawberry, blueberry, chocolate chips, nutella, whipped cream, honey butter, warm syrup", "18", "per person", "V", "Chef attendant required: $250/station/90 min"], ["Breakfast", "Action Station", "Breakfast Creperie", "Banana, nutella & caramel, berry compote, lemon curd and whipped cream, crushed candied pecans", "18", "per person", "V", "Chef attendant required: $250/station/90 min"], ["Breakfast", "Action Station", "Carving Station – Apple Cider Glazed Spiral Ham", "Apple cider glazed spiral ham", "18", "per person", "GF", "Chef attendant required: $250/station/90 min"], ["Daytime Break", "Break Package", "Create Your Own Trail", "Almonds, cashews, peanuts; apple ring, sun dried cranberries, yogurt covered raisins; sunflower seeds, toasted coconut, chocolate chips granola", "28", "per person", "", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "Local Fruit Stand", "Seasonal fruits & vegetables wedges (melon, pineapple, cucumber, jicama), lime wedges, chamoy and tajin", "22", "per person", "", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "South of the Border", "Chicken taquitos, warm tortilla chips, house made guacamole & salsa roja, agua fresca", "28", "per person", "", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "Mediterranean Mezze", "Farmer's market vegetables, classic hummus, olive tapenade, pita bread and flatbread", "28", "per person", "VG", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "At The Fair", "Mini corn dogs, salted soft pretzels with queso dip, root beer, popcorn", "28", "per person", "", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "Sweet & Salty", "Roasted herb nuts, kettle potato chips, mixed berry shortcake, blackberry cobbler", "28", "per person", "", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "Chocolate Lovers", "Chocolate fudge brownies, chocolate dipped strawberries, chocolate chip cookies, individual chocolate milk", "26", "per person", "V", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "Cupcake Fair", "Red velvet with cream cheese frosting, vanilla with strawberry frosting, heavenly chocolate with devil's chocolate frosting", "32", "per person", "V", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "Citrus Fair", "Lemon bars, citrus pound cake, key lime meringue tart, strawberry lemonade", "26", "per person", "V", "Min 25 ppl, 45 min service"], ["Daytime Break", "Break Package", "The Jolt", "Coffee éclair, coffee pot de crème, coffee service with hazelnut/vanilla/almond syrups, irish cream, chocolate shavings, whipped cream", "28", "per person", "V", "Min 25 ppl, 45 min service"], ["Daytime Break", "Mindful Eating Break", "On the Healthy Side", "Fruit yogurts, fruit and berry shooters, banana bread and muffins, assorted tea sandwiches (heirloom tomato/basil/mozz, smoked salmon, egg salad curry, arugula feta)", "40", "per person", "", ""], ["Daytime Break", "Mindful Eating Break", "The Power Trip", "Individual yogurt parfaits, mini fruit smoothies (strawberry, acai, green juice), dried fruit, house-made energy bites, rosemary herbed roasted nuts mix", "36", "per person", "", ""], ["Daytime Break", "Mindful Eating Break", "Midday Stretch", "Seasonal hummus with mini bagel chips, roasted carrot & quinoa salad, beef jerky, whole fresh fruit, spa water, bottled water, coffee and tea", "45", "per person", "", ""], ["Daytime Break", "À La Carte", "Protein Bites – Whole Rolled Oats & Peanut Butter", "With ground flax seeds, honey, whey protein, chocolate chips", "92", "per dozen", "V", "Min 2 dozen per selection"], ["Daytime Break", "À La Carte", "Protein Bites – Date & Cashew", "With sliced almonds, coconut milk, whey protein, malden salt", "92", "per dozen", "V", "Min 2 dozen per selection"], ["Daytime Break", "À La Carte", "Protein Bites – Chia & Almond Butter", "With shredded coconut, agave, chocolate powder, whey protein", "92", "per dozen", "V", "Min 2 dozen per selection"], ["Daytime Break", "À La Carte", "Whole Fresh Fruit", "", "6", "each", "VG, GF, DF", "Min 12 items"], ["Daytime Break", "À La Carte", "Greek Yogurt", "", "8", "each", "V", "Min 12 items"], ["Daytime Break", "À La Carte", "Fruit Yogurt", "", "8", "each", "V, GF", "Min 12 items"], ["Daytime Break", "À La Carte", "Yogurt Parfait with Granola", "", "17", "each", "V", "Min 12 items"], ["Daytime Break", "À La Carte", "Freshly Baked Croissants", "", "72", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Freshly Baked Muffins", "", "72", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Sliced Breakfast Breads", "", "68", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Savory Filled Pastries (Parmesan & Leek / Spinach & Cheese)", "", "88", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Assorted Bagels with Cream Cheese", "Plain, whole grain, cinnamon raisin, multi", "82", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Scones (Blueberry / Orange / Cranberry / Chocolate Chip)", "", "88", "per dozen", "V", "One choice per dozen"], ["Daytime Break", "À La Carte", "Granola Bar", "", "9", "each", "V", "Min 12 items"], ["Daytime Break", "À La Carte", "Energy Bar", "", "9", "each", "V", "Min 12 items"], ["Daytime Break", "À La Carte", "String Cheese", "", "9", "each", "V, GF", "Min 12 items"], ["Daytime Break", "À La Carte", "Beef Jerky", "", "12", "each", "GF, DF", "Min 12 items"], ["Daytime Break", "À La Carte", "Individual Bags of Snacks", "", "10", "each", "V", "Min 12 items"], ["Daytime Break", "À La Carte", "Homemade Kettle Chips with Onion Dip", "", "35", "per pound", "VG, GF, DF", ""], ["Daytime Break", "À La Carte", "Candy Bar", "", "10", "each", "V", "Min 12 items"], ["Daytime Break", "À La Carte", "Freshly Baked Cookies", "", "72", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Black and White Cookies", "", "72", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Brownies and Blondies", "", "72", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Gourmet Cupcakes", "", "88", "per dozen", "V", ""], ["Daytime Break", "À La Carte", "Chocolate-Covered Strawberries", "", "82", "per dozen", "V, GF", ""], ["Daytime Break", "À La Carte", "Chocolate Truffles", "", "120", "per dozen", "V, GF", ""], ["Daytime Break", "À La Carte", "Häagen Dazs Ice Cream Bars", "", "12", "each", "V", "Min 12 items"], ["Daytime Break", "Beverage", "Freshly Brewed Coffee / Decaf / Iced Tea / Hot Tea", "", "135", "per gallon", "", ""], ["Daytime Break", "Beverage", "Starbucks Coffee / Decaf + Teavana Tea", "", "165", "per gallon", "", ""], ["Daytime Break", "Beverage", "Hot Chocolate Bar", "Chocolate shavings, cinnamon, whipped cream", "128", "per gallon", "", ""], ["Daytime Break", "Beverage", "Beverage Station Package (2 hrs)", "Brewed coffee, decaf, hot tea, soft drinks, bottled water", "32", "per person", "", ""], ["Daytime Break", "Beverage", "Flavor Enhancement (Syrups)", "Hazelnut, vanilla, caramel, almond syrups, Irish crème, chocolate shavings, whipped cream", "8", "per person", "", ""], ["Daytime Break", "Beverage", "Bottled Still or Sparkling Water", "", "8", "each", "", ""], ["Daytime Break", "Beverage", "Assorted Soft Drinks", "", "8", "each", "", ""], ["Daytime Break", "Beverage", "Bottled Iced Tea", "", "9", "each", "", ""], ["Daytime Break", "Beverage", "Assorted Bottled Fruit Juices", "", "8", "each", "", ""], ["Daytime Break", "Beverage", "Assorted Bottled Powerade", "", "9", "each", "", ""], ["Daytime Break", "Beverage", "Starbucks Doubleshot", "", "12", "each", "", ""], ["Daytime Break", "Beverage", "Freshly Squeezed Juice (OJ / Cranberry / Grapefruit)", "", "105", "per gallon", "", ""], ["Daytime Break", "Beverage", "Lemonade", "", "95", "per gallon", "", ""], ["Daytime Break", "Beverage", "CQ Infused Water", "Strawberry, mango, peach, lemon, red raspberry pomegranate, or black raspberry acai (3 gal min)", "115", "per gallon", "", "Min 3 gallons"], ["Daytime Break", "Beverage", "Spa Water", "Lemon, orange, or cucumber", "85", "per gallon", "", ""], ["Lunch", "Taste of California Buffet", "Monday – The Golden Coast (2 entrées)", "Choice of 2 starters, 2 sides, 2 entrées, dessert. Includes coffee, decaf, tea, iced tea", "80", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Monday – The Golden Coast (3 entrées)", "Choice of 2 starters, 2 sides, 3 entrées, dessert. Includes coffee, decaf, tea, iced tea", "87", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Tuesday – Sabor del Sol (2 entrées)", "Choice of 2 starters, 2 sides, 2 entrées, dessert. Includes coffee, decaf, tea, iced tea", "80", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Tuesday – Sabor del Sol (3 entrées)", "Choice of 2 starters, 2 sides, 3 entrées, dessert. Includes coffee, decaf, tea, iced tea", "87", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Wednesday – California Cucina (2 entrées)", "Choice of 2 starters, 2 sides, 2 entrées, dessert. Includes coffee, decaf, tea, iced tea", "80", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Wednesday – California Cucina (3 entrées)", "Choice of 2 starters, 2 sides, 3 entrées, dessert. Includes coffee, decaf, tea, iced tea", "87", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Thursday – Southern Harvest (2 entrées)", "Choice of 2 starters, 2 sides, 2 entrées, dessert. Includes coffee, decaf, tea, iced tea", "80", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Thursday – Southern Harvest (3 entrées)", "Choice of 2 starters, 2 sides, 3 entrées, dessert. Includes coffee, decaf, tea, iced tea", "87", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Friday – Pacific Rim (2 entrées)", "Choice of 2 starters, 2 sides, 2 entrées, dessert. Includes coffee, decaf, tea, iced tea", "80", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Friday – Pacific Rim (3 entrées)", "Choice of 2 starters, 2 sides, 3 entrées, dessert. Includes coffee, decaf, tea, iced tea", "87", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Saturday – West Coast Gathering (2 entrées)", "Choice of 2 starters, 2 sides, 2 entrées, dessert. Includes coffee, decaf, tea, iced tea", "80", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Saturday – West Coast Gathering (3 entrées)", "Choice of 2 starters, 2 sides, 3 entrées, dessert. Includes coffee, decaf, tea, iced tea", "87", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Sunday – Farm to Feast (2 entrées)", "Choice of 2 starters, 2 sides, 2 entrées, dessert. Includes coffee, decaf, tea, iced tea", "80", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Taste of California Buffet", "Sunday – Farm to Feast (3 entrées)", "Choice of 2 starters, 2 sides, 3 entrées, dessert. Includes coffee, decaf, tea, iced tea", "87", "per person", "", "Min 25 ppl, 90 min service"], ["Lunch", "Cold Lunch Buffet", "Coastal Comfort Buffet", "Choice of 2 starters, 3 sandwiches/wraps, 2 sides, 3 desserts. Coffee, decaf, tea, iced tea", "75", "per person", "", "Min 25 ppl, 90 min service. +$10/person each additional starter or side"], ["Lunch", "Three-Course Plated Lunch", "Pan Seared Pacific Salmon (Lunch)", "Forbidden rice, seasonal beans, tomato fondue. Includes starter, dessert, artisan rolls, coffee/tea", "75", "per person", "GF", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Oven Roasted Striped Bass", "Seasonal vegetable ratatouille, fennel slaw, citrus emulsion. Includes starter, dessert, artisan rolls, coffee/tea", "75", "per person", "GF", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Chicken Breast Piccata (Lunch)", "Sundried tomato risotto, grilled asparagus, lemon caper sauce. Includes starter, dessert, artisan rolls, coffee/tea", "72", "per person", "", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Thyme Scented Chicken Breast (Lunch)", "Celeriac mashed potato, charred broccolini, au jus. Includes starter, dessert, artisan rolls, coffee/tea", "72", "per person", "GF", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Wild Mushroom Stuffed Chicken Breast", "Warm salad of quinoa, seasonal squash & cherry tomato, garlic jus. Includes starter, dessert, artisan rolls, coffee/tea", "75", "per person", "GF, DF", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Braised Boneless Short Ribs (Lunch)", "Roasted garlic mashed potato, orange glazed heirloom carrots, braising jus. Includes starter, dessert, artisan rolls, coffee/tea", "79", "per person", "GF", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Petite Beef Tenderloin (Lunch)", "Pommes souffle with chives, grilled broccolini, cabernet reduction. Includes starter, dessert, artisan rolls, coffee/tea", "80", "per person", "GF", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Marinated Prime Flat Iron Steak", "Smashed baby yukon potato, roasted mini peppers, chimichurri. Includes starter, dessert, artisan rolls, coffee/tea", "80", "per person", "GF, DF", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Seasonal Squash Ravioli (Lunch)", "Squash puree with maple, sauteed julienne vegetables, petite basil. Includes starter, dessert, artisan rolls, coffee/tea", "70", "per person", "V", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Montreal Spiced Cauliflower Steak", "Carrot puree, roasted exotic mushrooms, asparagus, saffron sauce. Includes starter, dessert, artisan rolls, coffee/tea", "70", "per person", "GF, V", "Min 25 ppl"], ["Lunch", "Three-Course Plated Lunch", "Stuffed Portobello Mushroom", "Wild rice & quinoa, seasonal squash, vegan parmesan, Swiss chard, roasted red pepper coulis. Includes starter, dessert, artisan rolls, coffee/tea", "70", "per person", "GF, VG", "Min 25 ppl"], ["Lunch", "Plated Light Lunch", "Roasted Pacific Salmon Salad", "Baby iceberg wedge, blue cheese, cherry tomato, corn, cucumber, herb ranch", "60", "per person", "GF", ""], ["Lunch", "Plated Light Lunch", "Nicoise Salad", "Seared ahi tuna, French beans, tomato, hard boiled egg, fingerling potato, olives, lemon-thyme vinaigrette", "62", "per person", "GF, DF", ""], ["Lunch", "Plated Light Lunch", "Grilled Chicken Salad", "Quinoa, baby kale, red apple, cherry tomato, dried cranberries, toasted almonds, citrus vinaigrette", "60", "per person", "GF, DF", ""], ["Lunch", "Plated Light Lunch", "Roasted Chicken Caesar Salad", "Romaine heart, parmesan cheese, herb croutons, cherry tomato, caesar dressing", "60", "per person", "", ""], ["Dinner", "Dinner Buffet", "Farm & Flame Buffet", "2 salads, grilled filet, pan-seared salmon, mushroom risotto, broccolini/bell pepper/rainbow carrots, baby yukon potatoes, 3 sweets. Coffee/tea", "115", "per person", "", "Min 25 ppl, 90 min service"], ["Dinner", "Dinner Buffet", "Coast Grove Buffet", "2 salads, braised short ribs, herb brined chicken breast, seared barramundi, fontina gnocchi, caramelized brussels sprouts, roasted root vegetables, 3 sweets. Coffee/tea", "125", "per person", "", "Min 25 ppl, 90 min service"], ["Dinner", "Dinner Buffet", "PCH Sunset Buffet", "2 salads, lobster bisque, grilled prime rib eye, roasted chicken thigh, cheese tortelloni, classic mashed potato, grilled asparagus, 3 sweets. Coffee/tea", "145", "per person", "", "Min 25 ppl, 90 min service"], ["Dinner", "Dinner Buffet", "PCH Sunset Buffet – Surf & Turf Upgrade", "Add grilled Maine lobster tail (half tail per person) to PCH Sunset Buffet", "35", "per person (add-on)", "GF", "Add-on to PCH Sunset Buffet"], ["Dinner", "Plated Dinner", "Roasted Airline Chicken Breast", "Potato and parsnip mash, haricot verts, natural jus. Includes starter, dessert, coffee/tea", "95", "per person", "GF", "Min 25 ppl"], ["Dinner", "Plated Dinner", "Filet Mignon", "Potato gratin, maitake mushroom, butternut squash puree, port wine demi. Includes starter, dessert, coffee/tea", "120", "per person", "GF", "Min 25 ppl"], ["Dinner", "Plated Dinner", "Braised Beef Short Ribs (Dinner)", "Crushed baby yukon potato, seasonal beans, red wine braising jus. Includes starter, dessert, coffee/tea", "110", "per person", "GF", "Min 25 ppl"], ["Dinner", "Plated Dinner", "Pan-Seared Seasonal Bass", "Lemon parmesan risotto, grilled asparagus, beurre rouge. Includes starter, dessert, coffee/tea", "110", "per person", "GF", "Min 25 ppl"], ["Dinner", "Plated Dinner", "Roasted Pacific Salmon (Dinner)", "Purple potato mash, grilled broccolini, bercy sauce. Includes starter, dessert, coffee/tea", "110", "per person", "GF", "Min 25 ppl"], ["Dinner", "Plated Dinner – Duet", "Glazed Short Rib & Pacific Salmon", "Butternut squash risotto, seasonal beans, red wine braising jus & caper cream sauce. Includes starter, dessert, coffee/tea", "120", "per person", "GF", "Min 25 ppl"], ["Dinner", "Plated Dinner – Duet", "Beef Fillet & Seabass", "Whipped yukon gold potatoes, grilled asparagus, parsnip chips, bordelaise & beurre blanc. Includes starter, dessert, coffee/tea", "125", "per person", "GF", "Min 25 ppl"], ["Dinner", "Plated Dinner – Duet", "Beef Fillet & Butter Poached Half Lobster", "Mushroom risotto, caramelized cipollini, cabernet & thermidor sauce. Includes starter, dessert, coffee/tea", "140", "per person", "GF", "Min 25 ppl"], ["Dinner", "Plated Dinner – Duet", "Roasted Chicken Breast & Grilled Prawns", "Truffle mashed potato, charred broccolini, tarragon jus & creole remoulade. Includes starter, dessert, coffee/tea", "140", "per person", "GF", "Min 25 ppl"], ["Dinner", "Dessert", "Milk Chocolate Cremeaux Tart", "With coffee cream", "", "(included with plated dinner)", "V", "Select one with plated dinner"], ["Dinner", "Dessert", "Mango Lemon Torte", "With caramel sauce", "", "(included with plated dinner)", "", "Select one with plated dinner"], ["Dinner", "Dessert", "Champagne White Chocolate Mousse Gateaux", "With strawberry coulis", "", "(included with plated dinner)", "", "Select one with plated dinner"], ["Dinner", "Dessert", "Dark Chocolate Espresso Dome", "Espresso mousse, hazelnut praline, raspberry sauce", "", "(included with plated dinner)", "", "Select one with plated dinner"], ["Dinner", "Dessert", "Strawberry Pistachio Torte", "With strawberry sauce", "", "(included with plated dinner)", "", "Select one with plated dinner"], ["Dinner", "Dessert", "Apple Walnut Crumble Cheesecake", "With caramel sauce", "", "(included with plated dinner)", "V", "Select one with plated dinner"], ["Dinner", "Dessert", "Tiramisu", "Coffee liqueur, lady finger, mascarpone cream, vanilla sauce", "", "(included with plated dinner)", "", "Select one with plated dinner"], ["Reception", "Small Bite – Hot", "Lobster Bisque Boule", "Leek and fennel infused, mini brioche boule", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Coconut Malibu Shrimp", "Zesty marmalade", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Tempura Shrimp Skewers", "Wasabi aioli", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Chicken Empanada", "Chimichurri aioli", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Buffalo Chicken Spring Roll", "Sweet chili sauce", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Shawarma Spiced Chicken Skewer", "Garlic tahini yogurt", "12", "per piece", "GF", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Premium Lump Crab Cake", "Remoulade sauce", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Crab Cigar", "Lump crab, cheese, old bay seasoning, avocado-jalapeno aioli", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Brisket Wrapped in Pork Belly", "Peach BBQ glaze", "12", "per piece", "GF", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Montreal Spiced Beef Skewers", "Smoked bbq aioli", "12", "per piece", "GF", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Vegetable Spring Rolls", "Teriyaki ginger sauce", "12", "per piece", "V, DF", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Truffle & Wild Mushroom Arancini", "Saffron aioli", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Vegetable Potato Samosa", "Mint sauce", "12", "per piece", "V", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Vegan Impossible Beef Quesadilla", "Pepper and cashew romesco", "12", "per piece", "VG", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Vegan Falafel Filled Mushroom Caps", "Kale & vegan cheese stuffing, spicy tahini sauce", "12", "per piece", "GF, VG", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Quinoa & Zucchini Fritter", "Pine nuts, feta cheese filling, creamy avocado-lime dip", "12", "per piece", "GF, V", "Min 25 pieces per item"], ["Reception", "Small Bite – Hot", "Vegan Green Chili Arepas", "Mild chilies, cilantro, vegan cheese, vegan chipotle mayo", "12", "per piece", "GF, VG", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Santa Barbara Smoked Salmon Tart", "Cucumber & crème fraiche", "12", "per piece", "GF", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Ahi Tuna Poke Cone", "Sesame cone, wasabi aioli", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "California Roll", "Fresh crab, cucumber, avocado, soy sauce", "12", "per piece", "", "Min $50 order"], ["Reception", "Small Bite – Cold", "Lobster Roll", "Brioche bun, mayo, lemon juice, dill", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Poached Shrimp", "Cocktail sauce, lemon wedge", "12", "per piece", "GF, DF", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Classic Devilled Egg", "Salmon roe", "12", "per piece", "GF", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Chicken Vol-au-Vents", "With creamy mushrooms, chives", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Achiote Chicken Salad Tostada", "Pickled onion, queso fresco", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Melon & Prosciutto Skewer", "Mint, balsamic glaze", "12", "per piece", "GF", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Heirloom Tomato Bruschetta", "Burrata cheese spread, basil, balsamic drizzle", "12", "per piece", "", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Organic Red Beet Tart", "Gluten free tart, goat cheese mousse, raisin chutney", "12", "per piece", "GF, V", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Vegan Rice Paper Roll", "Mango, bell peppers, rice noodles, cucumber, sweet chili sauce", "12", "per piece", "GF, VG", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Caprese Skewer", "Cherry tomato, mozzarella, lemon oil, balsamic glaze", "12", "per piece", "GF", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Pistachio Crusted Grape", "Red grape, toasted pistachio, goat cheese", "12", "per piece", "GF, V", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Portobella Mushroom Crostini", "Cream cheese spread, olive tapenade, balsamic drizzle", "12", "per piece", "V", "Min 25 pieces per item"], ["Reception", "Small Bite – Cold", "Roasted Artichoke Heart Tart", "Smoked eggplant mousse, pesto aioli", "12", "per piece", "V", "Min 25 pieces per item"], ["Reception", "Carving Station", "Moroccan Spiced Rack of Lamb", "Port and mint reduction, tzatziki sauce, petite ciabatta. Serves 15–20", "550", "per station (4 racks)", "GF", "Chef attendant required: $250"], ["Reception", "Carving Station", "Coffee & Black Pepper Crusted Beef Rib Eye", "Natural jus, horseradish cream, mustard, mayo, silver dollar rolls. Serves 30", "695", "each", "GF", "Chef attendant required: $250"], ["Reception", "Carving Station", "Montreal Spiced Baron of Beef", "Horseradish cream, rosemary demi, mustard, mayo, silver dollar rolls. Serves 120–150", "1250", "each", "GF", "Chef attendant required: $250"], ["Reception", "Carving Station", "Smoked Beef Brisket", "House rub, barbecue sauce, petite ciabatta. Serves 25", "325", "each", "GF", "Chef attendant required: $250"], ["Reception", "Carving Station", "Rosemary & Dijon Rubbed New York Strip Sirloin", "Horseradish cream, mustard, mayo, silver dollar rolls. Serves 25", "625", "each", "GF", "Chef attendant required: $250"], ["Reception", "Carving Station", "Black Angus Beef Tenderloin", "Béarnaise sauce, green peppercorn, mustard, mayo, silver dollar rolls. Serves 15–20", "645", "each", "GF", "Chef attendant required: $250"], ["Reception", "Carving Station", "Coastal Spice & Butter Rubbed Pacific Salmon", "Lemon tarragon beurre blanc, petite ciabatta. Serves 15–20", "525", "each", "GF", "Chef attendant required: $250"], ["Reception", "Carving Station", "Brined and Roasted Turkey Breast", "Cranberry-orange relish, turkey gravy, silver dollar rolls. Serves 30", "450", "each", "GF", "Chef attendant required: $250"], ["Reception", "Station", "Artisan Cheese Board", "Assortment of local & gourmet cheese, dried fruits, nuts, compotes, olives, fresh baked breads & crackers", "31", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Charcuterie Board", "Assortment of local & imported cured meats, marinated olives, dijon mustard, feta cheese, cornichons, baguettes & crackers", "32", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Farmers Market Crudité", "Baby zucchini, mini sweet peppers, celery, cucumber, heirloom tomatoes, radishes, roasted carrots; chipotle aioli, creamy ranch, hummus", "22", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Salsa + Guac", "Corn & blue tortilla chips, roasted salsa roja, house made guacamole", "18", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Nacho Bar Upgrade", "Cheddar & jalapeno cheese sauce, black olives, crema fresca, pico de gallo, black beans, diced chicken (adds to Salsa + Guac)", "19", "per person (add-on)", "", "Must order with Salsa + Guac"], ["Reception", "Station", "Taste of Mediterranean", "Classic hummus, spicy tahini, baba ghanoush; marinated roasted pepper, feta cheese, olive tapenade; pita bread, sliced baguette", "30", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "On the Pacific Shore: Raw Bar", "2 each per person: shrimp, snow crab claw, seasonal oysters; mignonette, cocktail sauce, louie sauce, lemon wedges", "50", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Santa Ana District Taco Bar (2 meats)", "Fall-apart pork, cumin beef or adobo chicken; shredded cabbage, pico de gallo, fire-roasted tomato salsa, corn tortillas", "36", "per person", "GF", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Santa Ana District Taco Bar (3 meats)", "Fall-apart pork, cumin beef or adobo chicken; shredded cabbage, pico de gallo, fire-roasted tomato salsa, corn tortillas", "42", "per person", "GF", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Scallop In The Shell", "Delicately seared scallops; parsnip puree, strawberry & cucumber relish, saffron sauce", "36", "per person", "GF", "Chef attendant required"], ["Reception", "Station", "Slider Bar (2 meats)", "BBQ pulled pork, Angus beef patty, cajun grilled chicken, teriyaki grilled salmon, impossible patty; kettle chips, brioche buns", "36", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Slider Bar (3 meats)", "BBQ pulled pork, Angus beef patty, cajun grilled chicken, teriyaki grilled salmon, impossible patty; kettle chips, brioche buns", "42", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Tater Bar (2 options)", "Garlic & parmesan fries, black pepper waffle fries, truffle crinkle fries, herb tater tots; ketchup and ranch dressing", "22", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Tater Bar (3 options)", "Garlic & parmesan fries, black pepper waffle fries, truffle crinkle fries, herb tater tots; ketchup and ranch dressing", "28", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Pizza & Flatbread (2 options)", "Margherita, BBQ chicken, spicy sausage salami, pepperoni, roasted vegetable flatbread", "26", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Pizza & Flatbread (3 options)", "Margherita, BBQ chicken, spicy sausage salami, pepperoni, roasted vegetable flatbread", "32", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Gourmet Grilled Cheese (2 options)", "Classic cheddar on sourdough, braised short rib & fontina on rye, wild mushroom & monterey jack on brioche, tomato & bacon jam mozzarella on multigrain", "24", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Gourmet Grilled Cheese (3 options)", "Classic cheddar on sourdough, braised short rib & fontina on rye, wild mushroom & monterey jack on brioche, tomato & bacon jam mozzarella on multigrain", "30", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Risotto Station", "Slowly cooked arborio rice, parmesan & preserved lemon, grilled shrimp, toppings: mushroom, chives, toasted pinenut, sweet peppers, tomato confit, parmesan", "30", "per person", "GF", "Chef attendant required. +$100 for 18-month aged Parmesan wheel"], ["Reception", "Station", "Quesadilla Bar (2 options)", "Queso fresco & pork adobo, skirt steak & jack cheese, chipotle chicken & oaxaca, mushroom/mozz/veg; fire roasted salsa, sour cream, pico de gallo", "32", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Quesadilla Bar (3 options)", "Queso fresco & pork adobo, skirt steak & jack cheese, chipotle chicken & oaxaca, mushroom/mozz/veg; fire roasted salsa, sour cream, pico de gallo", "39", "per person", "", "Min 30 ppl, 60 min service"], ["Reception", "Station", "Mashed Potato Martini Bar (2 options)", "Yukon gold, Peruvian purple, orange yam, Idaho russet; assorted toppings", "28", "per person", "", "Chef attendant required; Min 30 ppl"], ["Reception", "Station", "Mashed Potato Martini Bar (3 options)", "Yukon gold, Peruvian purple, orange yam, Idaho russet; assorted toppings", "34", "per person", "", "Chef attendant required; Min 30 ppl"], ["Reception", "Station", "Italian Pasta Station (2 options)", "Ziti marinara, orecchiette pesto, pan seared gnocchi mushroom alfredo, spaghetti bolognese, penne garlic butter GF", "24", "per person", "", "Min 30 ppl; can be live action +chef attendant"], ["Reception", "Station", "Italian Pasta Station (3 options)", "Ziti marinara, orecchiette pesto, pan seared gnocchi mushroom alfredo, spaghetti bolognese, penne garlic butter GF", "30", "per person", "", "Min 30 ppl; can be live action +chef attendant"], ["Reception", "Sweet Stories", "Creperie", "Fresh crepes made to order; strawberry, nutella, berry compote, lemon curd, chantilly cream, powdered sugar", "28", "per person", "V", "Chef attendant required"], ["Reception", "Sweet Stories", "S'mores & More", "Homemade raspberry and plain marshmallows, Hershey's chocolate, graham crackers", "28", "per person", "", "Chef attendant required"], ["Reception", "Sweet Stories", "Haagen-Dazs Ice Cream Parlor", "Choose 2 flavors (vanilla, chocolate, strawberry); strawberry/caramel/chocolate sauce, crushed Oreos, chocolate chips, whipped cream, chopped nuts, sprinkles", "28", "per person", "V", "Chef attendant required"], ["Reception", "Sweet Stories", "Hand Filled Cannolis", "Choose 2: mascarpone-ricotta/lemon zest, dark chocolate & pistachio, cream cheese/cinnamon/honey. Upgrade to action station +$4", "30", "per person", "V", "Chef attendant required for action station upgrade"], ["Reception", "Sweet Stories", "Mini Desserts & Shooters", "Chefs' seasonal: mini cheesecakes, chocolate mousse, tortes, petite fours, cake pops, assorted shooters. 2 pieces per person", "28", "per person", "", ""], ["Reception", "Sweet Stories", "Chocolate Delight", "Chefs' seasonal: chocolate mousse shooters, hazelnut chocolate tart, orange chocolate cake, chocolate cheesecake, mini choc chip cookies, chocolate biscotti. 2 pieces per person", "28", "per person", "", ""], ["Bar", "Bar Package", "Signature Bar – 1 Hour", "ABSOLUT Vodka, Tanqueray Gin, BACARDI Rum, 1800 Tequila, Jack Daniel's, Bulleit Rye, Dewar's 12yr, Columbia Crest wines, Prosecco, domestic & imported beers", "28", "per person", "", ""], ["Bar", "Bar Package", "Signature Bar – 2 Hours", "Same as 1-hour; extended service", "38", "per person", "", ""], ["Bar", "Bar Package", "Signature Bar – 3 Hours", "Same as 1-hour; extended service", "48", "per person", "", ""], ["Bar", "Bar Package", "Luxe Bar – 1 Hour", "Tito's Vodka, Hendrick's Gin, Ron Zacapa Rum, Casamigos Tequila, Knob Creek Bourbon, Jameson, Glenmorangie 10yr, Wente Wines, Domaine Ste. Michelle Brut, domestic & imported beers", "31", "per person", "", ""], ["Bar", "Bar Package", "Luxe Bar – 2 Hours", "Same as 1-hour; extended service", "43", "per person", "", ""], ["Bar", "Bar Package", "Luxe Bar – 3 Hours", "Same as 1-hour; extended service", "54", "per person", "", ""], ["Bar", "Bar Package", "Local Tastes Bar – 1 Hour", "OC craft distillery focus: Tito's, Hendrick's, Ron Zacapa, Casamigos, Knob Creek, Jameson, Glenmorangie 10yr, Wente Wines, Domaine Ste. Michelle", "35", "per person", "", ""], ["Bar", "Bar Package", "Local Tastes Bar – 2 Hours", "Same as 1-hour; extended service", "45", "per person", "", ""], ["Bar", "Bar Package", "Local Tastes Bar – 3 Hours", "Same as 1-hour; extended service", "55", "per person", "", ""], ["Bar", "Consumption", "Signature Liquors & Wine (Consumption)", "Per drink consumption pricing", "12", "each", "", ""], ["Bar", "Consumption", "Luxe Liquors & Wine (Consumption)", "Per drink consumption pricing", "14", "each", "", ""], ["Bar", "Consumption", "Local Craft Beer (Consumption)", "Per drink consumption pricing", "10", "each", "", ""], ["Bar", "Consumption", "Domestic Beer (Consumption)", "Per drink consumption pricing", "9", "each", "", ""], ["Bar", "Consumption", "Imported / Crafted Beer (Consumption)", "Per drink consumption pricing", "10", "each", "", ""], ["Bar", "Surcharge", "Bar Labor Fee", "Per bartender (4 hours): 1 bartender per 100–150 guests hosted / 150–200 guests cash bar", "250", "per bartender", "", ""], ["Bar", "Surcharge", "Chef / Station Attendant Fee", "Per chef station (2 hours)", "250", "per station", "", ""], ["Breakfast", "Buffet Hot Entrée Option", "Free Range Scrambled Eggs", "With butter and chives", "", "(included in buffet)", "V, GF", "Hot entrée selection for Rise & Shine buffet"], ["Breakfast", "Buffet Hot Entrée Option", "Free Range Egg White Frittata", "Sundried tomato, goat cheese & spinach", "", "(included in buffet)", "V, GF", "Hot entrée selection for Rise & Shine buffet"], ["Breakfast", "Buffet Hot Entrée Option", "Free Range Whole Egg Frittata", "Ham, boursin cheese & scallion", "", "(included in buffet)", "GF", "Hot entrée selection for Rise & Shine buffet"], ["Breakfast", "Buffet Hot Entrée Option", "Free-Range Hard-Boiled Eggs", "", "", "(included in buffet)", "V, GF, DF", "Hot entrée selection for Rise & Shine buffet"], ["Breakfast", "Buffet Hot Entrée Option", "Machaca con Huevo", "Shredded beef short ribs, onion, tomato, cilantro & light jalapeno", "", "(included in buffet)", "GF", "Hot entrée selection for Rise & Shine buffet"], ["Breakfast", "Buffet Hot Entrée Option", "Chilaquiles", "Scrambled eggs, pulled pork, tortilla chips, red sauce, cotija cheese", "", "(included in buffet)", "GF", "Hot entrée selection for Rise & Shine buffet"], ["Breakfast", "Buffet Hot Entrée Option", "Buttermilk Pancake", "Sweet butter, warm syrup", "", "(included in buffet)", "V", "Hot entrée selection for Rise & Shine buffet"], ["Breakfast", "Buffet Hot Entrée Option", "Cinnamon Roll Bread Pudding", "Tahitian vanilla bean, powdered sugar", "", "(included in buffet)", "V", "Hot entrée selection for Rise & Shine buffet"], ["Breakfast", "Buffet Side Option", "Thyme Roasted Yukon Gold Potatoes", "With scallions", "", "(included in buffet)", "VG, GF", "Side selection for Rise & Shine buffet"], ["Breakfast", "Buffet Side Option", "Traditional Hash Browns", "", "", "(included in buffet)", "V, GF", "Side selection for Rise & Shine buffet"], ["Breakfast", "Buffet Side Option", "Sweet Potato Hash", "Sweet mini peppers, red onions", "", "(included in buffet)", "VG, GF", "Side selection for Rise & Shine buffet"], ["Breakfast", "Buffet Side Option", "Cheddar Grits", "", "", "(included in buffet)", "V, GF", "Side selection for Rise & Shine buffet"], ["Breakfast", "Buffet Side Option", "Crispy Breakfast Potatoes", "With caramelized onions, roasted peppers, and tomato jam", "", "(included in buffet)", "VG, GF", "Side selection for Rise & Shine buffet"], ["Breakfast", "Buffet Meat Option", "Applewood Smoked Bacon", "", "", "(included in buffet)", "GF", "Breakfast meat selection for Rise & Shine buffet"], ["Breakfast", "Buffet Meat Option", "Apple Chicken Sausage", "", "", "(included in buffet)", "GF", "Breakfast meat selection for Rise & Shine buffet"], ["Breakfast", "Buffet Meat Option", "Pork Sausage Links", "", "", "(included in buffet)", "GF", "Breakfast meat selection for Rise & Shine buffet"], ["Breakfast", "Buffet Meat Option", "Turkey Bacon", "", "", "(included in buffet)", "GF", "Breakfast meat selection for Rise & Shine buffet"], ["Breakfast", "Buffet Meat Option", "Canadian Bacon", "", "", "(included in buffet)", "GF", "Breakfast meat selection for Rise & Shine buffet"], ["Breakfast", "Plated Breakfast Pre-Set", "Chia Seed Pudding", "Coconut milk, fresh berries, agave, sliced almonds", "", "(included with plated breakfast)", "GF, VG", "Pre-set starter choice for plated breakfasts"], ["Breakfast", "Plated Breakfast Pre-Set", "Overnight Oats (Pre-Set)", "Rolled oats, greek yogurt, maple syrup, chocolate chip, seasonal berries", "", "(included with plated breakfast)", "GF, V", "Pre-set starter choice for plated breakfasts"], ["Breakfast", "Plated Breakfast Pre-Set", "Greek Yogurt Parfait", "Tahitian vanilla, wild berry compote, gluten free granola", "", "(included with plated breakfast)", "GF, V", "Pre-set starter choice for plated breakfasts"], ["Breakfast", "Plated Breakfast Pre-Set", "Seasonal Sliced Fruit and Mixed Berries", "", "", "(included with plated breakfast)", "GF, VG", "Pre-set starter choice for plated breakfasts"], ["Breakfast", "Plated Breakfast Pre-Set", "Freshly Baked Breakfast Pastry", "", "", "(included with plated breakfast)", "V", "Pre-set starter choice for plated breakfasts"], ["Lunch", "Starter", "Greek Salad", "Romaine lettuce, feta cheese, cucumbers, olives, red onions, oregano lemon vinaigrette", "", "(included in buffet)", "GF", "Monday – The Golden Coast starter option"], ["Lunch", "Starter", "Farmers Market Salad", "Mixed baby lettuces, cherry tomatoes, cucumber, haricot verts, sunflower seeds, blue cheese, apple cider vinaigrette", "", "(included in buffet)", "GF, V", "Monday – The Golden Coast starter option"], ["Lunch", "Starter", "Bowtie Pasta Salad", "Cherry tomato confit, sliced cucumber, artichoke, roasted sweet peppers, creamy dijon-basil dressing", "", "(included in buffet)", "V", "Monday – The Golden Coast starter option"], ["Lunch", "Starter", "Potato Leek Soup", "Crème fraiche and scallions", "", "(included in buffet)", "GF, V", "Monday – The Golden Coast starter option"], ["Lunch", "Entrée", "Thyme Scented Whole Chicken", "Roasted beet garnish, natural jus", "", "(included in buffet)", "GF, DF", "Monday – The Golden Coast entrée option"], ["Lunch", "Entrée", "Spice Crusted Pork Tenderloin", "Pear chutney, port wine demi", "", "(included in buffet)", "GF", "Monday – The Golden Coast entrée option"], ["Lunch", "Entrée", "Seared Local Salmon", "Seasonal garlic chard, whole grain mustard cream", "", "(included in buffet)", "GF", "Monday – The Golden Coast entrée option"], ["Lunch", "Entrée", "Seasonal Squash Ravioli", "Sauteed squash, parmesan cream sauce", "", "(included in buffet)", "V", "Monday – The Golden Coast entrée option"], ["Lunch", "Side", "Thyme Scented Red Potato", "", "", "(included in buffet)", "GF, VG", "Monday – The Golden Coast side"], ["Lunch", "Side", "Roasted Seasonal Vegetables with Lemon Oil", "", "", "(included in buffet)", "GF, VG", "Monday – The Golden Coast side"], ["Lunch", "Dessert", "Lemon & Lavender Mousse", "", "", "(included in buffet)", "GF", "Monday – The Golden Coast dessert"], ["Lunch", "Dessert", "Chocolate Panna Cotta", "", "", "(included in buffet)", "GF", "Monday – The Golden Coast dessert"], ["Lunch", "Dessert", "Seasonal Berries and Chantilly Verrines", "", "", "(included in buffet)", "GF, V", "Monday – The Golden Coast dessert"], ["Lunch", "Starter", "Baja Caesar Salad", "Gem lettuce, baby tomatoes, pickled red onion, roasted corn, queso fresco, crispy tortilla strips, cotija and pepitas dressing", "", "(included in buffet)", "V", "Tuesday – Sabor del Sol starter option"], ["Lunch", "Starter", "Jicama Salad", "Jicama julienne, cabbage, mango, carrot julienne, mint, citrus & avocado dressing", "", "(included in buffet)", "GF, V", "Tuesday – Sabor del Sol starter option"], ["Lunch", "Starter", "Grilled Vegetables and Poblano Salad", "Seasonal squash, bell peppers, onion, roasted poblano, queso fresco, chipotle lime dressing", "", "(included in buffet)", "GF, V", "Tuesday – Sabor del Sol starter option"], ["Lunch", "Starter", "Tortilla Soup", "On the side: queso fresco & tortilla strips", "", "(included in buffet)", "GF, VG", "Tuesday – Sabor del Sol starter option"], ["Lunch", "Entrée", "Beef Fajita", "Bell pepper, onion & chimichurri", "", "(included in buffet)", "GF", "Tuesday – Sabor del Sol entrée option"], ["Lunch", "Entrée", "Mojo Chicken", "Marinated chicken thigh, mango & pineapple relish, mojo sauce", "", "(included in buffet)", "GF", "Tuesday – Sabor del Sol entrée option"], ["Lunch", "Entrée", "Mexican White Bass", "Fennel & caper veracruz sauce", "", "(included in buffet)", "GF", "Tuesday – Sabor del Sol entrée option"], ["Lunch", "Entrée", "Cheese Enchiladas", "Oaxaca cheese, roasted tomato & chili sauce", "", "(included in buffet)", "V", "Tuesday – Sabor del Sol entrée option"], ["Lunch", "Side", "Cilantro Rice", "", "", "(included in buffet)", "GF, VG", "Tuesday – Sabor del Sol side"], ["Lunch", "Side", "Chayote & Calabacitas", "", "", "(included in buffet)", "GF, VG", "Tuesday – Sabor del Sol side"], ["Lunch", "Dessert", "Mango Yogurt Cake", "", "", "(included in buffet)", "", "Tuesday – Sabor del Sol dessert"], ["Lunch", "Dessert", "Mexican Wedding Cookies", "", "", "(included in buffet)", "", "Tuesday – Sabor del Sol dessert"], ["Lunch", "Dessert", "Dulce de Leche Cheese Cake", "", "", "(included in buffet)", "V", "Tuesday – Sabor del Sol dessert"], ["Lunch", "Starter", "Insalata Caprese", "Cherry tomato, ciliegine mozzarella, cucumber, basil, creamy balsamic dressing", "", "(included in buffet)", "GF, V", "Wednesday – California Cucina starter option"], ["Lunch", "Starter", "Mediterranean Antipasto Salad", "Boston lettuce, grilled seasonal squash, kalamata olives, cucumber, cherry tomato, shaved fennel, citrus vinaigrette", "", "(included in buffet)", "GF, VG", "Wednesday – California Cucina starter option"], ["Lunch", "Starter", "Arugula & Parmesan Salad", "Baby arugula, artichokes, roasted sweet peppers, shredded parmesan, caper & shallot vinaigrette", "", "(included in buffet)", "GF, V", "Wednesday – California Cucina starter option"], ["Lunch", "Starter", "Tuscan White Bean Soup", "Braised beans, seasonal vegetables, chopped parsley", "", "(included in buffet)", "GF, VG", "Wednesday – California Cucina starter option"], ["Lunch", "Entrée", "Italian Sausage Casserole", "Spinach, tomato, creamy sauce & cheese gratin", "", "(included in buffet)", "", "Wednesday – California Cucina entrée option"], ["Lunch", "Entrée", "Chicken Breast Picatta", "Caramelized cipollini onion, caper-white wine sauce", "", "(included in buffet)", "GF", "Wednesday – California Cucina entrée option"], ["Lunch", "Entrée", "Seared Barramundi", "Sweety drop peppers, citrus & herb emulsion", "", "(included in buffet)", "GF", "Wednesday – California Cucina entrée option"], ["Lunch", "Entrée", "Spinach Tortellini", "Pesto cream, heirloom tomato, parmesan cheese", "", "(included in buffet)", "", "Wednesday – California Cucina entrée option"], ["Lunch", "Side", "Roasted Beets, Turnips, Balsamic Glaze", "", "", "(included in buffet)", "GF, VG", "Wednesday – California Cucina side"], ["Lunch", "Side", "Rice Pilaf with Golden Raisins", "", "", "(included in buffet)", "GF, V", "Wednesday – California Cucina side"], ["Lunch", "Dessert", "Mascarpone Cannoli", "", "", "(included in buffet)", "V", "Wednesday – California Cucina dessert"], ["Lunch", "Dessert", "Almond and Citrus Olive Oil Cake", "", "", "(included in buffet)", "VG", "Wednesday – California Cucina dessert"], ["Lunch", "Dessert", "Limoncello Panna Cotta", "", "", "(included in buffet)", "GF", "Wednesday – California Cucina dessert"], ["Lunch", "Starter", "Shredded Lettuce Salad", "Romaine and bibb, black beans, chopped tomato, pickled onions, cilantro, creamy yogurt and smoked paprika dressing", "", "(included in buffet)", "GF, V", "Thursday – Southern Harvest starter option"], ["Lunch", "Starter", "Cajun Potato Salad", "Cajun spiced red potato, bell peppers, celery, chopped green onions, mayo", "", "(included in buffet)", "GF, V", "Thursday – Southern Harvest starter option"], ["Lunch", "Starter", "Marinated Farmers Market Salad", "Seasonal radish, cucumber, cherry tomato, red onion, fresh basil, maple bourbon vinaigrette", "", "(included in buffet)", "GF, VG", "Thursday – Southern Harvest starter option"], ["Lunch", "Starter", "Vegetarian Gumbo Soup", "Okra, mirepoix vegetables, southern seasonings", "", "(included in buffet)", "V", "Thursday – Southern Harvest starter option"], ["Lunch", "Entrée", "Blackened Whole Chicken", "Pickled vegetables, hickory smoked sauce", "", "(included in buffet)", "GF, DF", "Thursday – Southern Harvest entrée option"], ["Lunch", "Entrée", "Secret Spice Rubbed Brisket", "Pearl onion relish, citrus BBQ sauce", "", "(included in buffet)", "GF, DF", "Thursday – Southern Harvest entrée option"], ["Lunch", "Entrée", "Baked Habanero Scented Salmon", "Shaved fennel, orange and dill garnish, carolina tangy sauce", "", "(included in buffet)", "GF, DF", "Thursday – Southern Harvest entrée option"], ["Lunch", "Entrée", "Fried Green Tomato Stack", "Corn and onion relish, roasted red pepper and garlic sauce", "", "(included in buffet)", "V", "Thursday – Southern Harvest entrée option"], ["Lunch", "Side", "Mac & Cheese, Panko and Cheese Gratinated", "", "", "(included in buffet)", "V", "Thursday – Southern Harvest side"], ["Lunch", "Side", "Roasted Root Vegetables", "", "", "(included in buffet)", "GF, VG", "Thursday – Southern Harvest side"], ["Lunch", "Dessert", "Blackberry Almond Tart", "", "", "(included in buffet)", "V", "Thursday – Southern Harvest dessert"], ["Lunch", "Dessert", "Caramelized Banana Short Cake", "", "", "(included in buffet)", "", "Thursday – Southern Harvest dessert"], ["Lunch", "Dessert", "Corn Panna Cotta", "", "", "(included in buffet)", "GF", "Thursday – Southern Harvest dessert"], ["Lunch", "Starter", "Cucumber & Wakame Salad", "Shredded carrots, pickled ginger, sesame seeds, rice wine vinaigrette", "", "(included in buffet)", "GF, VG", "Friday – Pacific Rim starter option"], ["Lunch", "Starter", "Asian Chopped Salad", "Shredded iceberg & red cabbage, carrot julienne, edamame, bell pepper diced, soy-sesame dressing", "", "(included in buffet)", "DF, V", "Friday – Pacific Rim starter option"], ["Lunch", "Starter", "Soba Noodle Salad", "Julienne of mango, carrot & zucchini, cilantro, mint, sweet chili lime dressing", "", "(included in buffet)", "GF, VG", "Friday – Pacific Rim starter option"], ["Lunch", "Starter", "Egg Drop Soup", "Spinach, chili oil and scallions", "", "(included in buffet)", "V", "Friday – Pacific Rim starter option"], ["Lunch", "Entrée", "Thai Green Curry Marinated Chicken", "Chicken thigh, basil & lemongrass marinade, coconut curry sauce", "", "(included in buffet)", "GF, DF", "Friday – Pacific Rim entrée option"], ["Lunch", "Entrée", "Beef Bulgogi Style", "Soy and sesame marinated beef strips, charred leeks", "", "(included in buffet)", "DF", "Friday – Pacific Rim entrée option"], ["Lunch", "Entrée", "Miso Marinated Salmon", "Citrus relish, scallions, soy vinaigrette", "", "(included in buffet)", "DF", "Friday – Pacific Rim entrée option"], ["Lunch", "Entrée", "Stir Fried Tofu", "Bok choy, red bell pepper, carrot julienne, chili-garlic gluten free teriyaki sauce", "", "(included in buffet)", "GF, VG", "Friday – Pacific Rim entrée option"], ["Lunch", "Side", "Vegetable Fried Rice", "", "", "(included in buffet)", "VG, DF", "Friday – Pacific Rim side"], ["Lunch", "Side", "Garlic Broccoli & Seasonal Beans with Sesame Oil", "", "", "(included in buffet)", "GF, VG", "Friday – Pacific Rim side"], ["Lunch", "Dessert", "Green Tea Mousse", "", "", "(included in buffet)", "GF", "Friday – Pacific Rim dessert"], ["Lunch", "Dessert", "Coconut Mango Rice Pudding", "", "", "(included in buffet)", "GF, VG", "Friday – Pacific Rim dessert"], ["Lunch", "Dessert", "Ube Cream Tart", "", "", "(included in buffet)", "V", "Friday – Pacific Rim dessert"], ["Lunch", "Starter", "Baby Kale & Quinoa Salad", "Roasted beets, seasonal citrus, goat cheese, poppy seed vinaigrette", "", "(included in buffet)", "GF, V", "Saturday – West Coast Gathering starter option"], ["Lunch", "Starter", "California Caesar", "Romaine hearts, roasted corn, cherry tomato, parmesan, creamy Caesar dressing", "", "(included in buffet)", "GF, V", "Saturday – West Coast Gathering starter option"], ["Lunch", "Starter", "Heirloom Tomato and Burrata Salad", "Sliced tomato, burrata mousse, basil, lemon oil and balsamic vinaigrette", "", "(included in buffet)", "GF, V", "Saturday – West Coast Gathering starter option"], ["Lunch", "Starter", "Carrot Coconut Soup", "Ginger & maple scented, roasted and crushed chickpeas", "", "(included in buffet)", "GF, VG", "Saturday – West Coast Gathering starter option"], ["Lunch", "Entrée", "Montreal Spiced Beef Tri-Tip", "Sauteed mushroom garnish, roasted garlic jus", "", "(included in buffet)", "GF, DF", "Saturday – West Coast Gathering entrée option"], ["Lunch", "Entrée", "Citrus Marinated Grilled Chicken", "Roasted mini pepper garnish, salsa verde", "", "(included in buffet)", "GF, DF", "Saturday – West Coast Gathering entrée option"], ["Lunch", "Entrée", "Baja Grilled Cod", "Cabbage slaw, mango and sweet chili relish", "", "(included in buffet)", "GF, DF", "Saturday – West Coast Gathering entrée option"], ["Lunch", "Entrée", "Grilled Seasonal Squash Lasagna", "Pomodoro sauce, vegan parmesan cheese, fresh basil", "", "(included in buffet)", "GF, VG", "Saturday – West Coast Gathering entrée option"], ["Lunch", "Side", "Wild Rice and Quinoa Pilaf with Raisins", "", "", "(included in buffet)", "GF, VG", "Saturday – West Coast Gathering side"], ["Lunch", "Side", "Seasonal Grilled Vegetables with Parsley", "", "", "(included in buffet)", "GF, VG", "Saturday – West Coast Gathering side"], ["Lunch", "Dessert", "Green Apple Panna Cotta", "", "", "(included in buffet)", "GF", "Saturday – West Coast Gathering dessert"], ["Lunch", "Dessert", "Raspberry Swirl Cheesecake", "", "", "(included in buffet)", "V", "Saturday – West Coast Gathering dessert"], ["Lunch", "Dessert", "Vegan Chocolate Mousse", "", "", "(included in buffet)", "VG", "Saturday – West Coast Gathering dessert"], ["Lunch", "Starter", "Classic Cobb Salad", "Romaine hearts, cucumber, tomato, applewood bacon, blue cheese crumble, pink peppercorn ranch dressing", "", "(included in buffet)", "GF", "Sunday – Farm to Feast starter option"], ["Lunch", "Starter", "Seasonal Melon and Beet Salad", "Toasted walnuts, arugula, frisée, creamy balsamic dressing", "", "(included in buffet)", "GF, V", "Sunday – Farm to Feast starter option"], ["Lunch", "Starter", "Elbow Macaroni & Egg Salad", "Yellow mustard, mayonnaise, shallot, bell peppers, paprika, cheddar cheese", "", "(included in buffet)", "V", "Sunday – Farm to Feast starter option"], ["Lunch", "Starter", "Smoky Tomato and Beans Soup", "Creamy finish, chives", "", "(included in buffet)", "GF, V", "Sunday – Farm to Feast starter option"], ["Lunch", "Entrée", "House Smoked Brisket", "Whiskey BBQ sauce, charred scallions", "", "(included in buffet)", "GF, DF", "Sunday – Farm to Feast entrée option"], ["Lunch", "Entrée", "Mustard and Thyme Grilled Chicken", "Artichoke garnish, creamy mushroom sauce", "", "(included in buffet)", "GF", "Sunday – Farm to Feast entrée option"], ["Lunch", "Entrée", "Grilled Shrimps and Vegetables", "Garlic, paprika, lime marinade, chimichurri sauce", "", "(included in buffet)", "GF, DF", "Sunday – Farm to Feast entrée option"], ["Lunch", "Entrée", "Portobello Mushrooms and Grilled Halloumi Cheese", "Creamy basil pesto sauce, balsamic glaze", "", "(included in buffet)", "GF, V", "Sunday – Farm to Feast entrée option"], ["Lunch", "Side", "Grilled Corn with Garlic Parmesan Sauce", "", "", "(included in buffet)", "V", "Sunday – Farm to Feast side"], ["Lunch", "Side", "Roasted Herb Potato", "", "", "(included in buffet)", "GF, VG", "Sunday – Farm to Feast side"], ["Lunch", "Dessert", "Blueberry White Chocolate Mousse", "", "", "(included in buffet)", "GF", "Sunday – Farm to Feast dessert"], ["Lunch", "Dessert", "Salted Caramel Cream Puff", "", "", "(included in buffet)", "V", "Sunday – Farm to Feast dessert"], ["Lunch", "Dessert", "Apple Crumble Bar", "", "", "(included in buffet)", "", "Sunday – Farm to Feast dessert"], ["Lunch", "Coastal Comfort Starter", "California Caesar (Coastal Comfort)", "Romaine hearts, roasted corn, cherry tomato, parmesan, creamy Caesar dressing", "", "(included in buffet)", "GF, V", "Coastal Comfort Buffet starter option"], ["Lunch", "Coastal Comfort Starter", "Country Potato Salad", "Mayo, egg, mustard, cayenne pepper", "", "(included in buffet)", "GF, V", "Coastal Comfort Buffet starter option"], ["Lunch", "Coastal Comfort Starter", "Market Salad", "Mixed baby lettuces, cherry tomatoes, cucumber, seasonal beans, sunflower seeds, blue cheese, apple cider vinaigrette", "", "(included in buffet)", "GF, V", "Coastal Comfort Buffet starter option"], ["Lunch", "Coastal Comfort Starter", "Butternut Squash Soup", "Coconut milk, toasted pumpkin seeds", "", "(included in buffet)", "GF, VG", "Coastal Comfort Buffet starter option"], ["Lunch", "Coastal Comfort Sandwich", "Chipotle Chicken Sandwich", "Piquillo peppers, pesto aioli, gruyere cheese, ciabatta bread", "", "(included in buffet)", "", "Coastal Comfort Buffet sandwich option"], ["Lunch", "Coastal Comfort Sandwich", "Cubano Sandwich", "Pulled pork, ham, swiss cheese, pickle, mustard, potato hoagie roll", "", "(included in buffet)", "", "Coastal Comfort Buffet sandwich option"], ["Lunch", "Coastal Comfort Sandwich", "Beef Fajita Wrap", "Cumin scented beef, shredded iceberg, roasted bell peppers and onions, flour tortilla", "", "(included in buffet)", "DF", "Coastal Comfort Buffet sandwich option"], ["Lunch", "Coastal Comfort Sandwich", "Grilled Vegetable & Portobello Wrap", "Arugula, balsamic vinaigrette, goat cheese, spinach tortilla", "", "(included in buffet)", "V", "Coastal Comfort Buffet sandwich option"], ["Lunch", "Coastal Comfort Sandwich", "Ratatouille Wrap", "Roasted seasonal vegetables, peppers, goat cheese, hummus, gluten free tortilla", "", "(included in buffet)", "GF, V", "Coastal Comfort Buffet sandwich option"], ["Lunch", "Coastal Comfort Side", "House Fried Kettle Chips", "", "", "(included in buffet)", "", "Coastal Comfort Buffet side option"], ["Lunch", "Coastal Comfort Side", "French Fries", "", "", "(included in buffet)", "", "Coastal Comfort Buffet side option"], ["Lunch", "Coastal Comfort Side", "Farmers Market Vegetable Crudité", "", "", "(included in buffet)", "", "Coastal Comfort Buffet side option"], ["Lunch", "Coastal Comfort Side", "Coleslaw", "", "", "(included in buffet)", "", "Coastal Comfort Buffet side option"], ["Lunch", "Coastal Comfort Dessert", "Green Apple Panna Cotta (Coastal)", "", "", "(included in buffet)", "GF", "Coastal Comfort Buffet dessert"], ["Lunch", "Coastal Comfort Dessert", "Salted Caramel Chocolate Torte", "", "", "(included in buffet)", "", "Coastal Comfort Buffet dessert"], ["Lunch", "Coastal Comfort Dessert", "Coconut Mango Rice Pudding (Coastal)", "", "", "(included in buffet)", "GF, VG", "Coastal Comfort Buffet dessert"], ["Lunch", "Plated Lunch Starter", "Roasted Beet Salad (Plated Lunch)", "Green oak lettuce, candied pecan, goat cheese, radish, seasonal citrus vinaigrette", "", "(included with plated lunch)", "GF", "Starter choice for three-course plated lunch"], ["Lunch", "Plated Lunch Starter", "Heirloom Tomato Burrata Salad", "Sliced cucumber, arugula pesto, balsamic glaze, micro greens, lemon oil", "", "(included with plated lunch)", "V", "Starter choice for three-course plated lunch"], ["Lunch", "Plated Lunch Starter", "Traditional Greens Salad (Plated Lunch)", "Baby leaf lettuces, shaved root vegetables, cucumber, heirloom cherry tomatoes, poppy seed vinaigrette", "", "(included with plated lunch)", "GF, VG", "Starter choice for three-course plated lunch"], ["Lunch", "Plated Lunch Starter", "Classic Caesar Salad (Plated Lunch)", "Romaine heart, parmesan cheese, herb croutons, Caesar dressing", "", "(included with plated lunch)", "V", "Starter choice for three-course plated lunch"], ["Lunch", "Plated Lunch Starter", "Smoked Tomato Bisque", "Seasonal vegetables, lemon oil", "", "(included with plated lunch)", "V", "Starter choice for three-course plated lunch"], ["Lunch", "Plated Lunch Starter", "Butternut Squash Soup (Plated Lunch)", "Coconut milk, cinnamon scented, chives", "", "(included with plated lunch)", "GF, VG", "Starter choice for three-course plated lunch"], ["Lunch", "Plated Lunch Dessert", "Pistachio White Chocolate Gateaux (Lunch)", "With strawberry sauce", "", "(included with plated lunch)", "", "Dessert choice for three-course plated lunch"], ["Lunch", "Plated Lunch Dessert", "Crème Fraiche Cheesecake (Lunch)", "Berry compote, sour orange coulis", "", "(included with plated lunch)", "V", "Dessert choice for three-course plated lunch"], ["Lunch", "Plated Lunch Dessert", "Mango Lemon Torte (Lunch)", "With caramel sauce", "", "(included with plated lunch)", "", "Dessert choice for three-course plated lunch"], ["Lunch", "Plated Lunch Dessert", "Citrus Fruit Tart (Lunch)", "Blood orange curd, fresh fruit, berry coulis", "", "(included with plated lunch)", "", "Dessert choice for three-course plated lunch"], ["Lunch", "Plated Light Lunch Dessert", "Tiramisu (Light Lunch)", "Lady finger, mascarpone cream, coffee liqueur, vanilla sauce", "", "(included with plated lunch)", "", "Dessert choice for plated light lunch"], ["Lunch", "Plated Light Lunch Dessert", "Pistachio White Chocolate Gateaux (Light Lunch)", "With strawberry sauce", "", "(included with plated lunch)", "", "Dessert choice for plated light lunch"], ["Lunch", "Plated Light Lunch Dessert", "Citrus Fruit Tart (Light Lunch)", "Blood orange curd, fresh fruit, berry coulis", "", "(included with plated lunch)", "", "Dessert choice for plated light lunch"], ["Lunch", "Plated Light Lunch Dessert", "Crème Fraiche Cheesecake (Light Lunch)", "Berry compote, sour orange coulis", "", "(included with plated lunch)", "V", "Dessert choice for plated light lunch"], ["Dinner", "Farm & Flame Item", "Bloomsdale Spinach Salad", "Red wine poached pear, sliced almond, goat cheese, pomegranate seeds, poppy seed vinaigrette", "", "(included in buffet)", "GF, V", "Farm & Flame dinner buffet item"], ["Dinner", "Farm & Flame Item", "Field Green Lettuce Salad", "Baby mixed greens, frisée, cucumbers, cherry tomatoes, toasted pepita seeds, caramelized shallot vinaigrette", "", "(included in buffet)", "GF, VG", "Farm & Flame dinner buffet item"], ["Dinner", "Farm & Flame Item", "Grilled Chophouse Filet", "House made spice rub, green peppercorn bordelaise", "", "(included in buffet)", "GF, DF", "Farm & Flame dinner buffet item"], ["Dinner", "Farm & Flame Item", "Pan-Seared Pacific Salmon (Farm & Flame)", "Purple cauliflower and raisin puree", "", "(included in buffet)", "GF", "Farm & Flame dinner buffet item"], ["Dinner", "Farm & Flame Item", "Mushroom Risotto", "Wild mushrooms, parmesan cream", "", "(included in buffet)", "GF", "Farm & Flame dinner buffet item"], ["Dinner", "Farm & Flame Item", "Broccolini, Bell Pepper, Rainbow Carrots", "", "", "(included in buffet)", "GF, VG", "Farm & Flame dinner buffet item"], ["Dinner", "Farm & Flame Item", "Baby Yukon Potatoes", "Roasted garlic, extra-virgin olive oil", "", "(included in buffet)", "GF, VG", "Farm & Flame dinner buffet item"], ["Dinner", "Farm & Flame Dessert", "Lavender Cream Tart", "", "", "(included in buffet)", "", "Farm & Flame dinner buffet dessert"], ["Dinner", "Farm & Flame Dessert", "Caramel Cheesecake", "", "", "(included in buffet)", "V", "Farm & Flame dinner buffet dessert"], ["Dinner", "Farm & Flame Dessert", "Strawberry White Chocolate Mousse", "", "", "(included in buffet)", "GF", "Farm & Flame dinner buffet dessert"], ["Dinner", "Coast Grove Item", "Baby Green Salad", "Baby tomatoes, strawberries, candied walnuts, dijon-maple vinaigrette", "", "(included in buffet)", "GF, VG", "Coast Grove dinner buffet item"], ["Dinner", "Coast Grove Item", "Quinoa & Apple Salad", "Baby rocket, shaved fennel, dried cranberries, citrus vinaigrette", "", "(included in buffet)", "GF, VG", "Coast Grove dinner buffet item"], ["Dinner", "Coast Grove Item", "Braised Short Ribs", "Gremolata, red wine jus", "", "(included in buffet)", "GF", "Coast Grove dinner buffet item"], ["Dinner", "Coast Grove Item", "Herb Brined Chicken Breast", "Creamy mushroom emulsion", "", "(included in buffet)", "GF", "Coast Grove dinner buffet item"], ["Dinner", "Coast Grove Item", "Seared Barramundi", "Parsnip puree, beurre rouge", "", "(included in buffet)", "GF", "Coast Grove dinner buffet item"], ["Dinner", "Coast Grove Item", "Fontina Gnocchi", "Blistered tomato, pesto cream sauce", "", "(included in buffet)", "", "Coast Grove dinner buffet item"], ["Dinner", "Coast Grove Item", "Caramelized Brussels Sprouts", "Balsamic drizzle", "", "(included in buffet)", "GF, VG", "Coast Grove dinner buffet item"], ["Dinner", "Coast Grove Item", "Roasted Root Vegetables", "Lemon oil", "", "(included in buffet)", "GF, VG", "Coast Grove dinner buffet item"], ["Dinner", "Coast Grove Dessert", "Coffee Cream Puff", "", "", "(included in buffet)", "V", "Coast Grove dinner buffet dessert"], ["Dinner", "Coast Grove Dessert", "Orange Chocolate Torte", "", "", "(included in buffet)", "", "Coast Grove dinner buffet dessert"], ["Dinner", "Coast Grove Dessert", "Black Forest Cake", "", "", "(included in buffet)", "", "Coast Grove dinner buffet dessert"], ["Dinner", "PCH Sunset Item", "California Chopped Salad", "Roasted seasonal squash, dried apricot, romaine lettuce, candied walnut, champagne dressing", "", "(included in buffet)", "GF, VG", "PCH Sunset dinner buffet item"], ["Dinner", "PCH Sunset Item", "Baby Kale and Beet Salad", "Goat cheese, dates, seasonal radish, creamy balsamic dressing", "", "(included in buffet)", "GF", "PCH Sunset dinner buffet item"], ["Dinner", "PCH Sunset Item", "Lobster Bisque", "Crème fraiche", "", "(included in buffet)", "", "PCH Sunset dinner buffet item"], ["Dinner", "PCH Sunset Item", "Grilled Prime Rib Eye", "Cabernet reduction", "", "(included in buffet)", "GF, DF", "PCH Sunset dinner buffet item"], ["Dinner", "PCH Sunset Item", "Roasted Chicken Thigh", "Lemon brine, herbs, chicken jus", "", "(included in buffet)", "GF, DF", "PCH Sunset dinner buffet item"], ["Dinner", "PCH Sunset Item", "Cheese Tortelloni", "Creamy sundried tomato sauce", "", "(included in buffet)", "V", "PCH Sunset dinner buffet item"], ["Dinner", "PCH Sunset Item", "Classic Mashed Potato", "Butter & cream", "", "(included in buffet)", "GF, V", "PCH Sunset dinner buffet item"], ["Dinner", "PCH Sunset Item", "Grilled Asparagus", "Lemon oil", "", "(included in buffet)", "GF, VG", "PCH Sunset dinner buffet item"], ["Dinner", "PCH Sunset Dessert", "Yogurt Panna Cotta & Seasonal Berries", "", "", "(included in buffet)", "", "PCH Sunset dinner buffet dessert"], ["Dinner", "PCH Sunset Dessert", "Apple Walnut Cobbler", "", "", "(included in buffet)", "V", "PCH Sunset dinner buffet dessert"], ["Dinner", "PCH Sunset Dessert", "Raspberry Silk Tart", "", "", "(included in buffet)", "", "PCH Sunset dinner buffet dessert"], ["Dinner", "Plated Dinner Starter", "Garden Field Greens", "Farm gathered leaf lettuces, poached pear, gorgonzola cheese, dried cranberries, candied walnuts, white balsamic vinaigrette", "", "(included with plated dinner)", "GF, V", "Starter choice for plated dinner"], ["Dinner", "Plated Dinner Starter", "Heirloom Tomato and Mozzarella Salad", "Cucumber ribbons, basil pesto, balsamic drizzle", "", "(included with plated dinner)", "GF, V", "Starter choice for plated dinner"], ["Dinner", "Plated Dinner Starter", "Caesar Salad (Dinner)", "Petite gem lettuce, parmesan cheese, herb croutons, heirloom cherry tomatoes, caesar dressing", "", "(included with plated dinner)", "", "Starter choice for plated dinner"], ["Dinner", "Plated Dinner Starter", "Roasted Beet Salad (Dinner)", "Hydroponic bibb lettuce, frisse, shaved manchego cheese, pomegranate seeds, citrus vinaigrette", "", "(included with plated dinner)", "GF, V", "Starter choice for plated dinner"], ["Dinner", "Plated Dinner Starter", "Traditional Greens Salad (Dinner)", "Baby leaf lettuces, shaved root vegetables, cucumber, heirloom cherry tomatoes, radish, poppy seed vinaigrette", "", "(included with plated dinner)", "GF, VG", "Starter choice for plated dinner"], ["Dinner", "Plated Dinner Starter", "Cream of Foraged Mushrooms Soup", "Cognac cream, sauteed mushroom, truffle oil", "", "(included with plated dinner)", "GF, V", "Starter choice for plated dinner"], ["Dinner", "Plated Dinner Starter", "Smoked Tomato Bisque (Dinner)", "Burrata mousse, lemon oil, chives", "", "(included with plated dinner)", "GF, V", "Starter choice for plated dinner"], ["Dinner", "Plated Dinner Starter", "Butternut Squash Soup (Dinner)", "Coconut cream, toasted crushed pumpkin seeds", "", "(included with plated dinner)", "GF, VG", "Starter choice for plated dinner"], ["Bar", "Wine – Sparkling", "Riondo Prosecco Spumante DOC, Italy", "Golden delicious apples, pear, yellow flowers", "56", "per bottle", "", ""], ["Bar", "Wine – Sparkling", "Domaine Ste. Michelle Brut, WA", "Green apples, fresh-cut lemon, lime peel", "55", "per bottle", "", ""], ["Bar", "Wine – Sparkling", "Chandon Brut, CA", "Bartlett pear, lemon zest, apple", "80", "per bottle", "", ""], ["Bar", "Wine – Sparkling", "Moët & Chandon Impérial Brut 185ml, France", "Yellow peach, raw almonds, lime blossom", "35", "per bottle", "", ""], ["Bar", "Wine – Sparkling", "Veuve Clicquot Yellow Label 375ml, France", "Apples, vanilla bean, lightly toasted brioche", "95", "per bottle", "", ""], ["Bar", "Wine – White", "Pinot Grigio, Terlato Family, Italy", "White peaches, Asian pear, spring flowers", "76", "per bottle", "", ""], ["Bar", "Wine – White", "Sauvignon Blanc, Matanzas Creek, CA", "Pears, vanilla cream, oak aged", "56", "per bottle", "", ""], ["Bar", "Wine – White", "Sauvignon Blanc, Wairau River", "Grapefruit, nectarine, tropical fruits", "52", "per bottle", "", ""], ["Bar", "Wine – White", "Riesling, Chateau Ste. Michelle", "Ripe limes, floral, soft peaches", "48", "per bottle", "", ""], ["Bar", "Wine – White", "Chardonnay, Columbia Crest", "Apples, pear, melon", "56", "per bottle", "", ""], ["Bar", "Wine – White", "Chardonnay, Proverb, CA", "Baked apple, pineapple chunks, caramel", "44", "per bottle", "", ""], ["Bar", "Wine – White", "Chardonnay, Decoy by Duckhorn", "Apricot, citrus, honeysuckle", "58", "per bottle", "", ""], ["Bar", "Wine – White", "Chardonnay, Wente", "Melon, green apple, vanilla", "58", "per bottle", "", ""], ["Bar", "Wine – White", "Chardonnay, Sonoma-Cutrer, CA", "Honeycrisp apples, roasted nuts, butter", "72", "per bottle", "", ""], ["Bar", "Wine – Rosé", "H3 Rosé, Horse Heaven Hills", "Watermelon, white peach, raspberry", "55", "per bottle", "", ""], ["Bar", "Wine – Rosé", "Fleur de Mer Rosé", "Watermelon, cherries, lemon custard, lavender", "64", "per bottle", "", ""], ["Bar", "Wine – Rosé", "Whispering Angel Rosé, Côte de Provence", "Pear blossom, bing cherry, jasmine flowers", "87", "per bottle", "", ""], ["Bar", "Wine – Red", "Pinot Noir, Parker Station, CA", "Red plum, vanilla, wild strawberries", "54", "per bottle", "", ""], ["Bar", "Wine – Red", "Pinot Noir, Decoy by Duckhorn", "Black cherry, wild strawberry, black tea, sage", "60", "per bottle", "", ""], ["Bar", "Wine – Red", "Pinot Noir, Meiomi, CA", "Dark cherries, strawberry jam, vanilla mocha", "62", "per bottle", "", ""], ["Bar", "Wine – Red", "Merlot, Wente, Livermore Valley, CA", "Black cherry, plum, cinnamon", "56", "per bottle", "", ""], ["Bar", "Wine – Red", "Cabernet Sauvignon, Columbia Crest H3, WA", "Plums, cocoa, vanilla", "56", "per bottle", "", ""], ["Bar", "Wine – Red", "Cabernet Sauvignon, Proverb, CA", "Blackberries, mocha, vanilla bean", "40", "per bottle", "", ""], ["Bar", "Wine – Red", "Cabernet Sauvignon, Decoy by Duckhorn (Medium)", "Raspberry, plum, blueberry", "58", "per bottle", "", ""], ["Bar", "Wine – Red", "Red Blend, Murrieta's Well 'The Spur' Livermore CA", "White pepper, coffee, toasty oak", "68", "per bottle", "", ""], ["Bar", "Wine – Red", "Red Blend, Insignia by Joseph Phelps", "Blackberry, cocoa", "550", "per bottle", "", ""], ["Bar", "Wine – Red", "Pinot Noir, Belle Glos", "Ripe plums, dried herbs, smoke", "96", "per bottle", "", ""], ["Bar", "Wine – Red", "Merlot, Wente 'Sandstone' Livermore CA", "Black cherry, plum, savory herbs", "52", "per bottle", "", ""], ["Bar", "Wine – Red", "Pinot Noir, Davis Bynum, Russian River Valley", "Ripe strawberries, cherry, smoke", "64", "per bottle", "", ""], ["Bar", "Wine – Red", "Pinot Noir, Ponzi Tavola, Willamette Valley, OR", "Dark plums, raspberries, cedar", "52", "per bottle", "", ""], ["Bar", "Wine – Red", "Cabernet Sauvignon, Decoy by Duckhorn (Dark)", "Currant, cherry, plum, olive", "72", "per bottle", "", ""], ["Bar", "Wine – Red", "Cabernet Sauvignon, Columbia Crest H3, Horse Heaven Hills", "Black cherry, candied blackberry, coffee beans", "56", "per bottle", "", ""], ["Bar", "Wine – Red", "Cabernet Sauvignon, DAOU, Paso Robles (Figs)", "Figs, raisins, espresso", "94", "per bottle", "", ""], ["Bar", "Wine – Red", "Cabernet Sauvignon, DAOU Paso Robles (Blackberry)", "Blackberry, black plums, smoke", "75", "per bottle", "", ""], ["Bar", "Wine – Red", "Malbec, Bodega Norton Barrel Select, Mendoza", "Ripe plums, dried herbs, smoke", "60", "per bottle", "", ""], ["Bar", "Wine – Red", "Cabernet Sauvignon, Jordan", "Black currants, blackberries, ripe cherries", "178", "per bottle", "", ""], ["Bar", "Wine – Red", "Merlot, Decoy by Duckhorn", "Black raspberry, spiced plums", "162", "per bottle", "", ""], ["Bar", "Wine – Red", "Red Blend, Overture by Opus One", "Blackberry, marionberry, nutmeg", "280", "per bottle", "", ""], ["Bar", "Wine – Red", "Red Blend, Opus One", "Black fruits, roasted coffee, chocolate shavings", "625", "per bottle", "", ""]];
+
+// ── PASSWORD ──
+// Change the password below to whatever you want staff to use
+const SITE_PASSWORD = 'snaah';
+const AUTH_KEY      = 'hilton_auth_ts';
+const AUTH_HOURS    = 8; // Hours before password is required again
+
+(function(){
+  const ts = localStorage.getItem(AUTH_KEY);
+  const valid = ts && (Date.now() - parseInt(ts)) < AUTH_HOURS * 3600000;
+  if(valid) document.getElementById('pw-overlay').style.display = 'none';
+})();
+
+function checkPassword(){
+  const val = document.getElementById('pw-input').value;
+  if(val === SITE_PASSWORD){
+    localStorage.setItem(AUTH_KEY, Date.now().toString());
+    document.getElementById('pw-overlay').style.display = 'none';
+    document.getElementById('pw-error').style.display = 'none';
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+
+// ── FIREBASE CONFIG ──
+// Paste your Firebase project config here (from Firebase Console → Project Settings → Your Apps)
+const firebaseConfig = {
+  apiKey:            "AIzaSyACCDnsgvpFlr6emujOhQXzhUzh_nNGpuk",
+  authDomain:        "hiltonbanquetpresheet.firebaseapp.com",
+  databaseURL:       "https://hiltonbanquetpresheet-default-rtdb.firebaseio.com",
+  projectId:         "hiltonbanquetpresheet",
+  storageBucket:     "hiltonbanquetpresheet.firebasestorage.app",
+  messagingSenderId: "506532294717",
+  appId:             "1:506532294717:web:88444521c1f1147f91fa54"
+};
+
+// Guard: if Firebase SDK failed to load (e.g. no internet, opened as a local file),
+// show a clear message instead of crashing with "firebase is not defined".
+let fbDB, menuRef, sheetsRef;
+if (typeof firebase === 'undefined') {
+  console.error('Firebase SDK did not load. Open this page via Netlify, not as a local file.');
+  document.addEventListener('DOMContentLoaded', () => {
+    showToast('⚠️ Could not connect to database. Make sure you are accessing this page through the Netlify link, not a local file.', '#b71c1c');
+  });
+} else {
+  firebase.initializeApp(firebaseConfig);
+  fbDB     = firebase.database();
+  menuRef  = fbDB.ref('hilton_menu');
+  sheetsRef = fbDB.ref('hilton_preSheets');
+}
+
+const SHEET_TTL = 15 * 24 * 60 * 60 * 1000; // 15 days in ms
+
+// Unique ID for this browser session — used to detect remote vs local changes
+const SESSION_ID = Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+let _isFirstLoad = true;
+
+let menuDB=[], editingIdx=null, deleteIdx=null, beoBlocks=[];
+
+// THEME
+function toggleTheme(){
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('theme-btn').innerHTML=isDark?'🌙 Dark Mode':'☀️ Light Mode';
+  localStorage.setItem('hilton_theme',isDark?'light':'dark');
+}
+function applyStoredTheme(){
+  const t=localStorage.getItem('hilton_theme');
+  if(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('theme-btn').innerHTML=t==='dark'?'☀️ Light Mode':'🌙 Dark Mode';}
+}
+
+// PRINT
+function triggerPrint(){
+  const now=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const timeStr=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const dateStr=`${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+  document.getElementById('print-timestamp').innerHTML=`<strong>Printed:</strong> ${dateStr} at ${timeStr}`;
+  document.getElementById('print-page-footer').textContent='Hilton Anaheim — Confidential';
+  window.print();
+}
+
+// ── DATABASE (Firebase) ──
+function initDB(){
+  if(!menuRef){
+    // Firebase not available — fall back to seed data
+    menuDB = SEED.map((r,i) => ({id:i, category:r[0], subcategory:r[1], name:r[2], description:r[3], price:r[4], unit:r[5], dietary:r[6], notes:r[7]}));
+    if(document.getElementById('page-database').classList.contains('active')) renderDatabase();
+    return;
+  }
+  // Show spinner while connecting
+  document.getElementById('db-body').innerHTML =
+    '<tr><td colspan="9"><div class="db-loading">Connecting to database…</div></td></tr>';
+
+  menuRef.on('value', snapshot => {
+    const data = snapshot.val();
+
+    if(data && data.items){
+      menuDB = data.items;
+    } else {
+      // First ever load — seed Firebase with the built-in menu data
+      menuDB = SEED.map((r,i) => ({
+        id:i, category:r[0], subcategory:r[1], name:r[2],
+        description:r[3], price:r[4], unit:r[5], dietary:r[6], notes:r[7]
+      }));
+      menuRef.set({ items: menuDB, lastModifiedBy: SESSION_ID, lastModifiedAt: Date.now() });
+    }
+
+    // After the first snapshot, any further updates are from other users
+    if(!_isFirstLoad && data && data.lastModifiedBy !== SESSION_ID){
+      showSyncBanner();
+    }
+    _isFirstLoad = false;
+
+    // Re-render whichever view is active
+    if(document.getElementById('page-database').classList.contains('active')){
+      renderDatabase();
+    }
+  }, err => {
+    console.error('Firebase read error:', err);
+    showToast('⚠️ Could not connect to database — check your config','#b71c1c');
+  });
+}
+
+let _toastTimer = null;
+function saveDB(){
+  if(!menuRef){ showToast('⚠️ Database unavailable — open via Netlify link','#b71c1c'); return; }
+  menuRef.set({ items: menuDB, lastModifiedBy: SESSION_ID, lastModifiedAt: Date.now() })
+    .then(()  => showToast('✅ Saved to database'))
+    .catch(e  => {
+      console.error('Firebase save failed:', e);
+      showToast('⚠️ Could not save — check connection','#b71c1c');
+    });
+}
+
+function showSyncBanner(){
+  const b = document.getElementById('sync-banner');
+  if(!b) return;
+  b.classList.add('show');
+  // Auto-dismiss after 8 seconds
+  setTimeout(() => b.classList.remove('show'), 8000);
+}
+function dismissSyncBanner(){
+  const b = document.getElementById('sync-banner');
+  if(b) b.classList.remove('show');
+}
+function showToast(msg,bg){
+  const t=document.getElementById('save-toast');
+  if(!t)return;
+  t.textContent=msg;
+  t.style.background=bg||'#2e7d32';
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// NAV
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes(p))t.classList.add('active');});
+  if(p==='database')renderDatabase();
+}
+
+// PRE-SHEET
+function addBeoBlock(){
+  const id=Date.now()+Math.random();
+  beoBlocks.push({id,beo:'',ppl:'',ct:'',category:'',items:[emptyItem()],equipment:'',time:''});
+  renderPresheet();
+  setTimeout(()=>{const r=document.querySelectorAll('.beo-num-input');if(r.length)r[r.length-1].focus();},40);
+}
+function emptyItem(){return{searchVal:'',name:'',tags:'',desc:''};}
+
+function renderPresheet(){
+  scheduleDraftSave(); // queue an auto-draft save after 30 s of inactivity
+  const tbody=document.getElementById('presheet-body');
+  tbody.innerHTML='';
+  beoBlocks.forEach((block,bi)=>{
+    const topTr=document.createElement('tr');
+    topTr.className='beo-top-row beo-block';
+    topTr.innerHTML=`
+      <td><input class="beo-input beo-num-input" style="width:82px" placeholder="#" value="${esc(block.beo)}" onchange="updateBlock(${bi},'beo',this.value)"></td>
+      <td style="text-align:center"><input class="beo-input" style="width:42px;text-align:center" placeholder="—" value="${esc(block.ppl)}" onchange="updateBlock(${bi},'ppl',this.value)"></td>
+      <td style="text-align:center"><input class="beo-input" style="width:38px;text-align:center" placeholder="—" value="${esc(block.ct)}" onchange="updateBlock(${bi},'ct',this.value)"></td>
+      <td>
+        <span class="menu-item-label">Category:</span>
+        ${block.category
+          ? `<span class="beo-auto-field">${esc(block.category)}</span>`
+          : `<span class="beo-auto-placeholder">auto-fills from item</span>`}
+      </td>
+      <td><input class="beo-input" style="width:104px" placeholder="Equipment" value="${esc(block.equipment)}" onchange="updateBlock(${bi},'equipment',this.value)"></td>
+      <td>
+        <input class="beo-input time-picker-input" type="time" value="${esc(block.time)}" onchange="updateBlock(${bi},'time',this.value)">
+        <span class="time-print-display">${formatTime(block.time)}</span>
+      </td>
+      <td><button class="remove-row-btn" onclick="removeBeo(${bi})">✕</button></td>`;
+    tbody.appendChild(topTr);
+
+    block.items.forEach((item,ii)=>{
+      const dropId=`dp-${Math.floor(block.id)}-${ii}`;
+      const itemTr=document.createElement('tr');
+      itemTr.className='beo-item-row'+(item.name?' has-item':'');
+      itemTr.innerHTML=`
+        <td colspan="3"></td>
+        <td colspan="3">
+          <div class="menu-item-section">
+            <span class="menu-item-label">Menu Item:</span>
+            <div class="search-area">
+              <input class="search-input" id="si-${Math.floor(block.id)}-${ii}" placeholder="Type to search menu…"
+                value="${esc(item.searchVal||item.name)}" autocomplete="off"
+                oninput="onSI(${bi},${ii},this.value,'${dropId}')"
+                onfocus="onSF(${bi},${ii},this.value,'${dropId}')"
+                onblur="onSB('${dropId}')">
+              ${item.name?`<button class="clear-btn" onclick="clearItem(${bi},${ii})">✕</button>`:''}
+              <div class="search-dropdown" id="${dropId}"></div>
+            </div>
+          </div>
+          ${item.tags?`<div class="menu-item-section"><span class="menu-item-label">Dietary:</span> ${renderTags(item.tags)}</div>`:''}
+          ${item.desc?`<div class="menu-item-section"><span class="menu-item-label">Description:</span> <span class="menu-item-desc">${esc(item.desc)}</span></div>`:''}
+        </td>
+        <td style="text-align:center;vertical-align:middle">
+          ${ii>0?`<button class="remove-row-btn" onclick="removeItem(${bi},${ii})">✕</button>`:''}
+        </td>`;
+      tbody.appendChild(itemTr);
+    });
+
+    const addTr=document.createElement('tr');
+    addTr.className='beo-item-row';
+    addTr.innerHTML=`<td colspan="7" style="padding-bottom:9px">
+      <button style="background:none;border:none;color:var(--ink-muted);font-family:var(--font-ui);font-size:0.8rem;font-weight:600;cursor:pointer;padding:3px 0;transition:color 0.15s"
+        onmouseenter="this.style.color='var(--hilton-blue)'" onmouseleave="this.style.color='var(--ink-muted)'"
+        onclick="addItemRow(${bi})">＋ add menu item</button></td>`;
+    tbody.appendChild(addTr);
+  });
+}
+
+function updateBlock(bi,f,v){beoBlocks[bi][f]=v;}
+function removeBeo(bi){beoBlocks.splice(bi,1);renderPresheet();}
+function addItemRow(bi){beoBlocks[bi].items.push(emptyItem());renderPresheet();}
+function removeItem(bi,ii){beoBlocks[bi].items.splice(ii,1);renderPresheet();}
+function clearItem(bi,ii){beoBlocks[bi].items[ii]=emptyItem();renderPresheet();}
+
+function onSI(bi,ii,v,d){beoBlocks[bi].items[ii].searchVal=v;showDD(bi,ii,v,d);}
+function onSF(bi,ii,v,d){showDD(bi,ii,v,d);}
+function onSB(d){setTimeout(()=>{const el=document.getElementById(d);if(el)el.classList.remove('open');},200);}
+
+function showDD(bi,ii,val,dropId){
+  const el=document.getElementById(dropId);if(!el)return;
+  const q=val.toLowerCase().trim();
+  const res=menuDB.filter(m=>!q||m.name.toLowerCase().includes(q)||m.category.toLowerCase().includes(q)||m.subcategory.toLowerCase().includes(q)).slice(0,22);
+  if(!res.length){el.classList.remove('open');return;}
+  el.innerHTML=res.map(m=>`<div class="dropdown-item" onmousedown="selItem(${bi},${ii},${m.id})">
+    <span class="dropdown-item-price">${m.price>0?'$'+m.price+' / '+m.unit:'included'}</span>
+    <div class="dropdown-item-name">${esc(m.name)}</div>
+    <div class="dropdown-item-cat">${esc(m.category)} · ${esc(m.subcategory)}</div>
+  </div>`).join('');
+  el.classList.add('open');
+}
+
+function selItem(bi,ii,mid){
+  const m=menuDB.find(x=>x.id===mid);if(!m)return;
+  beoBlocks[bi].items[ii]={searchVal:m.name,name:m.name,tags:m.dietary,desc:m.description};
+  beoBlocks[bi].category=m.category; // Always update from the selected item
+  renderPresheet();
+}
+
+function renderTags(s){
+  if(!s)return'';
+  return s.split(',').map(t=>t.trim()).filter(Boolean).map(t=>`<span class="tag tag-${t.replace(/\s/g,'')}">${t}</span>`).join(' ');
+}
+
+// DATABASE
+function renderDatabase(){
+  const q=document.getElementById('db-search').value.toLowerCase();
+  const cat=document.getElementById('db-filter-cat').value;
+  const fil=menuDB.filter(m=>{
+    const mc=!cat||m.category===cat;
+    const mq=!q||m.name.toLowerCase().includes(q)||m.category.toLowerCase().includes(q)||m.subcategory.toLowerCase().includes(q)||(m.description||'').toLowerCase().includes(q);
+    return mc&&mq;
+  });
+  const tbody=document.getElementById('db-body');
+  if(!fil.length){tbody.innerHTML=`<tr><td colspan="9"><div class="no-results">No items found. Try adjusting your search.</div></td></tr>`;document.getElementById('db-count').textContent='0 items';return;}
+  tbody.innerHTML=fil.map(m=>{
+    const cc='cat-'+m.category.split(' ')[0];
+    const ps=m.price>0?`$${m.price}`:(m.unit||'—');
+    return`<tr>
+      <td><span class="cat-badge ${cc}">${esc(m.category)}</span></td>
+      <td style="font-size:0.8rem;color:var(--ink-muted)">${esc(m.subcategory)}</td>
+      <td style="font-weight:600;color:var(--ink-secondary)">${esc(m.name)}</td>
+      <td class="desc">${esc(m.description||'—')}</td>
+      <td class="price">${ps}</td>
+      <td style="font-size:0.8rem;color:var(--ink-muted)">${esc(m.unit||'—')}</td>
+      <td>${renderTags(m.dietary)}</td>
+      <td style="font-size:0.78rem;color:var(--ink-muted);font-style:italic">${esc(m.notes||'—')}</td>
+      <td class="actions">
+        <button class="copy-btn" onclick="copyItem(${m.id})" title="Duplicate item">⧉</button>
+        <button class="edit-btn" onclick="openEditModal(${m.id})" title="Edit item">✏️</button>
+        <button class="trash-btn" onclick="askDelete(${m.id})" title="Delete item">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
+  document.getElementById('db-count').textContent=`${fil.length} of ${menuDB.length} items`;
+}
+
+function openAddModal(){editingIdx=null;document.getElementById('modal-title').textContent='Add Menu Item';clearForm();document.getElementById('item-modal').classList.add('open');}
+function openEditModal(id){
+  const m=menuDB.find(x=>x.id===id);
+  if(!m)return;
+  editingIdx=id;
+  document.getElementById('modal-title').textContent='Edit Menu Item';
+  document.getElementById('f-category').value=m.category||'';
+  document.getElementById('f-subcategory').value=m.subcategory||'';
+  document.getElementById('f-name').value=m.name||'';
+  document.getElementById('f-description').value=m.description||'';
+  document.getElementById('f-price').value=m.price||'';
+  document.getElementById('f-unit').value=m.unit||'';
+  document.getElementById('f-dietary').value=m.dietary||'';
+  document.getElementById('f-notes').value=m.notes||'';
+  document.getElementById('item-modal').classList.add('open');
+}
+function closeModal(){document.getElementById('item-modal').classList.remove('open');}
+function clearForm(){['f-category','f-subcategory','f-name','f-description','f-price','f-unit','f-dietary','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});}
+function saveItem(){
+  const name=document.getElementById('f-name').value.trim();
+  const cat=document.getElementById('f-category').value;
+  if(!name){alert('Item Name is required.');return;}
+  if(!cat){alert('Category is required.');return;}
+  const item={id:editingIdx!==null?editingIdx:Date.now(),category:cat,subcategory:document.getElementById('f-subcategory').value.trim(),name,description:document.getElementById('f-description').value.trim(),price:parseFloat(document.getElementById('f-price').value)||0,unit:document.getElementById('f-unit').value.trim(),dietary:document.getElementById('f-dietary').value.trim(),notes:document.getElementById('f-notes').value.trim()};
+  if(editingIdx!==null){const idx=menuDB.findIndex(m=>m.id===editingIdx);if(idx>=0)menuDB[idx]=item;}else{menuDB.push(item);}
+  saveDB();renderDatabase();closeModal();
+}
+function askDelete(id){deleteIdx=id;const m=menuDB.find(x=>x.id===id);document.getElementById('confirm-text').textContent=`Remove "${m?m.name:'this item'}" from the database? This cannot be undone.`;document.getElementById('confirm-modal').classList.add('open');}
+function closeConfirm(){document.getElementById('confirm-modal').classList.remove('open');deleteIdx=null;}
+function confirmDelete(){if(deleteIdx===null)return;menuDB=menuDB.filter(m=>m.id!==deleteIdx);saveDB();renderDatabase();closeConfirm();}
+function copyItem(id){
+  const m=menuDB.find(x=>x.id===id);
+  if(!m)return;
+  const copy=Object.assign({},m,{id:Date.now(),name:m.name+' (Copy)'});
+  menuDB.push(copy);
+  saveDB();
+  renderDatabase();
+}
+
+function esc(s){if(!s&&s!==0)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.search-area')) document.querySelectorAll('.search-dropdown.open').forEach(d=>d.classList.remove('open'));
+  if(!e.target.closest('.date-wrapper')) document.getElementById('cal-popup')?.classList.remove('open');
+});
+
+function setToday(){
+  const d=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('sheet-date').value=`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`;
+  document.getElementById('sheet-day').value=days[d.getDay()];
+}
+
+// Shared date parser — accepts m/d/yy or m/d/yyyy
+function parseDate(val){
+  if(!val) return null;
+  const parts=val.trim().split('/');
+  if(parts.length!==3) return null;
+  const month=parseInt(parts[0],10)-1;
+  const day=parseInt(parts[1],10);
+  let year=parseInt(parts[2],10);
+  if(isNaN(month)||isNaN(day)||isNaN(year)) return null;
+  if(year>=0&&year<100) year+=2000; // 2-digit year: 26 → 2026
+  if(year<1900) return null;
+  const d=new Date(year,month,day);
+  return(!isNaN(d.getTime())&&d.getMonth()===month)?d:null;
+}
+
+function updateDayFromDate(){
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const d=parseDate(document.getElementById('sheet-date').value);
+  if(d) document.getElementById('sheet-day').value=days[d.getDay()];
+}
+
+// ── CALENDAR POPUP ──
+let _calYear=new Date().getFullYear(), _calMonth=new Date().getMonth();
+const CAL_MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CAL_DOWS=['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+function toggleCalendar(e){
+  e.stopPropagation();
+  const popup=document.getElementById('cal-popup');
+  if(popup.classList.contains('open')){ popup.classList.remove('open'); return; }
+  // Sync to currently entered date if valid
+  const d=parseDate(document.getElementById('sheet-date').value);
+  if(d){ _calYear=d.getFullYear(); _calMonth=d.getMonth(); }
+  else { const n=new Date(); _calYear=n.getFullYear(); _calMonth=n.getMonth(); }
+  renderCalendar();
+  popup.classList.add('open');
+}
+
+function renderCalendar(){
+  const popup=document.getElementById('cal-popup');
+  const firstDay=new Date(_calYear,_calMonth,1).getDay();
+  const daysInMonth=new Date(_calYear,_calMonth+1,0).getDate();
+  const today=new Date();
+  const sel=parseDate(document.getElementById('sheet-date').value);
+
+  let cells=CAL_DOWS.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++) cells+=`<div class="cal-day is-empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday=today.getFullYear()===_calYear&&today.getMonth()===_calMonth&&today.getDate()===d;
+    const isSel=sel&&sel.getFullYear()===_calYear&&sel.getMonth()===_calMonth&&sel.getDate()===d;
+    const cls=['cal-day',isToday?'is-today':'',isSel?'is-selected':''].filter(Boolean).join(' ');
+    cells+=`<div class="${cls}" onclick="pickCalDay(${d})">${d}</div>`;
+  }
+
+  popup.innerHTML=`
+    <div class="cal-header">
+      <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
+      <span class="cal-month-label">${CAL_MONTHS[_calMonth]} ${_calYear}</span>
+      <button class="cal-nav-btn" onclick="calNav(1)">›</button>
+    </div>
+    <div class="cal-grid">${cells}</div>`;
+}
+
+function calNav(dir){
+  _calMonth+=dir;
+  if(_calMonth<0){_calMonth=11;_calYear--;}
+  if(_calMonth>11){_calMonth=0;_calYear++;}
+  renderCalendar();
+}
+
+function pickCalDay(d){
+  const m=_calMonth+1;
+  document.getElementById('sheet-date').value=`${m}/${d}/${_calYear}`;
+  updateDayFromDate();
+  document.getElementById('cal-popup').classList.remove('open');
+}
+
+function formatTime(t){
+  if(!t) return '';
+  const parts=t.split(':');
+  if(parts.length<2) return t;
+  const h=parseInt(parts[0],10);
+  const m=parseInt(parts[1],10);
+  if(isNaN(h)||isNaN(m)) return t;
+  const ampm=h>=12?'PM':'AM';
+  const h12=h%12||12;
+  return `${h12}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+
+// ── SAVED PRE-SHEETS ──
+let _allSavedSheets = {}; // cache for filter
+
+function initSavedSheets(){
+  if(!sheetsRef) return; // Firebase not available
+  sheetsRef.on('value', snapshot => {
+    const data = snapshot.val() || {};
+    const now  = Date.now();
+    // Auto-remove expired sheets from Firebase
+    Object.entries(data).forEach(([key, sheet]) => {
+      if(sheet.expiresAt < now) sheetsRef.child(key).remove();
+    });
+    // Cache and render panel with non-expired sheets only
+    _allSavedSheets = Object.fromEntries(Object.entries(data).filter(([,s]) => s.expiresAt >= now));
+    renderSavedSidebar(_allSavedSheets);
+  });
+}
+
+function renderSavedSidebar(data){
+  const list   = document.getElementById('saved-list');
+  const sheets = Object.entries(data).sort((a,b) => b[1].savedAt - a[1].savedAt);
+  if(!sheets.length){
+    list.innerHTML = '<div class="saved-empty">No saved pre-sheets yet.<br>Click <strong>💾 Save Pre-Sheet</strong> above to save the current sheet.</div>';
+    return;
+  }
+  list.innerHTML = sheets.map(([key, sheet]) => {
+    const daysLeft  = Math.max(0, Math.ceil((sheet.expiresAt - Date.now()) / 86400000));
+    const meta      = [sheet.sheetDate, sheet.sheetDay].filter(Boolean).join(' · ');
+    const warnClass = daysLeft <= 2 ? 'expiry-urgent' : daysLeft <= 5 ? 'expiry-warn' : '';
+    const expiryTxt = daysLeft === 0 ? 'Expires today!' : `Expires in ${daysLeft} day${daysLeft!==1?'s':''}`;
+    return `<div class="saved-sheet-item ${warnClass}">
+      <div class="saved-sheet-title" title="${esc(sheet.title)}">${esc(sheet.title)}</div>
+      ${meta ? `<div class="saved-sheet-meta">${esc(meta)}</div>` : ''}
+      <div class="saved-sheet-expires">${expiryTxt}</div>
+      <div class="saved-sheet-actions">
+        <button class="saved-load-btn" onclick="loadPreSheet('${key}')">Open</button>
+        <button class="saved-dup-btn"  onclick="duplicatePreSheet('${key}')" title="Duplicate">⧉</button>
+        <button class="saved-del-btn"  onclick="deletePreSheet('${key}')">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Filter saved sheets by title or date
+function filterSavedSheets(){
+  const q = (document.getElementById('saved-filter').value || '').trim().toLowerCase();
+  if(!q){ renderSavedSidebar(_allSavedSheets); return; }
+  const filtered = Object.fromEntries(
+    Object.entries(_allSavedSheets).filter(([, s]) =>
+      (s.title      || '').toLowerCase().includes(q) ||
+      (s.sheetDate  || '').toLowerCase().includes(q) ||
+      (s.sheetDay   || '').toLowerCase().includes(q)
+    )
+  );
+  renderSavedSidebar(filtered);
+}
+function clearSavedFilter(){
+  document.getElementById('saved-filter').value = '';
+  renderSavedSidebar(_allSavedSheets);
+}
+
+// Duplicate a saved sheet — saves a copy with "Copy of …" title
+function duplicatePreSheet(key){
+  if(!sheetsRef) return;
+  sheetsRef.child(key).once('value', snapshot => {
+    const sheet = snapshot.val(); if(!sheet) return;
+    const now   = Date.now();
+    const newKey = 'sheet_' + now + '_' + Math.random().toString(36).slice(2,6);
+    const copy  = Object.assign({}, sheet, {
+      title:     'Copy of ' + sheet.title,
+      savedAt:   now,
+      expiresAt: now + SHEET_TTL,
+      blocks:    JSON.parse(JSON.stringify(sheet.blocks || []))
+    });
+    sheetsRef.child(newKey).set(copy)
+      .then(()  => showToast('⧉ Pre-sheet duplicated!'))
+      .catch(()  => showToast('⚠️ Could not duplicate','#b71c1c'));
+  });
+}
+
+// ── AUTO-DRAFT SAVING ──
+const DRAFT_KEY = 'hilton_draft';
+let _draftTimer = null;
+
+function scheduleDraftSave(){
+  clearTimeout(_draftTimer);
+  _draftTimer = setTimeout(saveDraft, 30000); // 30 seconds after last change
+}
+
+function saveDraft(){
+  if(!sheetsRef) return;
+  const draft = {
+    title:     '__draft__',
+    sheetDate: document.getElementById('sheet-date').value,
+    sheetDay:  document.getElementById('sheet-day').value,
+    savedAt:   Date.now(),
+    expiresAt: Date.now() + SHEET_TTL,
+    blocks:    JSON.parse(JSON.stringify(beoBlocks)),
+    isDraft:   true
+  };
+  sheetsRef.child(DRAFT_KEY).set(draft).then(() => {
+    const el = document.getElementById('draft-indicator');
+    if(el){ el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 3000); }
+  });
+}
+
+function restoreDraftIfAvailable(){
+  if(!sheetsRef) return;
+  sheetsRef.child(DRAFT_KEY).once('value', snapshot => {
+    const draft = snapshot.val();
+    if(!draft || !draft.isDraft) return;
+    // Only offer restore if there's actual content
+    if(!draft.blocks || !draft.blocks.length) return;
+    const saved = new Date(draft.savedAt).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    if(confirm(`A draft was auto-saved at ${saved}.\nWould you like to restore it?`)){
+      document.getElementById('sheet-date').value = draft.sheetDate || '';
+      document.getElementById('sheet-day').value  = draft.sheetDay  || '';
+      beoBlocks = draft.blocks;
+      renderPresheet();
+      showToast('↩️ Draft restored!');
+    }
+  });
+}
+
+function openSaveSheetModal(){
+  const dateVal = document.getElementById('sheet-date').value;
+  const dayVal  = document.getElementById('sheet-day').value;
+  const suggest = [dayVal, dateVal].filter(Boolean).join(' – ');
+  document.getElementById('save-sheet-title').value = suggest;
+  document.getElementById('save-sheet-modal').classList.add('open');
+  setTimeout(() => document.getElementById('save-sheet-title').select(), 60);
+}
+function closeSaveSheetModal(){ document.getElementById('save-sheet-modal').classList.remove('open'); }
+
+function savePreSheet(){
+  if(!sheetsRef){ showToast('⚠️ Database unavailable — open via Netlify link','#b71c1c'); return; }
+  const title = document.getElementById('save-sheet-title').value.trim();
+  if(!title){ alert('Please enter a title for this pre-sheet.'); return; }
+  const now = Date.now();
+  const key = 'sheet_' + now + '_' + Math.random().toString(36).slice(2,6);
+  const sheet = {
+    title,
+    sheetDate:  document.getElementById('sheet-date').value,
+    sheetDay:   document.getElementById('sheet-day').value,
+    savedAt:    now,
+    expiresAt:  now + SHEET_TTL,
+    blocks:     JSON.parse(JSON.stringify(beoBlocks))
+  };
+  sheetsRef.child(key).set(sheet)
+    .then(()  => { showToast('💾 Pre-sheet saved!'); closeSaveSheetModal(); })
+    .catch(()  => showToast('⚠️ Could not save — check connection','#b71c1c'));
+}
+
+function loadPreSheet(key){
+  if(!sheetsRef) return;
+  sheetsRef.child(key).once('value', snapshot => {
+    const sheet = snapshot.val();
+    if(!sheet) return;
+    if(!confirm(`Load "${sheet.title}"?\nThis will replace the current pre-sheet.`)) return;
+    document.getElementById('sheet-date').value = sheet.sheetDate || '';
+    document.getElementById('sheet-day').value  = sheet.sheetDay  || '';
+    beoBlocks = sheet.blocks || [];
+    renderPresheet();
+    showToast('📋 Pre-sheet loaded!');
+  });
+}
+
+function deletePreSheet(key){
+  if(!sheetsRef) return;
+  if(!confirm('Remove this saved pre-sheet? This cannot be undone.')) return;
+  sheetsRef.child(key).remove()
+    .then(()  => showToast('🗑️ Pre-sheet removed'))
+    .catch(()  => showToast('⚠️ Could not remove','#b71c1c'));
+}
+
+// ── RESET TO FULL MENU ──
+function resetToFullMenu(){
+  if(!menuRef){ showToast('⚠️ Database unavailable — open via Netlify link','#b71c1c'); return; }
+  if(!confirm(
+    `This will overwrite the current menu database with all ${SEED.length} built-in items.\n\n` +
+    `Any custom items you added will be removed.\n\nContinue?`
+  )) return;
+  const fullMenu = SEED.map((r,i) => ({
+    id:i, category:r[0], subcategory:r[1], name:r[2],
+    description:r[3], price:r[4], unit:r[5], dietary:r[6], notes:r[7]
+  }));
+  menuRef.set({ items: fullMenu, lastModifiedBy: SESSION_ID, lastModifiedAt: Date.now() })
+    .then(() => showToast(`✅ Menu reset — ${fullMenu.length} items loaded`))
+    .catch(() => showToast('⚠️ Could not reset — check connection','#b71c1c'));
+}
+
+// INIT
+applyStoredTheme();
+initDB();
+initSavedSheets();
+setToday();
+addBeoBlock();
+addBeoBlock();
+renderPresheet();
+// Offer to restore any auto-saved draft after a short delay (let Firebase settle first)
+setTimeout(restoreDraftIfAvailable, 1800);
+</script>
+</body>
+</html>
