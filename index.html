@@ -131,13 +131,10 @@
 
     /* ── FADE-IN ANIMATION ── */
     .fade-in {
-      opacity: 1; transform: translateY(0);
+      opacity: 0; transform: translateY(22px);
       transition: opacity 0.65s ease, transform 0.65s ease;
     }
-    .js-ready .fade-in {
-      opacity: 0; transform: translateY(22px);
-    }
-    .js-ready .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
 
     /* ── HERO ── */
     .hero {
@@ -268,10 +265,9 @@
     /* ── HOW I WORK ── */
     #approach { background: var(--bg-alt); transition: background 0.3s; }
     .principles-grid {
-      display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem;
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
     }
-    @media (max-width: 900px) { .principles-grid { grid-template-columns: repeat(2,1fr); } }
-    @media (max-width: 480px) { .principles-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .principles-grid { grid-template-columns: 1fr; } }
     .principle {
       padding: 2rem;
       border: 1px solid var(--border);
@@ -425,106 +421,6 @@
     }
     .skill-tag:hover { border-color: var(--gold-line); color: var(--fg); }
 
-    /* ── FEATURED WORK ── */
-    #work { background: var(--bg); transition: background 0.3s; }
-    .work-grid {
-      display: flex; flex-direction: column; gap: 3rem;
-    }
-    .work-card {
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      transition: border-color 0.25s, background 0.3s;
-      background: var(--bg);
-    }
-    .work-card:hover { border-color: var(--gold-line); }
-    .work-card-header {
-      display: flex; align-items: flex-start;
-      justify-content: space-between; gap: 1.5rem;
-      padding: 1.75rem 2rem;
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-      transition: border-color 0.3s;
-    }
-    .work-tag {
-      display: inline-block;
-      font-size: 0.62rem; font-weight: 600;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--gold); border: 1px solid var(--gold-line);
-      padding: 0.2rem 0.6rem; border-radius: 2px;
-      margin-bottom: 0.6rem;
-    }
-    .work-card-header h3 {
-      font-size: 1rem; font-weight: 700;
-      color: var(--title-col); letter-spacing: -0.02em;
-      margin-bottom: 0.4rem;
-      transition: color 0.3s;
-    }
-    .work-card-header p {
-      font-size: 0.85rem; color: var(--fg-3);
-      line-height: 1.65; max-width: 560px;
-      transition: color 0.3s;
-    }
-    .work-open-btn {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      color: var(--gold); text-decoration: none;
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      border: 1px solid var(--gold-line);
-      padding: 0.5rem 1rem; border-radius: 2px;
-      white-space: nowrap;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-    .work-open-btn:hover { background: var(--gold-dim); }
-    .work-open-btn svg { width: 12px; height: 12px; }
-
-    /* Browser chrome frame */
-    .work-preview {
-      background: var(--bg-alt);
-      transition: background 0.3s;
-    }
-    .browser-bar {
-      display: flex; align-items: center; gap: 0.75rem;
-      padding: 0.6rem 1rem;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      transition: background 0.3s, border-color 0.3s;
-    }
-    .browser-dots {
-      display: flex; gap: 5px; flex-shrink: 0;
-    }
-    .browser-dots span {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--border);
-    }
-    .browser-dots span:nth-child(1) { background: #ff5f57; }
-    .browser-dots span:nth-child(2) { background: #febc2e; }
-    .browser-dots span:nth-child(3) { background: #28c840; }
-    .browser-url {
-      font-size: 0.72rem; color: var(--muted);
-      letter-spacing: 0.02em; truncate: ellipsis;
-    }
-    .work-preview iframe {
-      width: 100%; height: 480px;
-      border: none; display: block;
-    }
-
-    /* Placeholder card */
-    .work-preview--placeholder {
-      height: 200px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .work-preview--placeholder p {
-      font-size: 0.78rem; color: var(--muted);
-      letter-spacing: 0.08em; text-transform: uppercase;
-    }
-
-    @media (max-width: 768px) {
-      .work-card-header { padding: 1.25rem 1.25rem; }
-      .work-preview iframe { height: 360px; }
-    }
-
     /* ── CONTACT CTA ── */
     #contact {
       background: var(--ink);
@@ -664,6 +560,27 @@
       .stat-number { font-size: 1.5rem; }
       .cta-button { padding: 0.8rem 1.5rem; font-size: 0.72rem; }
     }
+
+    /* ── FEATURED WORK ── */
+    #work { background: var(--bg-alt); padding: 80px 0; }
+    .work-grid { display: grid; gap: 40px; }
+    .work-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+    .work-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 28px 28px 20px; }
+    .work-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(196,162,106,0.12); border: 1px solid var(--gold-line); border-radius: 4px; padding: 3px 8px; margin-bottom: 10px; }
+    .work-card-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--fg); margin-bottom: 8px; }
+    .work-card-header p { font-size: 0.88rem; color: var(--fg-2); line-height: 1.65; max-width: 600px; }
+    .work-open-btn { flex-shrink: 0; font-size: 0.8rem; font-weight: 600; color: var(--gold); border: 1px solid var(--gold-line); border-radius: 8px; padding: 8px 16px; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
+    .work-open-btn:hover { background: var(--gold-dim); }
+    .work-preview { border-top: 1px solid var(--border); }
+    .browser-bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .browser-dots { display: flex; gap: 5px; }
+    .browser-dots span { width: 10px; height: 10px; border-radius: 50%; background: #e0e0e0; }
+    .browser-dots span:nth-child(1) { background: #ff5f57; }
+    .browser-dots span:nth-child(2) { background: #febc2e; }
+    .browser-dots span:nth-child(3) { background: #28c840; }
+    .browser-url { font-size: 11px; color: var(--muted); font-family: monospace; }
+    .work-preview iframe { width: 100%; height: 480px; border: none; display: block; }
+    @media (max-width: 600px) { .work-card-header { flex-direction: column; } .work-preview iframe { height: 320px; } }
 
     /* ── PRINT STYLESHEET (targets 2 pages) ── */
     @media print {
@@ -836,7 +753,7 @@
     <p class="hero-eyebrow fade-in">Operations &amp; Analytics Leader · Los Angeles, CA</p>
     <h1 class="fade-in">Martin A. <span>Myung</span></h1>
     <p class="hero-tagline fade-in">
-      Hospitality analytics and operations leader with 15+ years driving performance across luxury hotels —
+      Hospitality analytics and operations leader with 10+ years driving performance across luxury hotels —
       currently optimizing revenue, labor, and guest metrics across two major Hilton properties.
     </p>
     <div class="hero-contact fade-in">
@@ -869,20 +786,20 @@
 <div id="stats">
   <div class="stats-inner">
     <div class="stat fade-in">
-      <span class="stat-number">15+</span>
+      <span class="stat-number">10+</span>
       <span class="stat-label">Years Leading Teams</span>
     </div>
     <div class="stat fade-in">
-      <span class="stat-number">$164M+</span>
-      <span class="stat-label">Labor Budget Overseen</span>
+      <span class="stat-number">$64M+</span>
+      <span class="stat-label">Labor Budget Managed</span>
     </div>
     <div class="stat fade-in">
-      <span class="stat-number">2,500+</span>
+      <span class="stat-number">400+</span>
       <span class="stat-label">Rooms Pre-Opened</span>
     </div>
     <div class="stat fade-in">
-      <span class="stat-number">10+</span>
-      <span class="stat-label">Systems Built &amp; Deployed</span>
+      <span class="stat-number">2</span>
+      <span class="stat-label">Tools Built &amp; Deployed</span>
     </div>
   </div>
 </div>
@@ -893,16 +810,14 @@
     <p class="section-label">Profile</p>
     <h2 class="section-title fade-in">About Me</h2>
     <p class="summary-text fade-in">
-      I'm an operations and analytics leader with 15+ years of experience building teams, designing
+      I'm an operations and analytics leader with 10+ years of experience building teams, designing
       performance systems, and driving results in complex, high-service environments. Currently overseeing
       performance analytics across two large properties, I specialize in translating data into clear
       decisions — from revenue optimization and labor efficiency to cross-departmental reporting and
-      variance analysis. I'm known for identifying broken processes and replacing them entirely — building
-      new systems, tools, and frameworks that stick. Most recently, I've applied prompt engineering and
-      generative AI to convert manual workflows into fully functional web applications, cutting preparation
-      time and eliminating desktop software dependencies across two major properties. My background spans
-      pre-launch operations, P&amp;L ownership, training program design, and multi-site analytics, giving
-      me a perspective that's both strategically broad and deeply hands-on.
+      variance analysis. I'm passionate about closing performance gaps, developing people, and building
+      scalable systems. My background spans pre-launch operations, P&amp;L ownership, training program
+      design, and multi-site analytics, giving me a perspective that's both strategically broad and
+      deeply hands-on.
     </p>
   </div>
 </section>
@@ -921,17 +836,12 @@
       <div class="principle fade-in">
         <span class="principle-number">02</span>
         <h3>Systems Over Heroics</h3>
-        <p>Sustainable operations don't rely on one person working harder. I design scalable processes, SOPs, and documentation so that teams perform consistently — regardless of who's in the room or what season it is.</p>
+        <p>Good operations don't rely on one person working harder. I build scalable processes and documentation so teams perform consistently, regardless of who's in the room.</p>
       </div>
       <div class="principle fade-in">
         <span class="principle-number">03</span>
         <h3>Develop People Deliberately</h3>
         <p>Talent development is an operational function, not an afterthought. I treat career planning as seriously as budget planning — because the two are inseparable.</p>
-      </div>
-      <div class="principle fade-in">
-        <span class="principle-number">04</span>
-        <h3>Technology as a Force Multiplier</h3>
-        <p>I use prompt engineering and generative AI to turn slow, manual workflows into fast, accessible tools. When the right system doesn't exist, I build it — converting spreadsheets into web apps, replacing paper processes with digital ones, and making institutional knowledge scalable.</p>
       </div>
     </div>
   </div>
@@ -960,9 +870,6 @@
           <li>Partner with Revenue Management, Finance, and Operations teams to align reporting cadence and ensure data accuracy and consistency across both properties.</li>
           <li>Support budget planning and variance analysis, helping leaders understand performance drivers and course-correct in real time.</li>
           <li>Develop standardized reporting tools and processes that reduce manual work and improve the speed and reliability of performance data across the complex.</li>
-          <li>Built a digital presheet tool adopted across both properties, eliminating a manual handwritten process and reducing team preparation time by 80%.</li>
-          <li>Developed an F&amp;B forecasting tool for hotel management that pulls data from multiple sources to project revenue, covers, and average check across outlets — enabling more accurate weekly scheduling, monthly forecasts, and annual budgets. Currently live at one property with a roadmap to scale to both.</li>
-          <li>Used prompt engineering and generative AI to transform Excel-based spreadsheet tools into fully functional web apps — making team tools faster to access, easier to use, and no longer dependent on desktop software.</li>
         </ul>
       </div>
     </div>
@@ -978,7 +885,6 @@
           <span class="role-dates">Mar 2023 – May 2023</span>
         </div>
         <ul>
-          <li>Deployed on task force to Sensei Porcupine Creek, an ultra-luxury wellness retreat and private resort in Rancho Mirage, CA — formerly the estate of Bob Hope — to stabilize event operations and build foundational systems.</li>
           <li>Coordinated between sales and catering to maximize function space utilization and revenue; standardized procedures for group contracts and Banquet Event Orders across all upcoming events.</li>
           <li>Managed client relationships end-to-end from post-contract through billing, executing all event details with precision — resulting in at least one client rebooking and bringing an additional group.</li>
           <li>Oversaw food and beverage operations, collaborating with servers, bartenders, and the culinary team to deliver an excellent guest experience.</li>
@@ -1001,13 +907,12 @@
           <span class="role-dates">May 2022 – Nov 2022</span>
         </div>
         <ul>
-          <li>Redesigned the onboarding program for a newly opened Forbes 5-Star luxury hotel, improving content quality and new-hire experience while reducing time-to-productivity.</li>
+          <li>Redesigned the onboarding program to improve content quality and new-hire experience while reducing time-to-productivity.</li>
           <li>Partnered with department heads and senior executives to identify learning gaps and align training initiatives with hotel business goals.</li>
           <li>Delivered professional development programs — both in-person and virtual — for leaders across multiple hotels in North and Central America.</li>
           <li>Built the 2023 Training &amp; Development budget, encompassing talent acquisition, employee benefits, and employee relations.</li>
           <li>Led the simultaneous rollout of a new internal communications platform across two hotels, replacing fragmented workflows with a unified system.</li>
           <li>Partnered with regional leadership to identify high-potential talent, assess skill levels, and evaluate readiness for advancement.</li>
-          <li>Designed and facilitated leadership development workshops tailored to a unionized, multi-department hotel environment — building management capability across front-line and mid-level leaders.</li>
         </ul>
       </div>
 
@@ -1017,7 +922,7 @@
           <span class="role-dates">Dec 2021 – Apr 2022</span>
         </div>
         <ul>
-          <li>Owned full operational and budgetary responsibility for Housekeeping &amp; Laundry, Security, Residences, and Royal Service &amp; Reservations across a 400-room Forbes 5-Star property.</li>
+          <li>Owned full operational and budgetary responsibility for Housekeeping &amp; Laundry, Security, Residences, and Royal Service &amp; Reservations.</li>
           <li>Created career development plans for 11 department leaders, directly contributing to recent promotions and salary increases.</li>
           <li>Designed and delivered training on the Emergency Management Plan, with a focused module on cybersecurity risk mitigation.</li>
           <li>Collaborated with the labor relations legal team to help successfully negotiate a collective bargaining agreement.</li>
@@ -1025,7 +930,6 @@
           <li>Trained leaders on P&amp;L forecasting and monthly financial reviews, optimizing Excel reporting tools to improve accuracy and consistency month-over-month.</li>
           <li>Partnered with a third-party vendor to develop a custom telephone agent training program focused on signature touchpoints and value propositions, leading to increased conversion rates and upsell revenue.</li>
           <li>Contributed to committees advancing safer work practices, emergency preparedness, and corporate sustainability initiatives.</li>
-          <li>Oversaw labor scheduling, productivity tracking, and budget compliance for a division employing over 200 team members across multiple departments.</li>
         </ul>
       </div>
 
@@ -1042,8 +946,7 @@
           <li>Championed the adoption of RFID technology to track uniform and linen inventory.</li>
           <li>Restructured the team's OS&amp;E budget and supply inventory to account for new COVID-19 risks, updating corporate SOPs accordingly.</li>
           <li>Collaborated with general contractors, project managers, and hotel designers via Bluebeam to ensure accurate, on-time turnover.</li>
-          <li>Oversaw purchasing and receiving of hotel goods exceeding $8M, working closely with procurement professionals and managing vendor relationships throughout the pre-opening process.</li>
-          <li>Managed labor forecasting and budget accountability as part of a Rooms division overseeing a $164M+ annual labor budget across the hotel complex.</li>
+          <li>Oversaw purchasing and receiving of hotel goods, working closely with procurement professionals to manage vendor relationships and cost controls.</li>
         </ul>
       </div>
     </div>
@@ -1063,8 +966,6 @@
           <li>Improved room attendant productivity by 0.08 hours per unit by redistributing workload based on historical data analysis.</li>
           <li>Overhauled the guest incident tracking and reporting process, implementing standardized audits that produced consistent reporting and faster resolution times.</li>
           <li>Built a productivity dashboard tracking departmental output, wages, budget, and cost per occupied room — an invaluable tool for P&amp;L reviews, forecasting, and annual budgeting.</li>
-          <li>Managed a department of 80+ team members across room attendants, housepersons, laundry, and supervisory staff in one of LA's most demanding luxury environments.</li>
-          <li>Collaborated with Forbes Travel Guide standards to maintain and strengthen the property's 5-Star rating, ensuring service delivery met the highest benchmarks in the industry.</li>
         </ul>
       </div>
     </div>
@@ -1080,11 +981,9 @@
           <span class="role-dates">Jul 2017 – May 2018</span>
         </div>
         <ul>
-          <li>Developed a staffing model and organizational structure for an 889-room housekeeping operation — one of the largest hotel housekeeping departments in Los Angeles.</li>
+          <li>Developed a staffing model and organizational structure for an 889-room housekeeping operation.</li>
           <li>Led the training and system conversion to REX and HotSOS Mobile.</li>
           <li>Conducted weekly leadership meetings to align objectives, mentor managers, and drive follow-through.</li>
-          <li>Supported the pre-opening of a brand-new 73-story high-rise tower, standing up housekeeping operations, hiring plans, and training infrastructure ahead of launch.</li>
-          <li>Coordinated with union leadership and adhered to collective bargaining agreements governing labor scheduling, overtime, and workplace standards.</li>
         </ul>
       </div>
     </div>
@@ -1105,8 +1004,6 @@
           <li>Played a key role in planning and executing a $5M soft-goods renovation, requiring cross-functional coordination at scale.</li>
           <li>Authored monthly, quarterly, and year-end financial statements for the executive committee.</li>
           <li>Task-forced at Montage Palmetto Bluff for 8 weeks during a rebranding effort, supporting the addition of a 150-room hotel on a 20,000-acre community.</li>
-          <li>Oversaw housekeeping operations for a luxury mountain resort, managing the significant seasonal demand swings of a peak ski and summer destination.</li>
-          <li>Maintained Forbes Travel Guide and AAA service standards in a resort environment with complex residential, spa, and ski-in/ski-out logistics.</li>
         </ul>
       </div>
 
@@ -1116,10 +1013,9 @@
           <span class="role-dates">Jun 2014 – Dec 2015</span>
         </div>
         <ul>
-          <li>Managed day-to-day front desk operations for a Forbes 5-Star mountain resort, leading a team responsible for arrival experience, guest relations, and room assignments.</li>
+          <li>Managed day-to-day front desk operations.</li>
           <li>Rewrote the training manual to incorporate brand and third-party service standards.</li>
           <li>Authored the department's labor and expense budget.</li>
-          <li>Served as a key resource for guest recovery, handling escalated complaints and VIP arrivals to protect guest satisfaction scores and repeat business.</li>
         </ul>
       </div>
 
@@ -1132,8 +1028,6 @@
           <li>Created a 10-day training manual covering standards, safety, job processes, and step-by-step learning for every department position, including a dedicated revision for department trainers.</li>
           <li>Introduced new systems and structure to Housekeeping and residential operations, significantly improving organization and efficiency.</li>
           <li>Led the adoption of the OnTrack labor management system, training department heads across the Rooms division and establishing the forecast and budget formulas used in the platform.</li>
-          <li>Supported operations across a luxury ski-in/ski-out resort with 284 rooms and residences, managing the logistical complexity of peak winter and summer seasons.</li>
-          <li>Developed and enforced quality inspection standards for guest rooms and public areas, directly contributing to the property's Forbes Travel Guide rating.</li>
         </ul>
       </div>
     </div>
@@ -1187,48 +1081,13 @@
     <h2 class="section-title fade-in">Skills</h2>
 
     <div class="skills-group fade-in">
-      <p class="skills-group-label">Financial Management</p>
-      <div class="skills-grid">
-        <span class="skill-tag">P&amp;L Ownership</span>
-        <span class="skill-tag">Budget Development</span>
-        <span class="skill-tag">Variance Analysis</span>
-        <span class="skill-tag">Cost Control</span>
-        <span class="skill-tag">Financial Reporting</span>
-        <span class="skill-tag">Forecasting</span>
-      </div>
-    </div>
-
-    <div class="skills-group fade-in">
-      <p class="skills-group-label">Labor &amp; Workforce Planning</p>
-      <div class="skills-grid">
-        <span class="skill-tag">Labor Forecasting</span>
-        <span class="skill-tag">Productivity Modeling</span>
-        <span class="skill-tag">Scheduling Optimization</span>
-        <span class="skill-tag">Workforce Planning</span>
-        <span class="skill-tag">Union &amp; CBA Compliance</span>
-        <span class="skill-tag">OnTrack &amp; Unifocus</span>
-      </div>
-    </div>
-
-    <div class="skills-group fade-in">
       <p class="skills-group-label">Analytics &amp; Reporting</p>
       <div class="skills-grid">
         <span class="skill-tag">Microsoft Excel</span>
         <span class="skill-tag">Power BI</span>
         <span class="skill-tag">Data Analysis</span>
-        <span class="skill-tag">Dashboard Development</span>
-        <span class="skill-tag">Performance Metrics</span>
-      </div>
-    </div>
-
-    <div class="skills-group fade-in">
-      <p class="skills-group-label">AI &amp; Emerging Technology</p>
-      <div class="skills-grid">
-        <span class="skill-tag">Prompt Engineering</span>
-        <span class="skill-tag">Generative AI (Claude, ChatGPT)</span>
-        <span class="skill-tag">AI-Assisted Workflow Design</span>
-        <span class="skill-tag">Excel-to-Web App Conversion</span>
-        <span class="skill-tag">Operational Tool Development</span>
+        <span class="skill-tag">P&amp;L Reporting</span>
+        <span class="skill-tag">Budgeting &amp; Forecasting</span>
       </div>
     </div>
 
@@ -1237,21 +1096,8 @@
       <div class="skills-grid">
         <span class="skill-tag">Opera PMS</span>
         <span class="skill-tag">HotSOS / HotSOS Mobile</span>
+        <span class="skill-tag">OnTrack &amp; Unifocus</span>
         <span class="skill-tag">Bluebeam</span>
-        <span class="skill-tag">Multi-Property Operations</span>
-        <span class="skill-tag">Rooms Division Management</span>
-      </div>
-    </div>
-
-    <div class="skills-group fade-in">
-      <p class="skills-group-label">Pre-Opening &amp; Hotel Launch</p>
-      <div class="skills-grid">
-        <span class="skill-tag">Pre-Opening Operations</span>
-        <span class="skill-tag">Department Build-Out</span>
-        <span class="skill-tag">SOP Development</span>
-        <span class="skill-tag">Vendor &amp; Procurement Management</span>
-        <span class="skill-tag">Cross-Functional Launch Coordination</span>
-        <span class="skill-tag">Task Force Deployment</span>
       </div>
     </div>
 
@@ -1266,6 +1112,16 @@
       </div>
     </div>
 
+    <div class="skills-group fade-in">
+      <p class="skills-group-label">Productivity &amp; Collaboration</p>
+      <div class="skills-grid">
+        <span class="skill-tag">Microsoft 365</span>
+        <span class="skill-tag">Google Workspace</span>
+        <span class="skill-tag">Asana</span>
+        <span class="skill-tag">Slack</span>
+        <span class="skill-tag">Zoom</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1282,12 +1138,9 @@
           <div>
             <span class="work-tag">Live Tool</span>
             <h3>Hilton Anaheim — Daily Pre-Sheet</h3>
-            <p>Replaced a manual, handwritten daily presheet process across both properties — reducing team preparation time by 80%. Built using prompt engineering and generative AI to convert an Excel-based workflow into a fully interactive web application.</p>
+            <p>Replaced a manual, handwritten daily presheet process across both properties — reducing team preparation time by 80%. Built using prompt engineering and generative AI to convert existing Excel workflows into a fully interactive web app.</p>
           </div>
-          <a href="presheet-tool.html" target="_blank" class="work-open-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Open Tool
-          </a>
+          <a href="presheet-tool.html" target="_blank" class="work-open-btn">Open Tool ↗</a>
         </div>
         <div class="work-preview">
           <div class="browser-bar">
@@ -1304,9 +1157,9 @@
           <div>
             <span class="work-tag">Live Tool</span>
             <h3>Hilton Anaheim — F&amp;B Forecast Dashboard</h3>
-            <p>A multi-outlet forecasting dashboard used by hotel management for weekly scheduling, monthly forecasts, and annual budgets. Pulls live occupancy and room data to project revenue, covers, and average check by outlet and meal period — improving forecast accuracy and enabling teams to schedule appropriately for business demand.</p>
+            <p>A multi-outlet forecasting dashboard used by hotel management for weekly scheduling, monthly forecasts, and annual budgets. Projects revenue, covers, and average check by outlet and meal period — improving forecast accuracy and enabling teams to schedule for business demand.</p>
           </div>
-          <a href="fnb-forecast-tool.html" target="_blank" class="work-open-btn">Open Tool</a>
+          <a href="fnb-forecast-tool.html" target="_blank" class="work-open-btn">Open Tool ↗</a>
         </div>
         <div class="work-preview">
           <div class="browser-bar">
@@ -1342,16 +1195,12 @@
 </footer>
 
 <script>
-  // ── MARK JS AS READY (enables fade-in animations) ──
-  document.body.classList.add('js-ready');
-
   // ── THEME TOGGLE ──
   function applyTheme(dark) {
     document.body.classList.toggle('dark', dark);
-    try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch(e) {}
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
   }
-  try { if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark'); } catch(e) {}
-
+  if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
   document.getElementById('themeToggle').addEventListener('click', () => {
     applyTheme(!document.body.classList.contains('dark'));
   });
@@ -1384,20 +1233,16 @@
   }, { passive: true });
 
   // ── FADE-IN ON SCROLL ──
-  const fadeEls = document.querySelectorAll('.fade-in');
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    fadeEls.forEach(el => observer.observe(el));
-  } else {
-    fadeEls.forEach(el => el.classList.add('visible'));
-  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Trigger hero elements immediately
+  document.querySelectorAll('.hero .fade-in').forEach(el => {
+    setTimeout(() => el.classList.add('visible'), 100);
+  });
 </script>
+
 </body>
 </html>
