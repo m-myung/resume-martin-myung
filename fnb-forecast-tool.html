@@ -623,7 +623,7 @@ input[type=file].zone-input{display:none}
       <div class="kpi-card accent"><div class="kpi-label">TY Forecast Rooms</div><div class="kpi-value">34,577</div><div class="kpi-sub">April 2026</div></div>
       <div class="kpi-card green"><div class="kpi-label">LY Occupied Rooms</div><div class="kpi-value">20,868</div><div class="kpi-sub">April 2025 actual</div></div>
       <div class="kpi-card amber"><div class="kpi-label">Room Growth</div><div class="kpi-value" style="color:var(--green)">+65.7%</div><div class="kpi-sub">TY vs LY forecast</div></div>
-      <div class="kpi-card purple"><div class="kpi-label">LY Total Revenue</div><div class="kpi-value">$581K</div><div class="kpi-sub">Est. from STLY data</div></div>
+      <div class="kpi-card purple"><div class="kpi-label">LY Total Revenue</div><div class="kpi-value">—</div><div class="kpi-sub">Est. from STLY data</div></div>
     </div>
     <div class="card" style="margin-bottom:16px"><div class="card-header"><div class="card-title">Daily Rooms — TY Forecast vs LY Actual</div></div><div class="chart-wrap" style="height:280px"><canvas id="stlyChart"></canvas></div></div>
     <div class="grid grid-2">
@@ -738,39 +738,39 @@ input[type=file].zone-input{display:none}
 // STATIC REFERENCE DATA
 // ═══════════════════════════════════════════════════════
 const DAILY_OCC = [
-  {date:'Apr 1',dow:'Wed',occ:18.4,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 2',dow:'Thu',occ:46.1,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 3',dow:'Fri',occ:96.5,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 4',dow:'Sat',occ:99.8,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 5',dow:'Sun',occ:99.6,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 6',dow:'Mon',occ:34.1,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 7',dow:'Tue',occ:36.3,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 8',dow:'Wed',occ:47.6,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 9',dow:'Thu',occ:83.5,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 10',dow:'Fri',occ:90.5,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 11',dow:'Sat',occ:98.1,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 12',dow:'Sun',occ:98.5,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 13',dow:'Mon',occ:99.0,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 14',dow:'Tue',occ:99.8,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 15',dow:'Wed',occ:85.4,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 16',dow:'Thu',occ:75.2,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 17',dow:'Fri',occ:82.0,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 18',dow:'Sat',occ:84.1,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 19',dow:'Sun',occ:77.2,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 20',dow:'Mon',occ:85.1,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 21',dow:'Tue',occ:67.5,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 22',dow:'Wed',occ:44.9,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 23',dow:'Thu',occ:58.4,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 24',dow:'Fri',occ:65.1,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 25',dow:'Sat',occ:90.5,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 26',dow:'Sun',occ:94.2,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 27',dow:'Mon',occ:99.0,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 28',dow:'Tue',occ:99.6,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 29',dow:'Wed',occ:34.9,rooms:0,transient:0,group:0,event:''},
-  {date:'Apr 30',dow:'Thu',occ:34.7,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 1',dow:'Wed',occ:18.4,rooms:92,transient:51,group:41,event:''},
+  {date:'Apr 2',dow:'Thu',occ:46.1,rooms:230,transient:115,group:115,event:''},
+  {date:'Apr 3',dow:'Fri',occ:96.5,rooms:482,transient:313,group:169,event:''},
+  {date:'Apr 4',dow:'Sat',occ:99.8,rooms:499,transient:349,group:150,event:''},
+  {date:'Apr 5',dow:'Sun',occ:99.6,rooms:498,transient:359,group:139,event:''},
+  {date:'Apr 6',dow:'Mon',occ:34.1,rooms:170,transient:94,group:76,event:''},
+  {date:'Apr 7',dow:'Tue',occ:36.3,rooms:182,transient:106,group:76,event:''},
+  {date:'Apr 8',dow:'Wed',occ:47.6,rooms:238,transient:131,group:107,event:''},
+  {date:'Apr 9',dow:'Thu',occ:83.5,rooms:418,transient:209,group:209,event:''},
+  {date:'Apr 10',dow:'Fri',occ:90.5,rooms:452,transient:294,group:158,event:''},
+  {date:'Apr 11',dow:'Sat',occ:98.1,rooms:490,transient:343,group:147,event:''},
+  {date:'Apr 12',dow:'Sun',occ:98.5,rooms:492,transient:354,group:138,event:''},
+  {date:'Apr 13',dow:'Mon',occ:99.0,rooms:495,transient:272,group:223,event:''},
+  {date:'Apr 14',dow:'Tue',occ:99.8,rooms:499,transient:289,group:210,event:''},
+  {date:'Apr 15',dow:'Wed',occ:85.4,rooms:427,transient:235,group:192,event:''},
+  {date:'Apr 16',dow:'Thu',occ:75.2,rooms:376,transient:188,group:188,event:''},
+  {date:'Apr 17',dow:'Fri',occ:82.0,rooms:410,transient:266,group:144,event:''},
+  {date:'Apr 18',dow:'Sat',occ:84.1,rooms:420,transient:294,group:126,event:''},
+  {date:'Apr 19',dow:'Sun',occ:77.2,rooms:386,transient:278,group:108,event:''},
+  {date:'Apr 20',dow:'Mon',occ:85.1,rooms:426,transient:234,group:192,event:''},
+  {date:'Apr 21',dow:'Tue',occ:67.5,rooms:338,transient:196,group:142,event:''},
+  {date:'Apr 22',dow:'Wed',occ:44.9,rooms:224,transient:123,group:101,event:''},
+  {date:'Apr 23',dow:'Thu',occ:58.4,rooms:292,transient:146,group:146,event:''},
+  {date:'Apr 24',dow:'Fri',occ:65.1,rooms:325,transient:211,group:114,event:''},
+  {date:'Apr 25',dow:'Sat',occ:90.5,rooms:452,transient:316,group:136,event:''},
+  {date:'Apr 26',dow:'Sun',occ:94.2,rooms:471,transient:339,group:132,event:''},
+  {date:'Apr 27',dow:'Mon',occ:99.0,rooms:495,transient:272,group:223,event:''},
+  {date:'Apr 28',dow:'Tue',occ:99.6,rooms:498,transient:289,group:209,event:''},
+  {date:'Apr 29',dow:'Wed',occ:34.9,rooms:174,transient:96,group:78,event:''},
+  {date:'Apr 30',dow:'Thu',occ:34.7,rooms:174,transient:87,group:87,event:''},
 ];
 
-const STLY_ROOMS = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const STLY_ROOMS = [85,212,444,459,458,157,167,219,384,416,451,453,455,459,393,346,377,387,355,391,310,207,269,299,416,433,455,458,161,160];
 
 // DOW multipliers for realistic day-of-week variation
 const DOW_POR_MULT  = {Mon:0.84,Tue:0.89,Wed:0.95,Thu:1.00,Fri:1.12,Sat:1.28,Sun:1.10};
@@ -1432,7 +1432,7 @@ function renderAdjTable(outletName) {
 
   // Footer totals
   const totalRunRooms = days.reduce((s,d)=>s+(d.run_rooms!=null?d.run_rooms:d.rooms),0);
-  const blendInitPOR = totalRooms ? totInitRev/totalRooms : 0;
+  const blendInitPOR = totalRooms ? totInitRev/totalRooms : 500;
   const blendRunPOR  = totalRunRooms ? totRunRev/totalRunRooms : 0;
   document.getElementById('ft-init-por').textContent = '$'+blendInitPOR.toFixed(2);
   document.getElementById('ft-init-rev').textContent = F.$full(totInitRev);
