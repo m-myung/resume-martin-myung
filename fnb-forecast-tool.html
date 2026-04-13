@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>F&B Forecast Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#222538;--border:#2e3148;
+  --text:#e8eaf6;--text-muted:#7b82a3;--text-dim:#4a5078;
+  --accent:#4f7dff;--accent-glow:rgba(79,125,255,0.15);
+  --green:#22d3a0;--red:#f5455c;--amber:#f5a623;--purple:#a78bfa;
+  --nav-w:220px;--radius:12px;--card-shadow:0 2px 16px rgba(0,0,0,.35);
+}
+[data-theme="light"] {
+  --bg:#f0f2f8;--surface:#fff;--surface2:#f5f7ff;--border:#e0e4f0;
+  --text:#1a1d35;--text-muted:#5a6285;--text-dim:#9ba3c7;
+  --accent:#3b6bff;--accent-glow:rgba(59,107,255,.1);--card-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:14px;line-height:1.5}
+
+/* SIDEBAR */
+.sidebar{width:var(--nav-w);min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;left:0;top:0;z-index:100;transition:transform .3s}
+.sidebar-logo{padding:20px 18px 14px;border-bottom:1px solid var(--border)}
+.sidebar-logo .hotel{font-size:13px;font-weight:700;letter-spacing:.5px}
+.sidebar-logo .division{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.period-badge{display:inline-block;margin-top:8px;padding:3px 8px;background:var(--accent-glow);color:var(--accent);border-radius:20px;font-size:10px;font-weight:600}
+.nav{flex:1;padding:12px 8px}
+.nav-section{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;padding:8px 10px 4px;margin-top:8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--text-muted);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--accent-glow);color:var(--accent)}
+.nav-item .icon{font-size:16px;width:20px;text-align:center}
+.nav-item .badge{margin-left:auto;font-size:10px;padding:1px 6px;border-radius:10px;background:var(--accent-glow);color:var(--accent)}
+.sidebar-footer{padding:12px 8px;border-top:1px solid var(--border)}
+.theme-toggle{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-radius:8px;background:var(--surface2);cursor:pointer;border:1px solid var(--border)}
+.theme-toggle span{font-size:12px;color:var(--text-muted)}
+.toggle-pill{width:36px;height:20px;background:var(--border);border-radius:10px;position:relative;transition:background .2s}
+.toggle-pill::after{content:'';position:absolute;width:14px;height:14px;background:var(--text-muted);border-radius:50%;top:3px;left:3px;transition:all .2s}
+[data-theme="light"] .toggle-pill{background:var(--accent)}
+[data-theme="light"] .toggle-pill::after{left:19px;background:#fff}
+
+/* MAIN */
+.main{margin-left:var(--nav-w);flex:1;display:flex;flex-direction:column;min-height:100vh;min-width:0;overflow-x:auto}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;min-width:560px}
+.page-title{font-size:16px;font-weight:700}
+.page-subtitle{font-size:12px;color:var(--text-muted);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.as-of-badge{font-size:11px;padding:4px 10px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);color:var(--text-muted)}
+.upload-btn{font-size:12px;padding:6px 14px;border-radius:8px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:600;transition:opacity .15s;display:flex;align-items:center;gap:6px}
+.upload-btn:hover{opacity:.85}
+.content{padding:24px 28px;flex:1;min-width:560px}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:fadeIn .25s ease}
+
+/* GRID */
+.grid{display:grid;gap:16px}
+.grid-4{grid-template-columns:repeat(4,minmax(160px,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(200px,1fr))}
+.grid-2{grid-template-columns:repeat(2,minmax(280px,1fr))}
+.col-span-2{grid-column:span 2}
+.col-span-3{grid-column:span 3}
+
+/* CARD */
+.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:20px;box-shadow:var(--card-shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px}
+.card-subtitle{font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* KPI */
+.kpi-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:18px 20px;box-shadow:var(--card-shadow);position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi-card.accent::before{background:var(--accent)}
+.kpi-card.green::before{background:var(--green)}
+.kpi-card.amber::before{background:var(--amber)}
+.kpi-card.purple::before{background:var(--purple)}
+.kpi-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.kpi-value{font-size:26px;font-weight:800;color:var(--text);margin:6px 0 4px;letter-spacing:-.5px}
+.kpi-value.lg{font-size:22px}
+.kpi-sub{font-size:11px;color:var(--text-muted)}
+.kpi-badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:2px 7px;border-radius:12px;font-weight:600}
+.kpi-badge.pos{background:rgba(34,211,160,.12);color:var(--green)}
+.kpi-badge.neg{background:rgba(245,69,92,.12);color:var(--red)}
+.kpi-badge.neu{background:var(--accent-glow);color:var(--accent)}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.data-table td{padding:9px 12px;font-size:12px;color:var(--text);border-bottom:1px solid var(--border)}
+.data-table tr:hover td{background:var(--surface2)}
+.data-table .num{text-align:right;font-variant-numeric:tabular-nums}
+.data-table .pos{color:var(--green)}
+.data-table .neg{color:var(--red)}
+.data-table tfoot td{font-weight:700;border-top:2px solid var(--border);border-bottom:none;background:var(--surface2)}
+
+/* OUTLET DOT */
+.outlet-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+
+/* HEATMAP */
+.heatmap-grid{display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;font-size:10px}
+.hm-cell{height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;transition:opacity .15s;cursor:default}
+.hm-cell:hover{opacity:.8}
+.hm-header{color:var(--text-muted);font-weight:600;display:flex;align-items:center;justify-content:center}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:48px 32px;text-align:center;cursor:pointer;transition:all .2s;background:var(--surface)}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:var(--accent-glow)}
+.upload-zone-sm{padding:24px 16px}
+.upload-zone.loaded{border-color:var(--green);background:rgba(34,211,160,.06)}
+.upload-zone.loaded:hover{border-color:var(--green);background:rgba(34,211,160,.10)}
+.upload-status-dot{font-size:11px;color:var(--text-dim);margin-top:8px;font-weight:600}
+#fileInput{display:none}
+input[type=file].zone-input{display:none}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:20px;background:var(--surface2);border-radius:10px;padding:4px;width:fit-content;flex-wrap:wrap}
+.tab{padding:7px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-muted);border:none;background:none;transition:all .15s}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:var(--card-shadow)}
+
+/* MISC */
+.section-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--text-muted);margin-bottom:20px}
+.event-chip{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(167,139,250,.15);color:var(--purple);font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.forecast-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+.tag-initial{background:rgba(245,166,35,.15);color:var(--amber)}
+.tag-running{background:var(--accent-glow);color:var(--accent)}
+.chart-wrap{position:relative}
+
+/* ─── ADJUSTMENT PAGE STYLES ─── */
+.adj-outlet-bar{display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:16px;overflow-x:auto;flex-wrap:wrap;gap:4px}
+.adj-outlet-tab{padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-muted);border:none;background:none;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.adj-outlet-tab.active{background:var(--surface);color:var(--text);box-shadow:var(--card-shadow)}
+.adj-outlet-tab .dot{width:8px;height:8px;border-radius:50%}
+
+/* Impact summary bar */
+.impact-bar{display:flex;gap:12px;padding:14px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.impact-stat{display:flex;flex-direction:column;gap:2px}
+.impact-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.impact-value{font-size:16px;font-weight:800;color:var(--text)}
+.impact-sep{width:1px;background:var(--border);align-self:stretch;margin:0 4px}
+.impact-delta.pos{color:var(--green)}
+.impact-delta.neg{color:var(--red)}
+.impact-delta.neu{color:var(--text-muted)}
+.reset-btn{margin-left:auto;padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* Quick-adjust controls */
+.adj-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.adj-control-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.adj-control-title{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.adj-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.adj-row-label{font-size:12px;color:var(--text-muted);min-width:120px}
+.pct-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text-muted);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.pct-btn:hover{background:var(--accent-glow);color:var(--accent);border-color:var(--accent)}
+.pct-btn.neg-btn:hover{background:rgba(245,69,92,.12);color:var(--red);border-color:var(--red)}
+.adj-input{width:90px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;font-weight:700;text-align:center;outline:none}
+.adj-input:focus{border-color:var(--accent);background:var(--accent-glow)}
+.apply-btn{padding:5px 14px;border-radius:6px;background:var(--accent);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.apply-btn:hover{opacity:.85}
+
+/* Editable table cells */
+.editable-input{width:80px;padding:4px 6px;border-radius:5px;border:1px solid transparent;background:transparent;color:var(--text);font-size:12px;font-weight:600;text-align:right;outline:none;font-variant-numeric:tabular-nums;transition:all .15s}
+.editable-input:hover{border-color:var(--border);background:var(--surface2)}
+.editable-input:focus{border-color:var(--accent);background:var(--accent-glow)}
+.editable-input.modified{border-color:var(--amber)!important;background:rgba(245,166,35,.08)!important;color:var(--amber)}
+.editable-input.covers-input{width:72px}
+.adj-table-wrap{overflow-x:auto;max-height:520px;overflow-y:auto}
+.adj-table{width:100%;border-collapse:collapse;min-width:820px}
+.adj-table th{padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid var(--border);background:var(--surface2);position:sticky;top:0;z-index:2}
+.adj-table th.num{text-align:right}
+.adj-table td{padding:6px 10px;font-size:12px;border-bottom:1px solid var(--border)}
+.adj-table tr:hover td{background:rgba(79,125,255,.04)}
+.adj-table tfoot td{font-weight:700;background:var(--surface2);border-top:2px solid var(--border);font-size:12px;padding:8px 10px}
+.adj-table .num{text-align:right;font-variant-numeric:tabular-nums}
+.adj-table .pos{color:var(--green)}
+.adj-table .neg{color:var(--red)}
+.adj-section-header{background:var(--accent-glow)!important}
+.adj-section-header td{color:var(--accent);font-weight:700;font-size:11px;letter-spacing:.5px;padding:5px 10px!important}
+
+.covers-note{font-size:10px;color:var(--text-dim);margin-top:8px;padding:8px;background:var(--surface2);border-radius:6px;border:1px solid var(--border)}
+.change-badge{display:inline-block;font-size:9px;padding:1px 5px;border-radius:8px;background:rgba(245,166,35,.2);color:var(--amber);font-weight:700;margin-left:4px;vertical-align:middle}
+
+/* Column group dividers */
+.adj-table .group-init{border-left:2px solid rgba(245,166,35,.3)}
+.adj-table .group-run{border-left:2px solid rgba(79,125,255,.3)}
+
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+@media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+
+/* ── MOBILE ── */
+.mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;font-size:20px;color:var(--text);padding:4px 8px}
+
+@media(max-width:768px){
+  /* Sidebar slides in/out */
+  .sidebar{transform:translateX(-100%);z-index:200}
+  .sidebar.open{transform:translateX(0)}
+
+  /* Main layout */
+  .main{margin-left:0}
+  .mobile-menu-btn{display:block}
+  .topbar{padding:10px 14px;min-width:0}
+  .page-title{font-size:14px}
+  .page-subtitle{font-size:11px;display:none}
+  .as-of-badge{font-size:10px;padding:3px 7px;display:none}
+  .upload-btn{font-size:11px;padding:5px 10px}
+
+  /* Content & grids */
+  .content{padding:12px 14px;min-width:0}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3,.grid-2{grid-template-columns:1fr}
+  .col-span-2,.col-span-3{grid-column:span 1}
+
+  /* KPI cards */
+  .kpi-value{font-size:20px}
+  .kpi-card{padding:14px 16px}
+  .section-title{font-size:17px}
+  .section-sub{font-size:12px;margin-bottom:14px}
+
+  /* Cards */
+  .card{padding:14px}
+  .card-header{flex-wrap:wrap;gap:8px;margin-bottom:12px}
+
+  /* Impact bar */
+  .impact-bar{flex-wrap:wrap;gap:8px;padding:10px 14px}
+  .impact-stat{min-width:calc(50% - 8px)}
+  .impact-sep{display:none}
+  .impact-value{font-size:14px}
+  .reset-btn{margin-left:0;width:100%}
+
+  /* Adj controls stack to single column */
+  .adj-controls-grid{grid-template-columns:1fr}
+  .adj-row{flex-wrap:wrap;gap:6px}
+  .adj-row-label{min-width:100%;font-size:11px}
+  .adj-input{width:80px}
+  .pct-btn{padding:4px 8px;font-size:10px}
+  .apply-btn{padding:4px 10px;font-size:11px}
+
+  /* Outlet tab bar wraps */
+  .adj-outlet-bar{flex-wrap:wrap}
+  .adj-outlet-tab{padding:6px 12px;font-size:12px}
+
+  /* Adj table: compact on mobile */
+  .adj-table{min-width:700px;font-size:11px}
+  .adj-table th{font-size:9px;padding:6px 6px}
+  .adj-table td{padding:5px 6px;font-size:11px}
+  .editable-input{width:60px;font-size:11px}
+  .editable-input.covers-input{width:54px}
+
+  /* Data table */
+  .data-table th{font-size:10px;padding:6px 8px}
+  .data-table td{font-size:11px;padding:7px 8px}
+
+  /* Chart height on mobile */
+  .chart-wrap canvas{max-height:220px}
+
+  /* Upload zones stack */
+  .upload-grid{grid-template-columns:1fr!important}
+
+  /* Heatmap scrolls */
+  .heatmap-grid{font-size:9px}
+  .hm-cell{height:26px;font-size:9px}
+}
+
+@media(max-width:480px){
+  .grid-4{grid-template-columns:1fr 1fr}
+  .kpi-value{font-size:18px}
+  .section-title{font-size:15px}
+  .topbar{padding:8px 10px}
+  .content{padding:10px 10px}
+  .card{padding:10px}
+  /* On very small screens hide DOW column in adj table */
+  .adj-table .hide-xs{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile sidebar overlay -->
+<div id="sidebarOverlay" onclick="document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('active')" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="hotel">HILTON ANAHEIM</div>
+    <div class="division">F&amp;B Division</div>
+    <div class="period-badge" id="sidebarPeriod">April 2026</div>
+  </div>
+  <div class="nav">
+    <div class="nav-section">Overview</div>
+    <button class="nav-item active" onclick="navigate('dashboard')"><span class="icon">📊</span>Dashboard</button>
+    <button class="nav-item" onclick="navigate('occupancy')"><span class="icon">🏨</span>Occupancy</button>
+    <div class="nav-section">Forecast</div>
+    <button class="nav-item" onclick="navigate('adjustments')"><span class="icon">✏️</span>Adjustments<span class="badge">✦</span></button>
+    <button class="nav-item" onclick="navigate('forecast')"><span class="icon">📈</span>Forecast</button>
+    <button class="nav-item" onclick="navigate('outlets')"><span class="icon">🍽️</span>Outlets</button>
+    <button class="nav-item" onclick="navigate('stly')"><span class="icon">📅</span>STLY</button>
+    <div class="nav-section">Data</div>
+    <button class="nav-item" onclick="navigate('upload')"><span class="icon">📤</span>Upload Data</button>
+  </div>
+  <div class="sidebar-footer">
+    <div class="theme-toggle" onclick="toggleTheme()">
+      <span>☀️ Light Mode</span>
+      <div class="toggle-pill"></div>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="mobile-menu-btn" onclick="(function(){const s=document.getElementById('sidebar'),o=document.getElementById('sidebarOverlay');s.classList.toggle('open');o.style.display=s.classList.contains('open')?'block':'none'})()">☰</button>
+      <div>
+        <div class="page-title" id="pageTitle">MTD Performance Dashboard</div>
+        <div class="page-subtitle" id="pageSubtitle">Month-to-Date vs Initial Forecast vs Running Forecast</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="as-of-badge">📍 As of Mar 9, 2026</div>
+      <button class="upload-btn" onclick="navigate('upload')">⬆ Upload</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div class="page active" id="page-dashboard">
+    <div class="grid grid-4" style="margin-bottom:16px">
+      <div class="kpi-card accent">
+        <div class="kpi-label">Total Initial Forecast</div>
+        <div class="kpi-value" id="kpi-init-total">$1.43M</div>
+        <div class="kpi-sub">Full month F&amp;B revenue</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Running Forecast</div>
+        <div class="kpi-value" id="kpi-run-total">$1.40M</div>
+        <div class="kpi-sub" id="kpi-run-sub">vs Initial</div>
+      </div>
+      <div class="kpi-card amber">
+        <div class="kpi-label">Forecasted Occ. Rooms</div>
+        <div class="kpi-value">34,577</div>
+        <div class="kpi-sub">Pre-month forecast</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">Avg Rev / Occ. Room</div>
+        <div class="kpi-value" id="kpi-avg-por">$40.20</div>
+        <div class="kpi-sub">All outlets blended</div>
+      </div>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:16px">
+      <div class="card col-span-2">
+        <div class="card-header">
+          <div><div class="card-title">Revenue by Outlet — Full Month</div><div class="card-subtitle">Initial vs Running Forecast</div></div>
+          <div style="display:flex;gap:8px"><span class="forecast-tag tag-initial">Initial</span><span class="forecast-tag tag-running">Running</span></div>
+        </div>
+        <div class="chart-wrap" style="height:260px"><canvas id="outletBarChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Revenue Mix</div></div>
+        <div class="chart-wrap" style="height:210px"><canvas id="revenuePieChart"></canvas></div>
+        <div id="pieLegendsHtml" style="margin-top:10px"></div>
+      </div>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:16px">
+      <div class="card col-span-2">
+        <div class="card-header">
+          <div class="card-title">Daily Forecasted Revenue — April 2026</div>
+          <div style="font-size:11px;color:var(--text-muted)">Running vs Initial · POR × daily rooms</div>
+        </div>
+        <div class="chart-wrap" style="height:220px"><canvas id="dailyRevenueChart"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="kpi-card green">
+          <div class="kpi-label">Lorem Kitchen Capture Ratio</div>
+          <div class="kpi-value lg" id="kpi-capture">14.9%</div>
+          <div class="kpi-sub">Of occupied rooms dining</div>
+        </div>
+        <div class="kpi-card accent">
+          <div class="kpi-label">Total Outlet Covers</div>
+          <div class="kpi-value lg" id="kpi-covers">35,679</div>
+          <div class="kpi-sub">Forecast for month</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Adj. Occupancy</div>
+          <div class="kpi-value lg">67.1%</div>
+          <div class="kpi-sub">After OOO removal</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">MTD Revenue Summary by Outlet</div>
+        <div style="font-size:11px;color:var(--text-muted)">Actuals vs Forecasts</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr>
+            <th>Outlet</th><th class="num">MTD Actual</th>
+            <th class="num">Initial Fcst</th><th class="num">Running Fcst</th>
+            <th class="num">$ vs Initial</th><th class="num">$ vs Running</th>
+            <th class="num">% B/(W) Init</th><th class="num">% B/(W) Run</th>
+          </tr></thead>
+          <tbody id="outletTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OCCUPANCY ═══ -->
+  <div class="page" id="page-occupancy">
+    <div class="section-title">Occupancy &amp; Room Demand</div>
+    <div class="section-sub">April 2026 · Day-by-day forecasted occupancy with event overlay</div>
+    <div class="grid grid-4" style="margin-bottom:16px">
+      <div class="kpi-card accent"><div class="kpi-label">Total Forecast Rooms</div><div class="kpi-value">34,577</div><div class="kpi-sub">Pre-month forecast</div></div>
+      <div class="kpi-card green"><div class="kpi-label">21-Day Adj. Rooms</div><div class="kpi-value">15,040</div><div class="kpi-sub">Running forecast adj.</div></div>
+      <div class="kpi-card amber"><div class="kpi-label">Avg Daily Occ</div><div class="kpi-value">67.1%</div><div class="kpi-sub">Monthly average</div></div>
+      <div class="kpi-card purple"><div class="kpi-label">Peak Day</div><div class="kpi-value">99.8%</div><div class="kpi-sub">Apr 4 (Sat)</div></div>
+    </div>
+    <div class="grid grid-2" style="margin-bottom:16px">
+      <div class="card"><div class="card-header"><div class="card-title">Daily Occupancy %</div></div><div class="chart-wrap" style="height:240px"><canvas id="occLineChart"></canvas></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Rooms — Transient vs Group</div></div><div class="chart-wrap" style="height:240px"><canvas id="roomsStackedChart"></canvas></div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><div class="card-title">Occupancy Heatmap</div><div class="card-subtitle">Color intensity reflects forecasted occupancy %</div></div>
+      <div id="heatmapGrid"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11px;color:var(--text-muted)">
+        <div style="width:12px;height:12px;border-radius:2px;background:rgba(79,125,255,.15)"></div>Low
+        <div style="width:12px;height:12px;border-radius:2px;background:rgba(79,125,255,.5);margin-left:8px"></div>Medium
+        <div style="width:12px;height:12px;border-radius:2px;background:var(--accent);margin-left:8px"></div>High
+        <div style="width:12px;height:12px;border-radius:2px;background:#22d3a0;margin-left:8px"></div>Peak (&gt;95%)
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Events Calendar</div></div>
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>DOW</th><th class="num">Occ %</th><th class="num">Rooms</th><th class="num">Transient</th><th class="num">Group</th><th>Event</th></tr></thead>
+        <tbody id="eventsTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ ADJUSTMENTS ═══ -->
+  <div class="page" id="page-adjustments">
+    <div class="section-title">Forecast Adjustments</div>
+    <div class="section-sub">Edit revenue per occupied room (POR) and covers by outlet · Changes propagate live to all charts</div>
+
+    <!-- Outlet tabs -->
+    <div class="adj-outlet-bar" id="adjOutletBar"></div>
+
+    <!-- Impact summary -->
+    <div class="impact-bar" id="adjImpactBar">
+      <div class="impact-stat"><div class="impact-label">Initial Forecast</div><div class="impact-value" id="imp-init">—</div></div>
+      <div class="impact-sep"></div>
+      <div class="impact-stat"><div class="impact-label">Running Forecast</div><div class="impact-value" id="imp-run">—</div></div>
+      <div class="impact-sep"></div>
+      <div class="impact-stat"><div class="impact-label">vs Baseline (Init)</div><div class="impact-value impact-delta" id="imp-delta-init">—</div></div>
+      <div class="impact-stat"><div class="impact-label">vs Baseline (Run)</div><div class="impact-value impact-delta" id="imp-delta-run">—</div></div>
+      <div class="impact-sep"></div>
+      <div class="impact-stat"><div class="impact-label">Modified Days</div><div class="impact-value" id="imp-modified">0</div></div>
+      <button class="reset-btn" id="adjResetBtn" onclick="resetCurrentOutlet()">↺ Reset Outlet</button>
+      <button class="reset-btn" onclick="resetAllOutlets()" style="border-color:var(--red);color:var(--red)">↺ Reset All</button>
+    </div>
+
+    <!-- Quick-adjust controls -->
+    <div class="adj-controls-grid">
+      <!-- POR Controls -->
+      <div class="adj-control-card">
+        <div class="adj-control-title">
+          <span>📐 Revenue Per Occupied Room (POR)</span>
+        </div>
+        <div class="adj-row">
+          <span class="adj-row-label">Initial — all days</span>
+          <button class="pct-btn neg-btn" onclick="adjPOR('init',-0.10)">-10%</button>
+          <button class="pct-btn neg-btn" onclick="adjPOR('init',-0.05)">-5%</button>
+          <input class="adj-input" type="number" id="adjInitPorInput" step="0.01" placeholder="$/room">
+          <button class="pct-btn" onclick="adjPOR('init',+0.05)">+5%</button>
+          <button class="pct-btn" onclick="adjPOR('init',+0.10)">+10%</button>
+          <button class="apply-btn" onclick="applyPORInput('init')">Set</button>
+        </div>
+        <div class="adj-row">
+          <span class="adj-row-label">Running — all days</span>
+          <button class="pct-btn neg-btn" onclick="adjPOR('run',-0.10)">-10%</button>
+          <button class="pct-btn neg-btn" onclick="adjPOR('run',-0.05)">-5%</button>
+          <input class="adj-input" type="number" id="adjRunPorInput" step="0.01" placeholder="$/room">
+          <button class="pct-btn" onclick="adjPOR('run',+0.05)">+5%</button>
+          <button class="pct-btn" onclick="adjPOR('run',+0.10)">+10%</button>
+          <button class="apply-btn" onclick="applyPORInput('run')">Set</button>
+        </div>
+        <div class="covers-note">💡 Sets all days proportionally. To edit individual days use the table below.</div>
+      </div>
+
+      <!-- Covers / Capture Ratio Controls -->
+      <div class="adj-control-card">
+        <div class="adj-control-title">
+          <span>👥 Covers &amp; Capture Ratio</span>
+        </div>
+        <div class="adj-row">
+          <span class="adj-row-label">Init capture ratio</span>
+          <button class="pct-btn neg-btn" onclick="adjCovers('init',-0.10)">-10%</button>
+          <button class="pct-btn neg-btn" onclick="adjCovers('init',-0.05)">-5%</button>
+          <input class="adj-input" type="number" id="adjInitCoversInput" step="0.1" min="0" max="100" placeholder="cap %">
+          <button class="pct-btn" onclick="adjCovers('init',+0.05)">+5%</button>
+          <button class="pct-btn" onclick="adjCovers('init',+0.10)">+10%</button>
+          <button class="apply-btn" onclick="applyCapRatioInput('init')">Set %</button>
+        </div>
+        <div class="adj-row">
+          <span class="adj-row-label">Run capture ratio</span>
+          <button class="pct-btn neg-btn" onclick="adjCovers('run',-0.10)">-10%</button>
+          <button class="pct-btn neg-btn" onclick="adjCovers('run',-0.05)">-5%</button>
+          <input class="adj-input" type="number" id="adjRunCoversInput" step="0.1" min="0" max="100" placeholder="cap %">
+          <button class="pct-btn" onclick="adjCovers('run',+0.05)">+5%</button>
+          <button class="pct-btn" onclick="adjCovers('run',+0.10)">+10%</button>
+          <button class="apply-btn" onclick="applyCapRatioInput('run')">Set %</button>
+        </div>
+        <div class="covers-note" id="coversNote">💡 Enter capture ratio (e.g. 14.9 = 14.9% of rooms). ±% buttons scale existing covers proportionally. Edit individual day covers in the table below.</div>
+      </div>
+    </div>
+
+    <!-- Day-by-day table -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title" id="adjTableTitle">Day-by-Day Detail</div>
+          <div class="card-subtitle">Click any POR or Covers cell to edit · Amber = modified from baseline</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="forecast-tag tag-initial">Initial</span>
+          <span class="forecast-tag tag-running">Running</span>
+        </div>
+      </div>
+      <div class="adj-table-wrap">
+        <table class="adj-table">
+          <thead><tr>
+            <th>Date</th><th class="hide-xs">DOW</th><th class="num">Occ Rooms</th><th>Event</th>
+            <th class="num group-init">Init POR</th>
+            <th class="num group-init">Init Rev</th>
+            <th class="num group-init">Init Cap%</th>
+            <th class="num group-init">Init Cov</th>
+            <th class="num group-init">Avg Chk</th>
+            <th class="num group-run">Run POR</th>
+            <th class="num group-run">Run Rev</th>
+            <th class="num group-run">Run Cap%</th>
+            <th class="num group-run">Run Cov</th>
+            <th class="num group-run">Avg Chk</th>
+          </tr></thead>
+          <tbody id="adjTableBody"></tbody>
+          <tfoot><tr id="adjTableFoot">
+            <td colspan="4"><strong>MONTHLY TOTAL</strong></td>
+            <td class="num group-init" id="ft-init-por">—</td>
+            <td class="num group-init" id="ft-init-rev">—</td>
+            <td class="num group-init" id="ft-init-cov">—</td>
+            <td class="num group-init" id="ft-init-cap">—</td>
+            <td class="num group-init" id="ft-init-chk">—</td>
+            <td class="num group-run" id="ft-run-por">—</td>
+            <td class="num group-run" id="ft-run-rev">—</td>
+            <td class="num group-run" id="ft-run-cov">—</td>
+            <td class="num group-run" id="ft-run-cap">—</td>
+            <td class="num group-run" id="ft-run-chk">—</td>
+          </tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Meal-period breakdown card (visible for Lorem Kitchen, Amet Room Service, Consectetur Market) -->
+    <div id="mealPeriodSection"></div>
+  </div>
+
+  <!-- ═══ FORECAST ═══ -->
+  <div class="page" id="page-forecast">
+    <div class="section-title">Forecast Analysis</div>
+    <div class="section-sub">Initial vs Running Forecast · April 2026</div>
+    <div class="grid grid-4" style="margin-bottom:16px">
+      <div class="kpi-card accent"><div class="kpi-label">Initial Forecast</div><div class="kpi-value" id="fcst-init-kpi">$1.434M</div><div class="kpi-sub">Set pre-month</div></div>
+      <div class="kpi-card green"><div class="kpi-label">Running Forecast</div><div class="kpi-value" id="fcst-run-kpi">$1.401M</div><div class="kpi-sub">21-day adjusted</div></div>
+      <div class="kpi-card amber"><div class="kpi-label">Variance ($)</div><div class="kpi-value" id="fcst-var-kpi" style="color:var(--red)">-$33.6K</div><div class="kpi-sub">Run vs Initial</div></div>
+      <div class="kpi-card purple"><div class="kpi-label">Variance (%)</div><div class="kpi-value" id="fcst-varpct-kpi" style="color:var(--red)">-2.3%</div><div class="kpi-sub">B/(W) initial</div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><div class="card-title">Running vs Initial — Daily Revenue</div></div>
+      <div class="chart-wrap" style="height:280px"><canvas id="forecastLineChart"></canvas></div>
+    </div>
+    <div class="grid grid-2" style="margin-bottom:16px">
+      <div class="card"><div class="card-header"><div class="card-title">Variance by Outlet — $ B/(W) Initial</div></div><div class="chart-wrap" style="height:240px"><canvas id="varianceChart"></canvas></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">POR Rate by Outlet</div></div><div class="chart-wrap" style="height:240px"><canvas id="porChart"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Forecast Comparison Detail</div></div>
+      <div style="overflow-x:auto"><table class="data-table"><thead><tr>
+        <th>Outlet</th><th class="num">Initial Fcst</th><th class="num">Running Fcst</th>
+        <th class="num">Variance $</th><th class="num">Variance %</th>
+        <th class="num">Blended POR (Init)</th><th class="num">Blended POR (Run)</th>
+      </tr></thead><tbody id="forecastTableBody"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ═══ OUTLETS ═══ -->
+  <div class="page" id="page-outlets">
+    <div class="section-title">Outlet Performance</div>
+    <div class="section-sub">April 2026 · Full-month forecast by outlet</div>
+    <div class="grid grid-2" style="margin-bottom:16px">
+      <div class="card"><div class="card-header"><div class="card-title">Revenue Share by Outlet</div></div><div class="chart-wrap" style="height:280px"><canvas id="outletShareChart"></canvas></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Food / Beverage / Other Mix</div></div><div class="chart-wrap" style="height:280px"><canvas id="revMixChart"></canvas></div></div>
+    </div>
+    <div class="grid grid-3" id="outletCardsGrid"></div>
+  </div>
+
+  <!-- ═══ STLY ═══ -->
+  <div class="page" id="page-stly">
+    <div class="section-title">Same Time Last Year</div>
+    <div class="section-sub">April 2026 vs April 2025</div>
+    <div class="grid grid-4" style="margin-bottom:16px">
+      <div class="kpi-card accent"><div class="kpi-label">TY Forecast Rooms</div><div class="kpi-value">34,577</div><div class="kpi-sub">April 2026</div></div>
+      <div class="kpi-card green"><div class="kpi-label">LY Occupied Rooms</div><div class="kpi-value">20,868</div><div class="kpi-sub">April 2025 actual</div></div>
+      <div class="kpi-card amber"><div class="kpi-label">Room Growth</div><div class="kpi-value" style="color:var(--green)">+65.7%</div><div class="kpi-sub">TY vs LY forecast</div></div>
+      <div class="kpi-card purple"><div class="kpi-label">LY Total Revenue</div><div class="kpi-value">$581K</div><div class="kpi-sub">Est. from STLY data</div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px"><div class="card-header"><div class="card-title">Daily Rooms — TY Forecast vs LY Actual</div></div><div class="chart-wrap" style="height:280px"><canvas id="stlyChart"></canvas></div></div>
+    <div class="grid grid-2">
+      <div class="card"><div class="card-header"><div class="card-title">Restaurant Revenue TY vs LY</div></div><div class="chart-wrap" style="height:240px"><canvas id="stlyRevenueChart"></canvas></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Occupancy % TY vs LY</div></div><div class="chart-wrap" style="height:240px"><canvas id="stlyOccChart"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ UPLOAD ═══ -->
+  <div class="page" id="page-upload">
+    <div class="section-title">Upload Forecast Data</div>
+    <div class="section-sub">Upload the three template files — each targets a specific data layer of the dashboard</div>
+
+    <!-- 3-zone grid -->
+    <div class="grid grid-3" style="margin-bottom:20px;align-items:start">
+
+      <!-- Zone 1: Day by Day -->
+      <div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px"><span style="background:rgba(245,166,35,.15);color:var(--amber);padding:2px 8px;border-radius:6px;font-size:11px">INITIAL FORECAST</span></div>
+          <div style="font-size:15px;font-weight:800;margin-top:6px">📅 Day by Day Template</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Updates occupancy — rooms, occ%, transient, group &amp; events</div>
+        </div>
+        <div class="upload-zone upload-zone-sm" id="zone-dbd"
+          onclick="document.getElementById('fi-dbd').click()"
+          ondragover="event.preventDefault();this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="handleZoneDrop(event,'dbd')">
+          <div style="font-size:36px;margin-bottom:8px">📅</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px">Day by Day Template.xlsx</div>
+          <div style="font-size:11px;color:var(--text-muted)">Drop here or click to browse</div>
+          <div class="upload-status-dot" id="dot-dbd">⬜ Not loaded</div>
+        </div>
+        <input type="file" id="fi-dbd" class="zone-input" accept=".xlsx,.xlsm,.xls" onchange="handleZoneFile(this.files[0],'dbd')">
+        <div id="res-dbd" style="display:none;margin-top:10px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);font-size:11px;line-height:1.8"></div>
+      </div>
+
+      <!-- Zone 2: Forecast Report -->
+      <div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px"><span style="background:var(--accent-glow);color:var(--accent);padding:2px 8px;border-radius:6px;font-size:11px">RUNNING FORECAST</span></div>
+          <div style="font-size:15px;font-weight:800;margin-top:6px">📈 Short-Term Forecast</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Updates running room counts, ADR &amp; occupancy per day</div>
+        </div>
+        <div class="upload-zone upload-zone-sm" id="zone-frt"
+          onclick="document.getElementById('fi-frt').click()"
+          ondragover="event.preventDefault();this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="handleZoneDrop(event,'frt')">
+          <div style="font-size:36px;margin-bottom:8px">📈</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px">Forecast Report Template.xlsm</div>
+          <div style="font-size:11px;color:var(--text-muted)">Drop here or click to browse</div>
+          <div class="upload-status-dot" id="dot-frt">⬜ Not loaded</div>
+        </div>
+        <input type="file" id="fi-frt" class="zone-input" accept=".xlsx,.xlsm,.xls" onchange="handleZoneFile(this.files[0],'frt')">
+        <div id="res-frt" style="display:none;margin-top:10px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);font-size:11px;line-height:1.8"></div>
+      </div>
+
+      <!-- Zone 3: Property Level -->
+      <div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px"><span style="background:rgba(34,211,160,.12);color:var(--green);padding:2px 8px;border-radius:6px;font-size:11px">ACTUALS &amp; STLY</span></div>
+          <div style="font-size:15px;font-weight:800;margin-top:6px">🏨 Property Level Report</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Loads MTD actuals, covers, avg checks &amp; same-time-last-year</div>
+        </div>
+        <div class="upload-zone upload-zone-sm" id="zone-plr"
+          onclick="document.getElementById('fi-plr').click()"
+          ondragover="event.preventDefault();this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="handleZoneDrop(event,'plr')">
+          <div style="font-size:36px;margin-bottom:8px">🏨</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px">Property_Level_Report_Template.xlsx</div>
+          <div style="font-size:11px;color:var(--text-muted)">Drop here or click to browse</div>
+          <div class="upload-status-dot" id="dot-plr">⬜ Not loaded</div>
+        </div>
+        <input type="file" id="fi-plr" class="zone-input" accept=".xlsx,.xlsm,.xls" onchange="handleZoneFile(this.files[0],'plr')">
+        <div id="res-plr" style="display:none;margin-top:10px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);font-size:11px;line-height:1.8"></div>
+      </div>
+    </div>
+
+    <!-- Loaded data summary card -->
+    <div class="card" id="upload-summary-card" style="display:none;margin-bottom:16px">
+      <div class="card-header"><div class="card-title">📊 Loaded Data Summary</div><button onclick="resetUploadedData()" class="reset-btn">Reset All</button></div>
+      <div id="upload-summary-content" style="font-size:12px;line-height:1.9;display:grid;grid-template-columns:repeat(3,1fr);gap:16px"></div>
+    </div>
+
+    <!-- Template guide -->
+    <div class="card">
+      <div class="card-header" style="margin-bottom:14px"><div class="card-title">Template Format Guide</div></div>
+      <div class="grid grid-3" style="font-size:12px;gap:12px">
+        <div style="padding:14px;background:var(--surface2);border-radius:10px;border-left:3px solid var(--amber)">
+          <div style="font-weight:700;margin-bottom:8px;color:var(--amber)">📅 Day by Day Template.xlsx</div>
+          <div style="color:var(--text-muted);line-height:1.7"><strong style="color:var(--text)">Sheet:</strong> Forecast<br><strong style="color:var(--text)">Date row:</strong> col[3]='Total', dates in col[4+]<br><strong style="color:var(--text)">Data rows:</strong> Total Occupancy, Total Forecast, Transient Forecast, Group Forecast, Special Event TY</div>
+        </div>
+        <div style="padding:14px;background:var(--surface2);border-radius:10px;border-left:3px solid var(--accent)">
+          <div style="font-weight:700;margin-bottom:8px;color:var(--accent)">📈 Forecast Report Template.xlsm</div>
+          <div style="color:var(--text-muted);line-height:1.7"><strong style="color:var(--text)">Sheet:</strong> Forecast<br><strong style="color:var(--text)">Date row:</strong> col[1]='Date', serials in col[2+]<br><strong style="color:var(--text)">Data rows:</strong> Total Forecasted Occupied Rooms, ADR, Occupancy %, Transient RN, Group RN</div>
+        </div>
+        <div style="padding:14px;background:var(--surface2);border-radius:10px;border-left:3px solid var(--green)">
+          <div style="font-weight:700;margin-bottom:8px;color:var(--green)">🏨 Property_Level_Report_Template.xlsx</div>
+          <div style="color:var(--text-muted);line-height:1.7"><strong style="color:var(--text)">Sheet:</strong> Page_3<br><strong style="color:var(--text)">Col 2:</strong> MTD Actuals · <strong style="color:var(--text)">Col 7:</strong> LY MTD<br><strong style="color:var(--text)">Outlet revenues</strong> by name label<br><strong style="color:var(--text)">Covers</strong> second occurrence of outlet label</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// STATIC REFERENCE DATA
+// ═══════════════════════════════════════════════════════
+const DAILY_OCC = [
+  {date:'Apr 1',dow:'Wed',occ:18.4,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 2',dow:'Thu',occ:46.1,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 3',dow:'Fri',occ:96.5,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 4',dow:'Sat',occ:99.8,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 5',dow:'Sun',occ:99.6,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 6',dow:'Mon',occ:34.1,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 7',dow:'Tue',occ:36.3,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 8',dow:'Wed',occ:47.6,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 9',dow:'Thu',occ:83.5,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 10',dow:'Fri',occ:90.5,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 11',dow:'Sat',occ:98.1,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 12',dow:'Sun',occ:98.5,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 13',dow:'Mon',occ:99.0,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 14',dow:'Tue',occ:99.8,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 15',dow:'Wed',occ:85.4,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 16',dow:'Thu',occ:75.2,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 17',dow:'Fri',occ:82.0,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 18',dow:'Sat',occ:84.1,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 19',dow:'Sun',occ:77.2,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 20',dow:'Mon',occ:85.1,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 21',dow:'Tue',occ:67.5,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 22',dow:'Wed',occ:44.9,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 23',dow:'Thu',occ:58.4,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 24',dow:'Fri',occ:65.1,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 25',dow:'Sat',occ:90.5,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 26',dow:'Sun',occ:94.2,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 27',dow:'Mon',occ:99.0,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 28',dow:'Tue',occ:99.6,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 29',dow:'Wed',occ:34.9,rooms:0,transient:0,group:0,event:''},
+  {date:'Apr 30',dow:'Thu',occ:34.7,rooms:0,transient:0,group:0,event:''},
+];
+
+const STLY_ROOMS = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+// DOW multipliers for realistic day-of-week variation
+const DOW_POR_MULT  = {Mon:0.84,Tue:0.89,Wed:0.95,Thu:1.00,Fri:1.12,Sat:1.28,Sun:1.10};
+const DOW_COV_MULT  = {Mon:0.82,Tue:0.87,Wed:0.92,Thu:1.00,Fri:1.10,Sat:1.30,Sun:1.14};
+
+// Outlet meta
+const OUTLET_META = {
+  "Lorem Kitchen":{ color:'#4f7dff', icon:'🍽️', hasCovers:true,  base_init_por:0, base_run_por:0, base_cap:0 },
+  "Ipsum Café":         { color:'#22d3a0', icon:'☕',  hasCovers:false, base_init_por:0, base_run_por:0, base_cap:0 },
+  "Dolor Lounge":    { color:'#a78bfa', icon:'🍸',  hasCovers:true,  base_init_por:0, base_run_por:0, base_cap:0 },
+  "Amet Room Service":      { color:'#38bdf8', icon:'🛎️',  hasCovers:true,  base_init_por:0, base_run_por:0, base_cap:0 },
+  "Consectetur Market":   { color:'#f5a623', icon:'🛒',  hasCovers:false, base_init_por:0,     base_run_por:0,     base_cap:0 },
+  "Adipiscing Bar":        { color:'#f5455c', icon:'🌸',  hasCovers:false, base_init_por:0,  base_run_por:0,  base_cap:0 },
+  "Elit Events": { color:'#fb923c', icon:'🎪',  hasCovers:false, base_init_por:0,     base_run_por:0,     base_cap:0 },
+};
+
+const REV_MIX = {
+  "Lorem Kitchen":{food:73,bev:8,other:0},
+  "Ipsum Café":{food:100,bev:0,other:0},
+  "Dolor Lounge":{food:27,bev:57,other:16},
+  "Amet Room Service":{food:60,bev:23,other:17},
+};
+
+// Meal-period splits for outlets that track Breakfast / Lunch / Dinner
+// por_share: fraction of total outlet POR each period contributes
+// cover_share: fraction of total covers each period represents
+const MEAL_PERIOD_META = {
+  "Lorem Kitchen": [
+    { name:'Breakfast', por_share:0.30, cover_share:0.35 },
+    { name:'Lunch',     por_share:0.28, cover_share:0.28 },
+    { name:'Dinner',    por_share:0.42, cover_share:0.37 },
+  ],
+  "Amet Room Service": [
+    { name:'Breakfast', por_share:0.40, cover_share:0.40 },
+    { name:'Lunch',     por_share:0.25, cover_share:0.25 },
+    { name:'Dinner',    por_share:0.35, cover_share:0.35 },
+  ],
+  "Consectetur Market": [
+    { name:'Breakfast', por_share:0.40, cover_share:0.40 },
+    { name:'Lunch',     por_share:0.35, cover_share:0.35 },
+    { name:'Dinner',    por_share:0.25, cover_share:0.25 },
+  ],
+};
+
+// ═══════════════════════════════════════════════════════
+// REACTIVE STATE — ADJ_STATE[outlet][day]
+// ═══════════════════════════════════════════════════════
+let ADJ_STATE = {};   // mutable per-day data
+let ADJ_BASE  = {};   // immutable baseline for reset / delta calc
+
+// Uploaded data overlays
+let UPLOADED = { dbd: null, frt: null, plr: null };
+// Per-outlet actuals from Property Level Report
+let ACTUALS = {};  // { outletName: { mtd_rev, ly_rev, mtd_covers, ly_covers, today_rev } }
+
+function buildPerDayRow(name, meta, d) {
+  const pm = DOW_POR_MULT[d.dow] || 1;
+  const cm = DOW_COV_MULT[d.dow] || 1;
+  const ip = +(meta.base_init_por * pm).toFixed(2);
+  const rp = +(meta.base_run_por  * pm).toFixed(2);
+  const ic = meta.hasCovers ? Math.round(d.rooms * meta.base_cap * cm) : null;
+  const rc = meta.hasCovers ? Math.round(d.rooms * meta.base_cap * cm) : null;
+  const row = { date:d.date, dow:d.dow, rooms:d.rooms, event:d.event,
+                init_por:ip, run_por:rp, init_covers:ic, run_covers:rc,
+                init_por_mod:false, run_por_mod:false,
+                init_covers_mod:false, run_covers_mod:false };
+  // Initialize meal-period sub-rows for outlets that track B/L/D
+  const mpm = MEAL_PERIOD_META[name];
+  if (mpm) {
+    row.meals = mpm.map(m => ({
+      name: m.name,
+      init_por:      +(ip * m.por_share).toFixed(2),
+      run_por:       +(rp * m.por_share).toFixed(2),
+      init_covers:   ic != null ? Math.round(ic * m.cover_share) : null,
+      run_covers:    rc != null ? Math.round(rc * m.cover_share) : null,
+      init_por_mod:  false, run_por_mod:  false,
+      init_covers_mod: false, run_covers_mod: false,
+    }));
+  }
+  return row;
+}
+
+function initState() {
+  ADJ_STATE = {}; ADJ_BASE = {};
+  for (const [name, meta] of Object.entries(OUTLET_META)) {
+    ADJ_STATE[name] = DAILY_OCC.map(d => buildPerDayRow(name, meta, d));
+    ADJ_BASE[name]  = DAILY_OCC.map(d => buildPerDayRow(name, meta, d));
+  }
+}
+initState();
+
+// ═══════════════════════════════════════════════════════
+// COMPUTE TOTALS FROM STATE
+// ═══════════════════════════════════════════════════════
+function computeOutletTotals(outletName) {
+  const days = ADJ_STATE[outletName];
+  let init_rev=0, run_rev=0, init_cov=0, run_cov=0;
+  let initRooms=0, runRooms=0;
+  for (const d of days) {
+    const rr = d.run_rooms != null ? d.run_rooms : d.rooms;
+    init_rev += d.init_por * d.rooms;
+    run_rev  += d.run_por  * rr;
+    initRooms += d.rooms;
+    runRooms  += rr;
+    if (d.init_covers != null) init_cov += d.init_covers;
+    if (d.run_covers  != null) run_cov  += d.run_covers;
+  }
+  return {
+    init_rev: Math.round(init_rev),
+    run_rev:  Math.round(run_rev),
+    init_cov, run_cov,
+    blended_init_por: initRooms ? +(init_rev/initRooms).toFixed(2) : 0,
+    blended_run_por:  runRooms  ? +(run_rev/runRooms).toFixed(2)   : 0,
+  };
+}
+
+function computeAllTotals() {
+  const result = {};
+  for (const name of Object.keys(OUTLET_META)) result[name] = computeOutletTotals(name);
+  return result;
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+const PAGE_TITLES = {
+  dashboard:   ['MTD Performance Dashboard',  'Month-to-Date vs Initial Forecast vs Running Forecast'],
+  occupancy:   ['Occupancy & Room Demand',    'Day-by-day forecasted occupancy with event overlay'],
+  adjustments: ['Forecast Adjustments',       'Edit POR rates and covers per outlet · Changes propagate live'],
+  forecast:    ['Forecast Analysis',          'Initial vs Running Forecast comparison · April 2026'],
+  outlets:     ['Outlet Performance',         'Revenue breakdown by F&B outlet · April 2026'],
+  stly:        ['STLY Comparison',            'Same Time Last Year · April 2026 vs April 2025'],
+  upload:      ['Upload Forecast Data',       'Drag & drop Excel files to update dashboard data'],
+};
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelector(`[onclick="navigate('${page}')"]`).classList.add('active');
+  document.getElementById('pageTitle').textContent   = PAGE_TITLES[page][0];
+  document.getElementById('pageSubtitle').textContent = PAGE_TITLES[page][1];
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').style.display = 'none';
+}
+function toggleTheme() {
+  const h = document.documentElement;
+  h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+  setTimeout(rebuildAllCharts, 60);
+}
+
+// ═══════════════════════════════════════════════════════
+// FORMAT HELPERS
+// ═══════════════════════════════════════════════════════
+const F = {
+  $: v => v>=1e6?`$${(v/1e6).toFixed(2)}M`:v>=1e3?`$${(v/1e3).toFixed(0)}K`:`$${Math.round(v).toLocaleString()}`,
+  $full: v => `$${Math.round(v).toLocaleString()}`,
+  pct: v => `${(v*100).toFixed(1)}%`,
+  por: v => `$${(+v).toFixed(2)}`,
+  num: v => Math.round(v).toLocaleString(),
+  delta: (v,base) => {
+    if (!base) return {str:'—',cls:''};
+    const p=(v/base*100).toFixed(1);
+    const s=v>=0?'+':'-';
+    return {str:`${s}$${Math.abs(Math.round(v)).toLocaleString()} (${s}${Math.abs(p)}%)`, cls:v>=0?'pos':'neg'};
+  },
+};
+function vc(v){ return v>0?'pos':v<0?'neg':''; }
+
+// ═══════════════════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════════════════
+let CHARTS = {};
+
+function cd() { // chart defaults
+  const s = getComputedStyle(document.documentElement);
+  return {
+    tm: s.getPropertyValue('--text-muted').trim()||'#7b82a3',
+    bd: s.getPropertyValue('--border').trim()||'#2e3148',
+    tx: s.getPropertyValue('--text').trim()||'#e8eaf6',
+    s2: s.getPropertyValue('--surface2').trim()||'#222538',
+  };
+}
+
+function mkScales(opts={}) {
+  const c = cd();
+  return {
+    x:{ grid:{color:c.bd}, ticks:{color:c.tm,maxTicksLimit:opts.xTicks||15}, ...opts.x },
+    y:{ grid:{color:c.bd}, ticks:{color:c.tm,...(opts.yCb?{callback:opts.yCb}:{})}, ...opts.y },
+  };
+}
+
+// ─ Dashboard charts ─
+function buildDashboardCharts() {
+  const c = cd();
+  const tots = computeAllTotals();
+  const names = Object.keys(OUTLET_META);
+  const actives = names.filter(n=>tots[n].init_rev>0||tots[n].run_rev>0);
+
+  // KPI updates
+  const totalInit = names.reduce((s,n)=>s+tots[n].init_rev,0);
+  const totalRun  = names.reduce((s,n)=>s+tots[n].run_rev,0);
+  const totalRooms = DAILY_OCC.reduce((s,d)=>s+d.rooms,0);
+  const totalCov = Object.values(tots).reduce((s,t)=>s+t.init_cov,0);
+  const restCap = tots["Lorem Kitchen"].init_cov / DAILY_OCC.reduce((s,d)=>s+d.rooms,0);
+
+  document.getElementById('kpi-init-total').textContent = F.$(totalInit);
+  document.getElementById('kpi-run-total').textContent  = F.$(totalRun);
+  const vd = F.delta(totalRun-totalInit, totalInit);
+  document.getElementById('kpi-run-sub').innerHTML = `<span style="color:var(--${totalRun>=totalInit?'green':'red'})">${vd.str} vs Initial</span>`;
+  document.getElementById('kpi-avg-por').textContent = F.por(totalRun/totalRooms);
+  document.getElementById('kpi-covers').textContent  = F.num(totalCov);
+  document.getElementById('kpi-capture').textContent = (restCap*100).toFixed(1)+'%';
+
+  // Outlet bar chart
+  if (CHARTS.bar) CHARTS.bar.destroy();
+  CHARTS.bar = new Chart(document.getElementById('outletBarChart'),{
+    type:'bar',
+    data:{
+      labels:actives.map(n=>n),
+      datasets:[
+        {label:'Initial Fcst',data:actives.map(n=>tots[n].init_rev),backgroundColor:'rgba(245,166,35,.7)',borderColor:'#f5a623',borderWidth:1,borderRadius:4},
+        {label:'Running Fcst',data:actives.map(n=>tots[n].run_rev), backgroundColor:'rgba(79,125,255,.7)', borderColor:'#4f7dff',borderWidth:1,borderRadius:4},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${F.$full(ctx.parsed.y)}`}}},
+      scales:mkScales({yCb:v=>F.$(v)})}
+  });
+
+  // Pie
+  if (CHARTS.pie) CHARTS.pie.destroy();
+  CHARTS.pie = new Chart(document.getElementById('revenuePieChart'),{
+    type:'doughnut',
+    data:{labels:actives,datasets:[{data:actives.map(n=>tots[n].run_rev||tots[n].init_rev),backgroundColor:actives.map(n=>OUTLET_META[n].color),borderWidth:0,hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${F.$full(ctx.parsed)}`}}}}
+  });
+  const totRev = actives.reduce((s,n)=>s+(tots[n].run_rev||tots[n].init_rev),0);
+  document.getElementById('pieLegendsHtml').innerHTML = actives.map(n=>{
+    const v=tots[n].run_rev||tots[n].init_rev;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:3px 0;font-size:11px">
+      <div><span class="outlet-dot" style="background:${OUTLET_META[n].color}"></span>${n}</div>
+      <div style="color:var(--text-muted)">${((v/totRev)*100).toFixed(1)}%</div></div>`;
+  }).join('');
+
+  // Daily revenue line
+  if (CHARTS.dailyRev) CHARTS.dailyRev.destroy();
+  const dailyRun  = DAILY_OCC.map(d=>names.reduce((s,n)=>s+ADJ_STATE[n].find(r=>r.date===d.date).run_por*d.rooms,0));
+  const dailyInit = DAILY_OCC.map(d=>names.reduce((s,n)=>s+ADJ_STATE[n].find(r=>r.date===d.date).init_por*d.rooms,0));
+  CHARTS.dailyRev = new Chart(document.getElementById('dailyRevenueChart'),{
+    type:'line',
+    data:{
+      labels:DAILY_OCC.map(d=>d.date.replace('Apr ','')),
+      datasets:[
+        {label:'Running',data:dailyRun,borderColor:'#4f7dff',backgroundColor:'rgba(79,125,255,.08)',fill:true,borderWidth:2,tension:.4,pointRadius:2},
+        {label:'Initial',data:dailyInit,borderColor:'#f5a623',backgroundColor:'transparent',borderDash:[4,3],fill:false,borderWidth:1.5,tension:.4,pointRadius:0},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:12}},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${F.$full(ctx.parsed.y)}`}}},
+      scales:mkScales({yCb:v=>F.$(v)})}
+  });
+
+  // Outlet table
+  const rows = names.map(n=>{
+    const t=tots[n]; const m=OUTLET_META[n];
+    const vi=t.run_rev-t.init_rev;
+    return `<tr>
+      <td><span class="outlet-dot" style="background:${m.color}"></span>${n}</td>
+      <td class="num">—</td>
+      <td class="num">${t.init_rev?F.$full(t.init_rev):'—'}</td>
+      <td class="num">${t.run_rev?F.$full(t.run_rev):'—'}</td>
+      <td class="num ${vc(vi)}">${t.init_rev?F.delta(vi,t.init_rev).str:'—'}</td>
+      <td class="num ${vc(vi)}">${t.run_rev?F.delta(-t.run_rev,0).str:'—'}</td>
+      <td class="num ${vc(vi)}">${t.init_rev?(vi>=0?'+':'')+((vi/t.init_rev)*100).toFixed(1)+'%':'—'}</td>
+      <td class="num ${vc(vi)}">${t.run_rev?'—':'—'}</td>
+    </tr>`;
+  });
+  const tI=totalInit,tR=totalRun;
+  rows.push(`<tr style="font-weight:700;border-top:2px solid var(--border)">
+    <td>TOTAL F&B</td><td class="num">—</td>
+    <td class="num">${F.$full(tI)}</td><td class="num">${F.$full(tR)}</td>
+    <td class="num ${vc(tR-tI)}">${F.delta(tR-tI,tI).str}</td>
+    <td class="num">—</td>
+    <td class="num ${vc(tR-tI)}">${((tR-tI)/tI*100).toFixed(1)}%</td>
+    <td class="num">—</td>
+  </tr>`);
+  document.getElementById('outletTableBody').innerHTML = rows.join('');
+}
+
+// ─ Occupancy charts ─
+function buildOccupancyCharts() {
+  const c=cd();
+  const dates=DAILY_OCC.map(d=>d.date.replace('Apr ',''));
+
+  if(CHARTS.occLine) CHARTS.occLine.destroy();
+  CHARTS.occLine = new Chart(document.getElementById('occLineChart'),{
+    type:'line',
+    data:{labels:dates,datasets:[{label:'Occ %',data:DAILY_OCC.map(d=>d.occ),borderColor:'#4f7dff',backgroundColor:'rgba(79,125,255,.1)',fill:true,borderWidth:2,tension:.4,pointRadius:3,
+      pointBackgroundColor:DAILY_OCC.map(d=>d.occ>=95?'#22d3a0':d.occ>=70?'#4f7dff':'#f5a623')}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y.toFixed(1)}%`}}},
+      scales:mkScales({yCb:v=>v+'%',y:{min:0,max:100}})}
+  });
+
+  if(CHARTS.roomsStacked) CHARTS.roomsStacked.destroy();
+  CHARTS.roomsStacked = new Chart(document.getElementById('roomsStackedChart'),{
+    type:'bar',
+    data:{labels:dates,datasets:[
+      {label:'Transient',data:DAILY_OCC.map(d=>d.transient),backgroundColor:'#4f7dff',borderRadius:2,stack:'r'},
+      {label:'Group',    data:DAILY_OCC.map(d=>d.group),    backgroundColor:'#a78bfa',borderRadius:2,stack:'r'},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:10}}},
+      scales:{x:{stacked:true,...mkScales().x},y:{stacked:true,...mkScales().y}}}
+  });
+
+  // Heatmap
+  const startDow={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6};
+  const offset=startDow[DAILY_OCC[0].dow]||0;
+  let hm='<div class="heatmap-grid"><div class="hm-header"></div>';
+  ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d=>{hm+=`<div class="hm-header">${d}</div>`;});
+  for(let w=0;w<5;w++){
+    hm+=`<div class="hm-header" style="font-size:10px;color:var(--text-dim)">Wk${w+1}</div>`;
+    for(let d=0;d<7;d++){
+      const i=w*7+d-offset;
+      if(i<0||i>=DAILY_OCC.length){hm+='<div class="hm-cell" style="background:transparent"></div>';continue;}
+      const pct=DAILY_OCC[i].occ;
+      const bg=pct>=95?'#22d3a0':pct>=80?'#4f7dff':pct>=60?'rgba(79,125,255,.6)':pct>=40?'rgba(79,125,255,.35)':'rgba(79,125,255,.12)';
+      const tc=pct>=60?'#fff':'var(--text)';
+      hm+=`<div class="hm-cell" style="background:${bg};color:${tc}" title="${DAILY_OCC[i].date}: ${pct}%">${Math.round(pct)}%</div>`;
+    }
+  }
+  hm+='</div>';
+  document.getElementById('heatmapGrid').innerHTML=hm;
+
+  document.getElementById('eventsTableBody').innerHTML=DAILY_OCC.map(d=>`
+    <tr>
+      <td>${d.date}</td><td style="color:var(--text-muted)">${d.dow}</td>
+      <td class="num ${d.occ>=95?'pos':d.occ<50?'neg':''}">${d.occ}%</td>
+      <td class="num">${d.rooms.toLocaleString()}</td>
+      <td class="num">${d.transient.toLocaleString()}</td>
+      <td class="num">${d.group.toLocaleString()}</td>
+      <td>${d.event?`<span class="event-chip" title="${d.event}">${d.event}</span>`:'<span style="color:var(--text-dim)">—</span>'}</td>
+    </tr>`).join('');
+}
+
+// ─ Forecast charts ─
+function buildForecastCharts() {
+  const c=cd();
+  const tots=computeAllTotals();
+  const names=Object.keys(OUTLET_META);
+  const totalInit=names.reduce((s,n)=>s+tots[n].init_rev,0);
+  const totalRun =names.reduce((s,n)=>s+tots[n].run_rev,0);
+  const varAmt=totalRun-totalInit;
+
+  document.getElementById('fcst-init-kpi').textContent=F.$(totalInit);
+  document.getElementById('fcst-run-kpi').textContent=F.$(totalRun);
+  document.getElementById('fcst-var-kpi').textContent=(varAmt>=0?'+':'')+F.$full(varAmt);
+  document.getElementById('fcst-var-kpi').style.color=varAmt>=0?'var(--green)':'var(--red)';
+  document.getElementById('fcst-varpct-kpi').textContent=(varAmt>=0?'+':'')+((varAmt/totalInit)*100).toFixed(1)+'%';
+  document.getElementById('fcst-varpct-kpi').style.color=varAmt>=0?'var(--green)':'var(--red)';
+
+  if(CHARTS.forecastLine) CHARTS.forecastLine.destroy();
+  const dailyRun =DAILY_OCC.map(d=>names.reduce((s,n)=>s+ADJ_STATE[n].find(r=>r.date===d.date).run_por*d.rooms,0));
+  const dailyInit=DAILY_OCC.map(d=>names.reduce((s,n)=>s+ADJ_STATE[n].find(r=>r.date===d.date).init_por*d.rooms,0));
+  CHARTS.forecastLine = new Chart(document.getElementById('forecastLineChart'),{
+    type:'line',
+    data:{labels:DAILY_OCC.map(d=>d.date.replace('Apr ','')),datasets:[
+      {label:'Running',data:dailyRun,borderColor:'#4f7dff',backgroundColor:'rgba(79,125,255,.08)',fill:true,borderWidth:2,tension:.4,pointRadius:3},
+      {label:'Initial',data:dailyInit,borderColor:'#f5a623',backgroundColor:'transparent',borderDash:[5,4],fill:false,borderWidth:1.5,tension:.4,pointRadius:0},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:12}},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${F.$full(ctx.parsed.y)}`}}},
+      scales:mkScales({yCb:v=>F.$(v)})}
+  });
+
+  const actives=names.filter(n=>tots[n].init_rev>0);
+  if(CHARTS.variance) CHARTS.variance.destroy();
+  CHARTS.variance = new Chart(document.getElementById('varianceChart'),{
+    type:'bar',
+    data:{
+      labels:actives.map(n=>n),
+      datasets:[{label:'$ B/(W) Initial',data:actives.map(n=>tots[n].run_rev-tots[n].init_rev),
+        backgroundColor:actives.map(n=>(tots[n].run_rev-tots[n].init_rev)>=0?'rgba(34,211,160,.7)':'rgba(245,69,92,.7)'),
+        borderColor:actives.map(n=>(tots[n].run_rev-tots[n].init_rev)>=0?'#22d3a0':'#f5455c'),
+        borderWidth:1,borderRadius:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const v=ctx.parsed.y;return ` ${v>=0?'+':''}${F.$full(v)}`;  }}}},
+      scales:mkScales({yCb:v=>F.$(v)})}
+  });
+
+  if(CHARTS.por) CHARTS.por.destroy();
+  CHARTS.por = new Chart(document.getElementById('porChart'),{
+    type:'bar',
+    data:{
+      labels:actives.map(n=>n),
+      datasets:[
+        {label:'Initial POR',data:actives.map(n=>tots[n].blended_init_por),backgroundColor:'rgba(245,166,35,.7)',borderRadius:4,borderWidth:1,borderColor:'#f5a623'},
+        {label:'Running POR',data:actives.map(n=>tots[n].blended_run_por), backgroundColor:'rgba(79,125,255,.7)', borderRadius:4,borderWidth:1,borderColor:'#4f7dff'},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:10}},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: $${ctx.parsed.y.toFixed(2)}`}}},
+      scales:mkScales({yCb:v=>'$'+v})}
+  });
+
+  document.getElementById('forecastTableBody').innerHTML=names.map(n=>{
+    const t=tots[n]; const m=OUTLET_META[n]; const v=t.run_rev-t.init_rev;
+    return `<tr>
+      <td><span class="outlet-dot" style="background:${m.color}"></span>${n}</td>
+      <td class="num">${t.init_rev?F.$full(t.init_rev):'—'}</td>
+      <td class="num">${t.run_rev?F.$full(t.run_rev):'—'}</td>
+      <td class="num ${vc(v)}">${t.init_rev?(v>=0?'+':'')+F.$full(v):'—'}</td>
+      <td class="num ${vc(v)}">${t.init_rev?(v>=0?'+':'')+((v/t.init_rev)*100).toFixed(1)+'%':'—'}</td>
+      <td class="num">${t.blended_init_por?'$'+t.blended_init_por.toFixed(2):'—'}</td>
+      <td class="num">${t.blended_run_por?'$'+t.blended_run_por.toFixed(2):'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─ Outlets charts ─
+function buildOutletCharts() {
+  const c=cd(); const tots=computeAllTotals();
+  const names=Object.keys(OUTLET_META);
+  const actives=names.filter(n=>tots[n].run_rev>0||tots[n].init_rev>0);
+
+  if(CHARTS.outletShare) CHARTS.outletShare.destroy();
+  CHARTS.outletShare = new Chart(document.getElementById('outletShareChart'),{
+    type:'doughnut',
+    data:{labels:actives,datasets:[{data:actives.map(n=>tots[n].run_rev||tots[n].init_rev),backgroundColor:actives.map(n=>OUTLET_META[n].color),borderWidth:0,hoverOffset:8}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+      plugins:{legend:{position:'bottom',labels:{color:c.tm,boxWidth:10,padding:10}},tooltip:{callbacks:{label:ctx=>` ${F.$full(ctx.parsed)}`}}}}
+  });
+
+  const mixes=Object.entries(REV_MIX);
+  if(CHARTS.revMix) CHARTS.revMix.destroy();
+  CHARTS.revMix = new Chart(document.getElementById('revMixChart'),{
+    type:'bar',
+    data:{labels:mixes.map(([n])=>n),datasets:[
+      {label:'Food %',   data:mixes.map(([,v])=>v.food),backgroundColor:'#4f7dff',stack:'s',borderRadius:3},
+      {label:'Beverage %',data:mixes.map(([,v])=>v.bev), backgroundColor:'#22d3a0',stack:'s',borderRadius:3},
+      {label:'Other %',  data:mixes.map(([,v])=>v.other),backgroundColor:'#a78bfa',stack:'s',borderRadius:3},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:10}},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}},
+      scales:{x:{stacked:true,...mkScales().x},y:{stacked:true,...mkScales().y,ticks:{callback:v=>v+'%'},max:100}}}
+  });
+
+  document.getElementById('outletCardsGrid').innerHTML=names.map(n=>{
+    const t=tots[n]; const m=OUTLET_META[n];
+    const v=t.run_rev-t.init_rev;
+    const vBadge=t.init_rev?`<span class="kpi-badge ${v>=0?'pos':'neg'}">${v>=0?'▲':'▼'} ${Math.abs(((v/t.init_rev)*100)).toFixed(1)}%</span>`:'';
+    return `<div style="background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--card-shadow)">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
+        <div style="width:4px;height:32px;border-radius:2px;background:${m.color}"></div>
+        <span style="font-size:20px">${m.icon}</span>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700">${n}</div>${vBadge}</div>
+      </div>
+      <div style="padding:14px 18px">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:var(--text-muted)">Initial Fcst</span><strong>${t.init_rev?F.$full(t.init_rev):'—'}</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:var(--text-muted)">Running Fcst</span><strong>${t.run_rev?F.$full(t.run_rev):'—'}</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:var(--text-muted)">Init POR</span><strong>${t.blended_init_por?'$'+t.blended_init_por.toFixed(2):'—'}</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:var(--text-muted)">Run POR</span><strong>${t.blended_run_por?'$'+t.blended_run_por.toFixed(2):'—'}</strong></div>
+        ${t.init_cov?`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:var(--text-muted)">Monthly Covers</span><strong>${t.init_cov.toLocaleString()}</strong></div>`:''}
+        ${m.hasCovers&&t.init_rev?`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:var(--text-muted)">Avg Check</span><strong>$${(t.init_rev/(t.init_cov||1)).toFixed(2)}</strong></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─ STLY charts ─
+function buildSTLYCharts() {
+  const c=cd();
+  const names=Object.keys(OUTLET_META);
+  const dates=DAILY_OCC.map(d=>d.date.replace('Apr ',''));
+
+  if(CHARTS.stly) CHARTS.stly.destroy();
+  CHARTS.stly = new Chart(document.getElementById('stlyChart'),{
+    type:'line',
+    data:{labels:dates,datasets:[
+      {label:'TY Forecast (Apr 26)',data:DAILY_OCC.map(d=>d.rooms),borderColor:'#4f7dff',backgroundColor:'rgba(79,125,255,.08)',fill:true,borderWidth:2,tension:.4,pointRadius:2},
+      {label:'LY Actual (Apr 25)',  data:STLY_ROOMS.slice(0,30),  borderColor:'#f5a623',backgroundColor:'transparent',borderDash:[5,4],fill:false,borderWidth:2,tension:.4,pointRadius:2},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:12}},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()} rooms`}}},
+      scales:mkScales()}
+  });
+
+  if(CHARTS.stlyRev) CHARTS.stlyRev.destroy();
+  const tyRev=DAILY_OCC.map(d=>Math.round(ADJ_STATE["Lorem Kitchen"].find(r=>r.date===d.date).run_por*d.rooms));
+  const lyRev=STLY_ROOMS.slice(0,30).map(r=>Math.round(r*2.5));
+  CHARTS.stlyRev = new Chart(document.getElementById('stlyRevenueChart'),{
+    type:'bar',
+    data:{labels:dates,datasets:[
+      {label:'TY Running Fcst',data:tyRev,backgroundColor:'rgba(79,125,255,.7)',borderRadius:3,borderWidth:1,borderColor:'#4f7dff'},
+      {label:'LY Actual (est)',data:lyRev,backgroundColor:'rgba(245,166,35,.5)',borderRadius:3,borderWidth:1,borderColor:'#f5a623'},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:10}},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${F.$full(ctx.parsed.y)}`}}},
+      scales:mkScales({yCb:v=>F.$(v)})}
+  });
+
+  if(CHARTS.stlyOcc) CHARTS.stlyOcc.destroy();
+  CHARTS.stlyOcc = new Chart(document.getElementById('stlyOccChart'),{
+    type:'line',
+    data:{labels:dates,datasets:[
+      {label:'TY Occ %',data:DAILY_OCC.map(d=>d.occ),       borderColor:'#22d3a0',backgroundColor:'rgba(34,211,160,.08)',fill:true,borderWidth:2,tension:.4,pointRadius:2},
+      {label:'LY Occ %',data:STLY_ROOMS.slice(0,30).map(r=>+(r/1611*100).toFixed(1)),borderColor:'#a78bfa',backgroundColor:'transparent',borderDash:[5,4],fill:false,borderWidth:1.5,tension:.4,pointRadius:2},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:10}},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}},
+      scales:mkScales({yCb:v=>v+'%',y:{min:0,max:100}})}
+  });
+}
+
+function rebuildAllCharts() {
+  buildDashboardCharts();
+  buildOccupancyCharts();
+  buildForecastCharts();
+  buildOutletCharts();
+  buildSTLYCharts();
+  if (CUR_OUTLET) renderAdjTable(CUR_OUTLET);
+}
+
+// ═══════════════════════════════════════════════════════
+// ADJUSTMENTS PAGE
+// ═══════════════════════════════════════════════════════
+// Outlets excluded from the Adjustments page tabs
+const ADJ_EXCLUDED = new Set(['Elit Events']);
+const ADJ_OUTLETS  = Object.keys(OUTLET_META).filter(n => !ADJ_EXCLUDED.has(n));
+let CUR_OUTLET = ADJ_OUTLETS[0];
+
+function buildAdjPage() {
+  const bar = document.getElementById('adjOutletBar');
+  bar.innerHTML = ADJ_OUTLETS.map(name => {
+    const meta = OUTLET_META[name];
+    return `<button class="adj-outlet-tab${name===CUR_OUTLET?' active':''}" onclick="selectAdjOutlet('${name.replace(/'/g,"\\'")}')">
+      <span class="dot" style="background:${meta.color}"></span>${meta.icon} ${name}
+    </button>`;
+  }).join('');
+  renderAdjTable(CUR_OUTLET);
+}
+
+function selectAdjOutlet(name) {
+  CUR_OUTLET = name;
+  document.querySelectorAll('.adj-outlet-tab').forEach((b,i)=>{
+    b.classList.toggle('active', ADJ_OUTLETS[i]===name);
+  });
+  renderAdjTable(name);
+}
+
+function renderAdjTable(outletName) {
+  const days = ADJ_STATE[outletName];
+  const base  = ADJ_BASE[outletName];
+  const meta  = OUTLET_META[outletName];
+  const totalRooms = days.reduce((s,d)=>s+d.rooms,0);
+
+  // Update bulk input values with current weighted averages / capture ratios
+  const totalRunRms = days.reduce((s,d)=>s+(d.run_rooms!=null?d.run_rooms:d.rooms),0);
+  const curInitPOR = days.reduce((s,d)=>s+d.init_por*d.rooms,0)/totalRooms;
+  const curRunPOR  = days.reduce((s,d)=>s+d.run_por*(d.run_rooms!=null?d.run_rooms:d.rooms),0)/totalRunRms;
+  const curInitCov = days.reduce((s,d)=>s+(d.init_covers||0),0);
+  const curRunCov  = days.reduce((s,d)=>s+(d.run_covers||0),0);
+  // Capture ratio = weighted monthly covers / weighted monthly rooms (as %)
+  const curInitCap = totalRooms > 0 && meta.hasCovers ? +(curInitCov/totalRooms*100).toFixed(2) : '';
+  const curRunCap  = totalRunRms> 0 && meta.hasCovers ? +(curRunCov/totalRunRms*100).toFixed(2) : '';
+  document.getElementById('adjInitPorInput').value    = curInitPOR.toFixed(2);
+  document.getElementById('adjRunPorInput').value     = curRunPOR.toFixed(2);
+  document.getElementById('adjInitCoversInput').value = meta.hasCovers ? curInitCap : '';
+  document.getElementById('adjRunCoversInput').value  = meta.hasCovers ? curRunCap  : '';
+
+  // Covers note — show baseline capture ratio and current total covers
+  const coversNote = meta.hasCovers
+    ? `👥 Baseline: ${(meta.base_cap*100).toFixed(1)}% capture. Current: Init ${curInitCov.toLocaleString()} covers (${curInitCap}%) · Run ${curRunCov.toLocaleString()} covers (${curRunCap}%). Enter a capture % and click Set % to redistribute across all days.`
+    : `ℹ️ ${outletName} does not track seat covers — only POR revenue adjustments apply.`;
+  document.getElementById('coversNote').textContent = coversNote;
+
+  // Adjust table title
+  document.getElementById('adjTableTitle').innerHTML =
+    `<span class="outlet-dot" style="background:${meta.color}"></span>${outletName} — Day-by-Day Detail`;
+
+  // Build table rows
+  let totInitRev=0,totRunRev=0,totInitCov=0,totRunCov=0,modCount=0;
+  const tbody = document.getElementById('adjTableBody');
+  // Escape apostrophes so inline JS handlers aren't broken by outlet names with apostrophes
+  const safeOutlet = outletName.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+  const rows = days.map((d,i) => {
+    const b = base[i];
+    const rr      = d.run_rooms != null ? d.run_rooms : d.rooms;  // running-forecast room count
+    const initRev = Math.round(d.init_por * d.rooms);
+    const runRev  = Math.round(d.run_por  * rr);
+    const initCap = d.rooms > 0 && d.init_covers != null ? (d.init_covers/d.rooms*100).toFixed(1)+'%' : '—';
+    const runCap  = rr > 0 && d.run_covers  != null ? (d.run_covers/rr*100).toFixed(1)+'%'  : '—';
+    const initChk = d.init_covers > 0 ? '$'+(initRev/d.init_covers).toFixed(2) : '—';
+    const runChk  = d.run_covers  > 0 ? '$'+(runRev/d.run_covers).toFixed(2)   : '—';
+
+    // Use _mod flags as source of truth; fall back to value-diff for cell-level edits
+    const iPmod  = d.init_por_mod      || Math.abs(d.init_por - b.init_por) > 0.001;
+    const rPmod  = d.run_por_mod       || Math.abs(d.run_por  - b.run_por)  > 0.001;
+    const iCmod  = d.init_covers_mod   || d.init_covers !== b.init_covers;
+    const rCmod  = d.run_covers_mod    || d.run_covers  !== b.run_covers;
+    if (iPmod||rPmod||iCmod||rCmod) modCount++;
+
+    totInitRev += initRev; totRunRev += runRev;
+    if (d.init_covers != null) totInitCov += d.init_covers;
+    if (d.run_covers  != null) totRunCov  += d.run_covers;
+
+    // Cap-ratio % input (editable) + covers count display (read-only)
+    const capInput = (type, isMod) => {
+      if (!meta.hasCovers) return `<span style="color:var(--text-dim)">—</span>`;
+      const rooms   = type==='run' && d.run_rooms!=null ? d.run_rooms : d.rooms;
+      const covers  = type==='init' ? d.init_covers : d.run_covers;
+      const capPct  = rooms > 0 && covers != null ? (covers/rooms*100).toFixed(1) : '';
+      return `<input class="editable-input covers-input${isMod?' modified':''}" type="number" min="0" max="200" step="0.1"
+           value="${capPct}" placeholder="—"
+           onchange="setCapRatio('${safeOutlet}',${i},'${type}',this.value)"
+           onfocus="this.select()" title="Capture ratio %; covers = rooms × %">`;
+    };
+    const covDisplay = (type) => {
+      if (!meta.hasCovers) return `<span style="color:var(--text-dim)">—</span>`;
+      const covers = type==='init' ? d.init_covers : d.run_covers;
+      return `<span style="font-size:12px">${covers!=null?covers.toLocaleString():'—'}</span>`;
+    };
+
+    const runRoomsLabel = d.run_rooms != null && d.run_rooms !== d.rooms
+      ? `<span style="font-size:10px;color:var(--accent)">▸ ${d.run_rooms.toLocaleString()}</span>` : '';
+    return `<tr>
+      <td>${d.date}</td>
+      <td class="hide-xs" style="color:var(--text-muted)">${d.dow}</td>
+      <td class="num">${d.rooms.toLocaleString()}${runRoomsLabel}</td>
+      <td>${d.event?`<span class="event-chip" title="${d.event}">${d.event}</span>`:'<span style="color:var(--text-dim)">—</span>'}</td>
+      <td class="num group-init">
+        <input class="editable-input${iPmod?' modified':''}" type="number" min="0" step="0.01" value="${d.init_por}"
+          onchange="setPOR('${safeOutlet}',${i},'init',this.value)" onfocus="this.select()">
+      </td>
+      <td class="num group-init">
+        <span style="font-size:12px;font-weight:600;${iPmod?'color:var(--amber)':''}">${F.$full(initRev)}</span>
+      </td>
+      <td class="num group-init">${capInput('init', iCmod)}</td>
+      <td class="num group-init" style="color:var(--text-muted);font-size:11px">${covDisplay('init')}</td>
+      <td class="num group-init" style="color:var(--text-muted);font-size:11px">${initChk}</td>
+      <td class="num group-run">
+        <input class="editable-input${rPmod?' modified':''}" type="number" min="0" step="0.01" value="${d.run_por}"
+          onchange="setPOR('${safeOutlet}',${i},'run',this.value)" onfocus="this.select()">
+      </td>
+      <td class="num group-run">
+        <span style="font-size:12px;font-weight:600;${rPmod?'color:var(--amber)':''}">${F.$full(runRev)}</span>
+      </td>
+      <td class="num group-run">${capInput('run', rCmod)}</td>
+      <td class="num group-run" style="color:var(--text-muted);font-size:11px">${covDisplay('run')}</td>
+      <td class="num group-run" style="color:var(--text-muted);font-size:11px">${runChk}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = rows.join('');
+
+  // Footer totals
+  const totalRunRooms = days.reduce((s,d)=>s+(d.run_rooms!=null?d.run_rooms:d.rooms),0);
+  const blendInitPOR = totalRooms ? totInitRev/totalRooms : 0;
+  const blendRunPOR  = totalRunRooms ? totRunRev/totalRunRooms : 0;
+  document.getElementById('ft-init-por').textContent = '$'+blendInitPOR.toFixed(2);
+  document.getElementById('ft-init-rev').textContent = F.$full(totInitRev);
+  document.getElementById('ft-init-cov').textContent = totInitCov ? totInitCov.toLocaleString() : '—';
+  document.getElementById('ft-init-cap').textContent = totInitCov && totalRooms ? (totInitCov/totalRooms*100).toFixed(1)+'%' : '—';
+  document.getElementById('ft-init-chk').textContent = totInitCov ? '$'+(totInitRev/totInitCov).toFixed(2) : '—';
+  document.getElementById('ft-run-por').textContent  = '$'+blendRunPOR.toFixed(2);
+  document.getElementById('ft-run-rev').textContent  = F.$full(totRunRev);
+  document.getElementById('ft-run-cov').textContent  = totRunCov ? totRunCov.toLocaleString() : '—';
+  document.getElementById('ft-run-cap').textContent  = totRunCov && totalRunRooms ? (totRunCov/totalRunRooms*100).toFixed(1)+'%' : '—';
+  document.getElementById('ft-run-chk').textContent  = totRunCov ? '$'+(totRunRev/totRunCov).toFixed(2) : '—';
+
+  // Impact bar
+  const baseInitRev = base.reduce((s,d)=>s+d.init_por*d.rooms,0);
+  const baseRunRev  = base.reduce((s,d)=>s+d.run_por*(d.run_rooms!=null?d.run_rooms:d.rooms),0);
+  document.getElementById('imp-init').textContent = F.$full(totInitRev);
+  document.getElementById('imp-run').textContent  = F.$full(totRunRev);
+
+  const di = totInitRev - baseInitRev;
+  const dr = totRunRev  - baseRunRev;
+  const diEl = document.getElementById('imp-delta-init');
+  const drEl = document.getElementById('imp-delta-run');
+  diEl.textContent = (di>=0?'+':'')+F.$full(di)+' ('+(di>=0?'+':'')+((di/baseInitRev)*100||0).toFixed(1)+'%)';
+  diEl.className = 'impact-value impact-delta '+(di>0?'pos':di<0?'neg':'neu');
+  drEl.textContent = (dr>=0?'+':'')+F.$full(dr)+' ('+(dr>=0?'+':'')+((dr/baseRunRev)*100||0).toFixed(1)+'%)';
+  drEl.className = 'impact-value impact-delta '+(dr>0?'pos':dr<0?'neg':'neu');
+  document.getElementById('imp-modified').textContent = modCount;
+
+  // Render meal-period breakdown for applicable outlets
+  renderMealTable(outletName);
+}
+
+// ─ Cell-level setters ─
+function setPOR(outlet, dayIdx, type, val) {
+  const v = parseFloat(val);
+  if (isNaN(v) || v < 0) return;
+  const field = type==='init' ? 'init_por' : 'run_por';
+  ADJ_STATE[outlet][dayIdx][field] = v;
+  ADJ_STATE[outlet][dayIdx][type==='init'?'init_por_mod':'run_por_mod'] = true;
+  refreshAfterEdit(outlet);
+}
+
+// Cell-level: user types a capture-ratio % → covers computed from rooms
+function setCapRatio(outlet, dayIdx, type, pct) {
+  const p = parseFloat(pct);
+  if (isNaN(p) || p < 0 || p > 200) return;
+  const d = ADJ_STATE[outlet][dayIdx];
+  const rooms = type==='run' && d.run_rooms!=null ? d.run_rooms : d.rooms;
+  const covers = Math.max(0, Math.round(rooms * p / 100));
+  const field    = type==='init' ? 'init_covers'     : 'run_covers';
+  const modField = type==='init' ? 'init_covers_mod' : 'run_covers_mod';
+  d[field]    = covers;
+  d[modField] = true;
+  refreshAfterEdit(outlet);
+}
+
+// ─ Bulk adjustments ─
+function adjPOR(type, pctDelta) {
+  const days = ADJ_STATE[CUR_OUTLET];
+  const field = type==='init' ? 'init_por' : 'run_por';
+  days.forEach(d => {
+    d[field] = +(d[field] * (1+pctDelta)).toFixed(2);
+    if (type==='init') d.init_por_mod = true; else d.run_por_mod = true;
+  });
+  refreshAfterEdit(CUR_OUTLET);
+  renderAdjTable(CUR_OUTLET);
+}
+
+function applyPORInput(type) {
+  const v = parseFloat(document.getElementById(type==='init'?'adjInitPorInput':'adjRunPorInput').value);
+  if (isNaN(v)||v<0) return;
+  const field = type==='init'?'init_por':'run_por';
+  const days = ADJ_STATE[CUR_OUTLET];
+  // Flat apply: set every day to exactly this POR value
+  days.forEach(d => {
+    d[field] = v;
+    if (type==='init') d.init_por_mod=true; else d.run_por_mod=true;
+  });
+  refreshAfterEdit(CUR_OUTLET);
+}
+
+function adjCovers(type, pctDelta) {
+  const days = ADJ_STATE[CUR_OUTLET];
+  const field    = type==='init'?'init_covers':'run_covers';
+  const modField = type==='init'?'init_covers_mod':'run_covers_mod';
+  days.forEach(d => {
+    if (d[field]!=null) { d[field]=Math.max(0,Math.round(d[field]*(1+pctDelta))); d[modField]=true; }
+  });
+  refreshAfterEdit(CUR_OUTLET);
+  renderAdjTable(CUR_OUTLET);
+}
+
+function applyCapRatioInput(type) {
+  // Read input as capture ratio percentage (e.g. 14.9 means 14.9% of rooms)
+  const v = parseFloat(document.getElementById(type==='init'?'adjInitCoversInput':'adjRunCoversInput').value);
+  if (isNaN(v) || v < 0 || v > 100) return;
+  const field = type==='init'?'init_covers':'run_covers';
+  const days = ADJ_STATE[CUR_OUTLET];
+  if (!OUTLET_META[CUR_OUTLET].hasCovers) return;
+  const cap = v / 100;
+  const roomFn = d => type==='run' && d.run_rooms!=null ? d.run_rooms : d.rooms;
+  const modField = type==='init'?'init_covers_mod':'run_covers_mod';
+  days.forEach(d => {
+    d[field] = Math.max(0, Math.round(roomFn(d) * cap));
+    d[modField] = true;
+  });
+  refreshAfterEdit(CUR_OUTLET);
+}
+
+// ─ Meal-period helpers ─
+// Re-aggregate meal sub-rows → parent day totals
+function syncMealAggregates(outlet, dayIdx) {
+  const d = ADJ_STATE[outlet][dayIdx];
+  if (!d.meals) return;
+  const rooms = d.rooms;
+  const rr    = d.run_rooms != null ? d.run_rooms : d.rooms;
+  // sum revenue contributions: POR * rooms, then divide back to blended POR
+  let initRevSum = 0, runRevSum = 0, initCovSum = 0, runCovSum = 0;
+  for (const m of d.meals) {
+    initRevSum += m.init_por * rooms;
+    runRevSum  += m.run_por  * rr;
+    if (m.init_covers != null) initCovSum += m.init_covers;
+    if (m.run_covers  != null) runCovSum  += m.run_covers;
+  }
+  d.init_por     = rooms > 0 ? +(initRevSum / rooms).toFixed(2) : 0;
+  d.run_por      = rr    > 0 ? +(runRevSum  / rr).toFixed(2)    : 0;
+  d.init_covers  = OUTLET_META[outlet].hasCovers ? initCovSum : null;
+  d.run_covers   = OUTLET_META[outlet].hasCovers ? runCovSum  : null;
+}
+
+// Bulk ±% levers for meal period POR (all days of active period)
+function adjMealPOR(outlet, mealIdx, type, pctDelta) {
+  const field    = type==='init' ? 'init_por'     : 'run_por';
+  const modField = type==='init' ? 'init_por_mod' : 'run_por_mod';
+  ADJ_STATE[outlet].forEach((d,i) => {
+    if (!d.meals || !d.meals[mealIdx]) return;
+    const m = d.meals[mealIdx];
+    m[field]    = +(m[field] * (1+pctDelta)).toFixed(2);
+    m[modField] = true;
+    d[type==='init'?'init_por_mod':'run_por_mod'] = true;
+    syncMealAggregates(outlet, i);
+  });
+  refreshAfterEdit(outlet);
+}
+
+// Bulk ±% levers for meal period covers cap ratio (all days)
+function adjMealCapRatio(outlet, mealIdx, type, pctDelta) {
+  const field    = type==='init' ? 'init_covers'     : 'run_covers';
+  const modField = type==='init' ? 'init_covers_mod' : 'run_covers_mod';
+  ADJ_STATE[outlet].forEach((d,i) => {
+    if (!d.meals || !d.meals[mealIdx]) return;
+    const m = d.meals[mealIdx];
+    if (m[field]!=null) {
+      m[field]    = Math.max(0, Math.round(m[field] * (1+pctDelta)));
+      m[modField] = true;
+      d[type==='init'?'init_covers_mod':'run_covers_mod'] = true;
+      syncMealAggregates(outlet, i);
+    }
+  });
+  refreshAfterEdit(outlet);
+}
+
+// Bulk set meal period POR (flat value across all days)
+function applyMealPORInput(outlet, mealIdx, type) {
+  const id = type==='init' ? 'mealPorInitInput' : 'mealPorRunInput';
+  const v  = parseFloat(document.getElementById(id).value);
+  if (isNaN(v) || v < 0) return;
+  const field    = type==='init' ? 'init_por'     : 'run_por';
+  const modField = type==='init' ? 'init_por_mod' : 'run_por_mod';
+  ADJ_STATE[outlet].forEach((d,i) => {
+    if (!d.meals || !d.meals[mealIdx]) return;
+    const m = d.meals[mealIdx];
+    m[field]    = v;
+    m[modField] = true;
+    d[type==='init'?'init_por_mod':'run_por_mod'] = true;
+    syncMealAggregates(outlet, i);
+  });
+  refreshAfterEdit(outlet);
+}
+
+// Bulk set meal period cap ratio (all days)
+function applyMealCapInput(outlet, mealIdx, type) {
+  const id = type==='init' ? 'mealCapInitInput' : 'mealCapRunInput';
+  const v  = parseFloat(document.getElementById(id).value);
+  if (isNaN(v) || v < 0 || v > 200) return;
+  const cap      = v / 100;
+  const field    = type==='init' ? 'init_covers'     : 'run_covers';
+  const modField = type==='init' ? 'init_covers_mod' : 'run_covers_mod';
+  ADJ_STATE[outlet].forEach((d,i) => {
+    if (!d.meals || !d.meals[mealIdx]) return;
+    const m     = d.meals[mealIdx];
+    const rooms = type==='run' && d.run_rooms!=null ? d.run_rooms : d.rooms;
+    m[field]    = Math.max(0, Math.round(rooms * cap));
+    m[modField] = true;
+    d[type==='init'?'init_covers_mod':'run_covers_mod'] = true;
+    syncMealAggregates(outlet, i);
+  });
+  refreshAfterEdit(outlet);
+}
+
+function setMealPOR(outlet, dayIdx, mealIdx, type, val) {
+  const v = parseFloat(val);
+  if (isNaN(v) || v < 0) return;
+  const m = ADJ_STATE[outlet][dayIdx].meals[mealIdx];
+  const field    = type==='init' ? 'init_por'     : 'run_por';
+  const modField = type==='init' ? 'init_por_mod' : 'run_por_mod';
+  m[field]    = v;
+  m[modField] = true;
+  // Mark parent as modified too
+  ADJ_STATE[outlet][dayIdx][type==='init'?'init_por_mod':'run_por_mod'] = true;
+  syncMealAggregates(outlet, dayIdx);
+  refreshAfterEdit(outlet);
+}
+
+function setMealCapRatio(outlet, dayIdx, mealIdx, type, pct) {
+  const p = parseFloat(pct);
+  if (isNaN(p) || p < 0 || p > 200) return;
+  const d = ADJ_STATE[outlet][dayIdx];
+  const m = d.meals[mealIdx];
+  const rooms    = type==='run' && d.run_rooms!=null ? d.run_rooms : d.rooms;
+  const covers   = Math.max(0, Math.round(rooms * p / 100));
+  const field    = type==='init' ? 'init_covers'     : 'run_covers';
+  const modField = type==='init' ? 'init_covers_mod' : 'run_covers_mod';
+  m[field]    = covers;
+  m[modField] = true;
+  d[type==='init'?'init_covers_mod':'run_covers_mod'] = true;
+  syncMealAggregates(outlet, dayIdx);
+  refreshAfterEdit(outlet);
+}
+
+function renderMealTable(outletName) {
+  const sec = document.getElementById('mealPeriodSection');
+  if (!sec) return;
+  const mpm = MEAL_PERIOD_META[outletName];
+  if (!mpm) { sec.innerHTML = ''; return; }
+
+  const meta = OUTLET_META[outletName];
+  const days = ADJ_STATE[outletName];
+  const safeO = outletName.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+  // Build tab bar for Breakfast / Lunch / Dinner
+  const MEAL_NAMES = mpm.map(m=>m.name);
+  let activeMeal = sec.dataset.activeMeal || MEAL_NAMES[0];
+  if (!MEAL_NAMES.includes(activeMeal)) activeMeal = MEAL_NAMES[0];
+  sec.dataset.activeMeal = activeMeal;
+  const mealIdx = MEAL_NAMES.indexOf(activeMeal);
+
+  const tabs = MEAL_NAMES.map((mn,mi)=>
+    `<button class="adj-outlet-tab${mn===activeMeal?' active':''}"
+       onclick="selectMealPeriod('${safeO}','${mn}')">${mn}</button>`
+  ).join('');
+
+  // Build rows for the active meal period
+  const baseRows = ADJ_BASE[outletName];
+  let rows = '';
+  for (let i=0; i<days.length; i++) {
+    const d = days[i];
+    if (!d.meals || !d.meals[mealIdx]) continue;
+    const m    = d.meals[mealIdx];
+    const bm   = baseRows[i] && baseRows[i].meals ? baseRows[i].meals[mealIdx] : null;
+    const rr   = d.run_rooms!=null ? d.run_rooms : d.rooms;
+    const iRev = Math.round(m.init_por * d.rooms);
+    const rRev = Math.round(m.run_por  * rr);
+    const iCap = d.rooms>0 && m.init_covers!=null ? (m.init_covers/d.rooms*100).toFixed(1) : '';
+    const rCap = rr>0    && m.run_covers !=null ? (m.run_covers /rr*100).toFixed(1)    : '';
+    const iChk = m.init_covers>0 ? '$'+(iRev/m.init_covers).toFixed(2) : '—';
+    const rChk = m.run_covers >0 ? '$'+(rRev/m.run_covers).toFixed(2)  : '—';
+
+    // Compare against stored baseline to avoid floating-point false positives
+    const iPmod = m.init_por_mod || (bm && Math.abs(m.init_por - bm.init_por) > 0.001);
+    const rPmod = m.run_por_mod  || (bm && Math.abs(m.run_por  - bm.run_por)  > 0.001);
+    const iCmod = m.init_covers_mod || (bm && m.init_covers !== bm.init_covers);
+    const rCmod = m.run_covers_mod  || (bm && m.run_covers  !== bm.run_covers);
+
+    // Always show cap% inputs in meal period view (even for outlets where hasCovers=false at outlet level)
+    const mkCapIn = (type, isMod) =>
+      `<input class="editable-input covers-input${isMod?' modified':''}" type="number" min="0" max="200" step="0.1"
+           value="${type==='init'?iCap:rCap}" placeholder="—"
+           onchange="setMealCapRatio('${safeO}',${i},${mealIdx},'${type}',this.value)"
+           onfocus="this.select()" title="Capture % for ${activeMeal}">`;
+    const mkCovDisp = (type) => {
+      const covers = type==='init' ? m.init_covers : m.run_covers;
+      return `<span style="font-size:12px">${covers!=null?covers.toLocaleString():'—'}</span>`;
+    };
+
+    rows += `<tr>
+      <td>${d.date}</td><td class="hide-xs" style="color:var(--text-muted)">${d.dow}</td>
+      <td class="num">${d.rooms.toLocaleString()}</td>
+      <td class="num group-init">
+        <input class="editable-input${iPmod?' modified':''}" type="number" min="0" step="0.01" value="${m.init_por}"
+          onchange="setMealPOR('${safeO}',${i},${mealIdx},'init',this.value)" onfocus="this.select()">
+      </td>
+      <td class="num group-init"><span style="font-size:12px;font-weight:600;${iPmod?'color:var(--amber)':''}">${F.$full(iRev)}</span></td>
+      <td class="num group-init">${mkCapIn('init',iCmod)}</td>
+      <td class="num group-init" style="color:var(--text-muted);font-size:11px">${mkCovDisp('init')}</td>
+      <td class="num group-init" style="color:var(--text-muted);font-size:11px">${iChk}</td>
+      <td class="num group-run">
+        <input class="editable-input${rPmod?' modified':''}" type="number" min="0" step="0.01" value="${m.run_por}"
+          onchange="setMealPOR('${safeO}',${i},${mealIdx},'run',this.value)" onfocus="this.select()">
+      </td>
+      <td class="num group-run"><span style="font-size:12px;font-weight:600;${rPmod?'color:var(--amber)':''}">${F.$full(rRev)}</span></td>
+      <td class="num group-run">${mkCapIn('run',rCmod)}</td>
+      <td class="num group-run" style="color:var(--text-muted);font-size:11px">${mkCovDisp('run')}</td>
+      <td class="num group-run" style="color:var(--text-muted);font-size:11px">${rChk}</td>
+    </tr>`;
+  }
+
+  sec.innerHTML = `
+    <div class="card" style="margin-top:16px">
+      <div class="card-header">
+        <div>
+          <div class="card-title">
+            <span class="outlet-dot" style="background:${meta.color}"></span>
+            ${outletName} — Meal Period Breakdown
+          </div>
+          <div class="card-subtitle">Breakfast / Lunch / Dinner detail · POR and Cap% per period</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="forecast-tag tag-initial">Initial</span>
+          <span class="forecast-tag tag-running">Running</span>
+        </div>
+      </div>
+      <div class="adj-outlet-bar" style="margin:0 0 12px 0">${tabs}</div>
+      <div class="adj-controls-grid" style="margin-bottom:12px">
+        <div class="adj-control-card">
+          <div class="adj-control-title">📐 POR — ${activeMeal} · All Days</div>
+          <div class="adj-row">
+            <span class="adj-row-label">Initial</span>
+            <button class="pct-btn neg-btn" onclick="adjMealPOR('${safeO}',${mealIdx},'init',-0.10)">-10%</button>
+            <button class="pct-btn neg-btn" onclick="adjMealPOR('${safeO}',${mealIdx},'init',-0.05)">-5%</button>
+            <input class="adj-input" type="number" id="mealPorInitInput" step="0.01" placeholder="$/room">
+            <button class="pct-btn" onclick="adjMealPOR('${safeO}',${mealIdx},'init',+0.05)">+5%</button>
+            <button class="pct-btn" onclick="adjMealPOR('${safeO}',${mealIdx},'init',+0.10)">+10%</button>
+            <button class="apply-btn" onclick="applyMealPORInput('${safeO}',${mealIdx},'init')">Set</button>
+          </div>
+          <div class="adj-row">
+            <span class="adj-row-label">Running</span>
+            <button class="pct-btn neg-btn" onclick="adjMealPOR('${safeO}',${mealIdx},'run',-0.10)">-10%</button>
+            <button class="pct-btn neg-btn" onclick="adjMealPOR('${safeO}',${mealIdx},'run',-0.05)">-5%</button>
+            <input class="adj-input" type="number" id="mealPorRunInput" step="0.01" placeholder="$/room">
+            <button class="pct-btn" onclick="adjMealPOR('${safeO}',${mealIdx},'run',+0.05)">+5%</button>
+            <button class="pct-btn" onclick="adjMealPOR('${safeO}',${mealIdx},'run',+0.10)">+10%</button>
+            <button class="apply-btn" onclick="applyMealPORInput('${safeO}',${mealIdx},'run')">Set</button>
+          </div>
+        </div>
+        <div class="adj-control-card">
+          <div class="adj-control-title">👥 Capture Ratio — ${activeMeal} · All Days</div>
+          <div class="adj-row">
+            <span class="adj-row-label">Initial</span>
+            <button class="pct-btn neg-btn" onclick="adjMealCapRatio('${safeO}',${mealIdx},'init',-0.10)">-10%</button>
+            <button class="pct-btn neg-btn" onclick="adjMealCapRatio('${safeO}',${mealIdx},'init',-0.05)">-5%</button>
+            <input class="adj-input" type="number" id="mealCapInitInput" step="0.1" min="0" max="200" placeholder="cap %">
+            <button class="pct-btn" onclick="adjMealCapRatio('${safeO}',${mealIdx},'init',+0.05)">+5%</button>
+            <button class="pct-btn" onclick="adjMealCapRatio('${safeO}',${mealIdx},'init',+0.10)">+10%</button>
+            <button class="apply-btn" onclick="applyMealCapInput('${safeO}',${mealIdx},'init')">Set %</button>
+          </div>
+          <div class="adj-row">
+            <span class="adj-row-label">Running</span>
+            <button class="pct-btn neg-btn" onclick="adjMealCapRatio('${safeO}',${mealIdx},'run',-0.10)">-10%</button>
+            <button class="pct-btn neg-btn" onclick="adjMealCapRatio('${safeO}',${mealIdx},'run',-0.05)">-5%</button>
+            <input class="adj-input" type="number" id="mealCapRunInput" step="0.1" min="0" max="200" placeholder="cap %">
+            <button class="pct-btn" onclick="adjMealCapRatio('${safeO}',${mealIdx},'run',+0.05)">+5%</button>
+            <button class="pct-btn" onclick="adjMealCapRatio('${safeO}',${mealIdx},'run',+0.10)">+10%</button>
+            <button class="apply-btn" onclick="applyMealCapInput('${safeO}',${mealIdx},'run')">Set %</button>
+          </div>
+        </div>
+      </div>
+      <div class="adj-table-wrap">
+        <table class="adj-table">
+          <thead><tr>
+            <th>Date</th><th class="hide-xs">DOW</th><th class="num">Rooms</th>
+            <th class="num group-init">Init POR</th>
+            <th class="num group-init">Init Rev</th>
+            <th class="num group-init">Init Cap%</th>
+            <th class="num group-init">Init Cov</th>
+            <th class="num group-init">Avg Chk</th>
+            <th class="num group-run">Run POR</th>
+            <th class="num group-run">Run Rev</th>
+            <th class="num group-run">Run Cap%</th>
+            <th class="num group-run">Run Cov</th>
+            <th class="num group-run">Avg Chk</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function selectMealPeriod(outletName, mealName) {
+  const sec = document.getElementById('mealPeriodSection');
+  if (sec) sec.dataset.activeMeal = mealName;
+  renderMealTable(outletName);
+}
+
+// ─ Reset ─
+function resetCurrentOutlet() {
+  ADJ_STATE[CUR_OUTLET] = ADJ_BASE[CUR_OUTLET].map(d => {
+    const copy = {...d};
+    if (d.meals) copy.meals = d.meals.map(m => ({...m}));
+    return copy;
+  });
+  refreshAfterEdit(CUR_OUTLET);
+  renderAdjTable(CUR_OUTLET);
+}
+
+function resetAllOutlets() {
+  initState();
+  refreshAfterEdit(CUR_OUTLET);
+  renderAdjTable(CUR_OUTLET);
+}
+
+// ─ Propagate changes to other pages ─
+function refreshAfterEdit(outlet) {
+  renderAdjTable(outlet);
+  buildDashboardCharts();
+  buildForecastCharts();
+  buildOutletCharts();
+  if (CHARTS.stlyRev) buildSTLYCharts();
+}
+
+// ═══════════════════════════════════════════════════════
+// TEMPLATE UPLOAD — THREE-ZONE HANDLERS
+// ═══════════════════════════════════════════════════════
+
+// ── Helper: Excel serial → {month, day, year} ──
+function xlDate(serial) {
+  if (!serial || isNaN(serial)) return null;
+  // Excel date serial (1=Jan 1 1900). Adjust for Excel leap-year bug (serial 60=Feb29,1900 never existed)
+  const d = new Date(Math.round((serial - 25569) * 86400 * 1000));
+  return { y: d.getUTCFullYear(), m: d.getUTCMonth()+1, d: d.getUTCDate() };
+}
+
+// ── Helper: format xlDate → 'Apr 1' style to match DAILY_OCC ──
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function xlDateStr(serial) {
+  const dt = xlDate(serial);
+  if (!dt) return null;
+  return `${MONTH_NAMES[dt.m-1]} ${dt.d}`;
+}
+
+// ── Helper: match a parsed day to DAILY_OCC index by date string ──
+function matchDay(dateStr) {
+  return DAILY_OCC.findIndex(d => d.date === dateStr);
+}
+
+// ── Helper: read all rows from a sheet ──
+function sheetRows(wb, sheetName) {
+  const ws = wb.Sheets[sheetName];
+  if (!ws) return null;
+  return XLSX.utils.sheet_to_json(ws, {header:1, defval:null, raw:true});
+}
+
+// ── Helper: scan rows for a label string, return row index ──
+function findRowByLabel(rows, patterns, startIdx=0, endIdx=null) {
+  const end = endIdx != null ? endIdx : rows.length;
+  for (let i = startIdx; i < end; i++) {
+    const r = rows[i];
+    const label = (r[0]||r[1]||'').toString().trim().toLowerCase();
+    if (patterns.some(p => label.includes(p))) return i;
+  }
+  return -1;
+}
+
+// ─────────────────────────────────────────────────────
+// PARSER 1 — Day by Day Template → Initial Forecast Occ
+// ─────────────────────────────────────────────────────
+function parseDayByDayTemplate(wb) {
+  // Try sheet named 'Forecast' first, else first sheet
+  const sn = wb.SheetNames.find(s=>s==='Forecast') || wb.SheetNames[0];
+  const rows = sheetRows(wb, sn);
+  if (!rows) return {error:'Sheet not found'};
+
+  // Find the date-header row: col[3] = 'Total' (or 'total') and col[4] is numeric (date serial)
+  let dateRowIdx = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const c3 = r[3] != null ? String(r[3]).trim().toLowerCase() : '';
+    if (c3 === 'total' && r[4] != null && !isNaN(Number(r[4]))) {
+      dateRowIdx = i; break;
+    }
+  }
+  if (dateRowIdx === -1) return {error:'Could not find date header row (expected col[3]=\'Total\')'};
+
+  const dateRow = rows[dateRowIdx];
+  // Collect all date columns (col 4 onward, non-null numerics)
+  const dateCols = [];
+  for (let c = 4; c < dateRow.length; c++) {
+    if (dateRow[c] != null && !isNaN(Number(dateRow[c])) && Number(dateRow[c]) > 40000) {
+      dateCols.push({col: c, dateStr: xlDateStr(Number(dateRow[c]))});
+    }
+  }
+  if (!dateCols.length) return {error:'No date columns found'};
+
+  // Scan rows below dateRowIdx for labeled data (up to 30 rows)
+  const scanEnd = Math.min(dateRowIdx + 35, rows.length);
+  const LABEL_ROWS = {
+    occ:      ['total occupancy', 'occupancy %', 'occ %'],
+    rooms:    ['total forecast', 'total rooms forecast'],
+    transient:['transient forecast', 'transient rn'],
+    group:    ['group forecast', 'group rn'],
+    event:    ['special event ty', 'special event'],
+  };
+  const dataRowIdxs = {};
+  for (let i = dateRowIdx+1; i < scanEnd; i++) {
+    const r = rows[i];
+    const label = String(r[0]||r[1]||'').trim().toLowerCase();
+    for (const [key, pats] of Object.entries(LABEL_ROWS)) {
+      if (!dataRowIdxs[key] && pats.some(p => label.includes(p))) {
+        dataRowIdxs[key] = i;
+      }
+    }
+  }
+
+  // Build per-day results
+  const days = [];
+  for (const {col, dateStr} of dateCols) {
+    if (!dateStr) continue;
+    const dayIdx = matchDay(dateStr);
+    if (dayIdx === -1) continue; // not in April 2026, skip
+    const get = key => {
+      const ri = dataRowIdxs[key];
+      return ri !== undefined ? (rows[ri][col] ?? null) : null;
+    };
+    days.push({
+      dateStr, dayIdx,
+      occ:      get('occ'),
+      rooms:    get('rooms'),
+      transient:get('transient'),
+      group:    get('group'),
+      event:    get('event') || '',
+    });
+  }
+
+  return {ok: true, days, rowsFound: Object.keys(dataRowIdxs), sheet: sn};
+}
+
+// ─────────────────────────────────────────────────────
+// PARSER 2 — Forecast Report Template → Running Occ
+// ─────────────────────────────────────────────────────
+function parseForecastReport(wb) {
+  const sn = wb.SheetNames.find(s=>s==='Forecast') || wb.SheetNames[0];
+  const rows = sheetRows(wb, sn);
+  if (!rows) return {error:'Sheet not found'};
+
+  // Find date row: col[1] = 'Date' (or 'date')
+  let dateRowIdx = -1;
+  for (let i = 0; i < Math.min(rows.length, 20); i++) {
+    const c1 = rows[i][1] != null ? String(rows[i][1]).trim().toLowerCase() : '';
+    if (c1 === 'date') { dateRowIdx = i; break; }
+  }
+  if (dateRowIdx === -1) return {error:'Could not find date row (expected col[1]=\'Date\')'};
+
+  const dateRow = rows[dateRowIdx];
+  // Date serials are in col 2 onward
+  const dateCols = [];
+  for (let c = 2; c < dateRow.length; c++) {
+    const v = dateRow[c];
+    if (v != null && !isNaN(Number(v)) && Number(v) > 40000) {
+      dateCols.push({col:c, dateStr: xlDateStr(Number(v))});
+    }
+  }
+  if (!dateCols.length) return {error:'No date columns found'};
+
+  // Scan all rows for key labels (search from dateRowIdx to end)
+  const LABEL_ROWS = {
+    occRooms:   ['total forecasted occupied rooms', 'forecasted occupied rooms'],
+    revRoomsRN: ['total forecasted revenue rooms rn', 'revenue rooms rn'],
+    adr:        ['adr'],
+    roomRev:    ['rev'],
+    occPct:     ['occupancy %', 'occupancy%', 'occ %'],
+    transientRN:['total forecasted transient rn', 'transient rn'],
+    transRev:   ['transient rev', 'transient revenue'],
+    groupRN:    ['total forecasted group rn', 'group rn'],
+    groupRev:   ['group rev', 'group revenue'],
+  };
+  const dataRowIdxs = {};
+  for (let i = dateRowIdx+1; i < Math.min(dateRowIdx+50, rows.length); i++) {
+    const r = rows[i];
+    const label = String(r[0]||r[1]||'').trim().toLowerCase();
+    for (const [key, pats] of Object.entries(LABEL_ROWS)) {
+      if (!dataRowIdxs[key] && pats.some(p => label.includes(p))) {
+        dataRowIdxs[key] = i;
+      }
+    }
+  }
+
+  const days = [];
+  for (const {col, dateStr} of dateCols) {
+    if (!dateStr) continue;
+    const dayIdx = matchDay(dateStr);
+    if (dayIdx === -1) continue;
+    const get = key => {
+      const ri = dataRowIdxs[key];
+      return ri !== undefined ? (rows[ri][col] ?? null) : null;
+    };
+    days.push({
+      dateStr, dayIdx,
+      rooms:      get('occRooms'),
+      adr:        get('adr'),
+      roomRev:    get('roomRev'),
+      occPct:     get('occPct'),
+      transientRN:get('transientRN'),
+      groupRN:    get('groupRN'),
+    });
+  }
+
+  return {ok:true, days, rowsFound: Object.keys(dataRowIdxs), sheet: sn};
+}
+
+// ─────────────────────────────────────────────────────
+// PARSER 3 — Property Level Report → Actuals & STLY
+// ─────────────────────────────────────────────────────
+function parsePropertyLevel(wb) {
+  // Find Page_3 sheet (detailed F&B breakdown by outlet)
+  const sn = wb.SheetNames.find(s => s === 'Page_3') ||
+             wb.SheetNames.find(s => /page.?3/i.test(s));
+  if (!sn) return {error:`Could not find Page_3 sheet. Available sheets: ${wb.SheetNames.join(', ')}`};
+  const rows = sheetRows(wb, sn);
+  if (!rows) return {error:'Sheet empty'};
+
+  // Find header row: where a cell contains 'MTD' or 'Today'
+  let headerRow = -1;
+  for (let i = 0; i < Math.min(rows.length, 20); i++) {
+    const rowStr = (rows[i]||[]).map(c=>String(c||'')).join(' ').toLowerCase();
+    if (rowStr.includes('mtd') || rowStr.includes('today')) { headerRow = i; break; }
+  }
+  // Determine column indices by header content
+  let colToday=1, colMTD=2, colLY=7; // defaults from analysis
+  if (headerRow !== -1) {
+    const hr = rows[headerRow];
+    hr.forEach((cell, ci) => {
+      const s = String(cell||'').trim().toLowerCase();
+      if (s === 'today' || s === 'actual') colToday = ci;
+      else if (s === 'mtd' || s === 'mtd actual') colMTD = ci;
+      else if (s.includes('ly') && s.includes('mtd')) colLY = ci;
+    });
+  }
+
+  // Outlet name matching
+  const OUTLET_KEY = [
+    {patterns:["Lorem Kitchen",'Lorem Kitchen','Lorem Kitchen'], name:"Lorem Kitchen"},
+    {patterns:['ipsum café'], name:'Ipsum Café'},
+    {patterns:["Dolor Lounge","Dolor Lounge",'Dolor Lounge'], name:"Dolor Lounge"},
+    {patterns:['amet room service'], name:'Amet Room Service'},
+    {patterns:["consectetur market","consectetur market",'consectetur'], name:"Consectetur Market"},
+    {patterns:['adipiscing bar','adipiscing bar'], name:'Adipiscing Bar'},
+    {patterns:['elit events','elit events'], name:'Elit Events'},
+  ];
+
+  function matchOutlet(label) {
+    const l = label.trim().toLowerCase();
+    for (const o of OUTLET_KEY) {
+      if (o.patterns.some(p => l.includes(p.toLowerCase()))) return o.name;
+    }
+    return null;
+  }
+
+  const revenue = {};   // outletName: {today, mtd, ly}
+  const covers  = {};   // outletName: {today, mtd, ly}
+
+  // Scan all rows — first occurrence of outlet label = revenue, second = covers
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const label = String(r[1]||r[0]||'').trim();
+    if (!label) continue;
+    const outletName = matchOutlet(label);
+    if (!outletName) continue;
+    const today = r[colToday] != null ? Number(r[colToday]) : null;
+    const mtd   = r[colMTD]   != null ? Number(r[colMTD])   : null;
+    const ly    = r[colLY]    != null ? Number(r[colLY])    : null;
+    if (!isNaN(today) || !isNaN(mtd) || !isNaN(ly)) {
+      if (!revenue[outletName]) {
+        revenue[outletName] = {today, mtd, ly};
+      } else if (!covers[outletName]) {
+        covers[outletName] = {today, mtd, ly};
+      }
+    }
+  }
+
+  // Also try Page_3 or DRR_Page_1 for rooms data (optional)
+  const loadedOutlets = Object.keys(revenue);
+  return {ok:true, revenue, covers, loadedOutlets, colMTD, colLY, sheet:sn};
+}
+
+// ─────────────────────────────────────────────────────
+// APPLY PARSED DATA TO STATE
+// ─────────────────────────────────────────────────────
+function applyDayByDay(parsed) {
+  // Update DAILY_OCC and re-init initial forecast for changed days
+  let changed = 0;
+  for (const d of parsed.days) {
+    if (d.dayIdx < 0 || d.dayIdx >= DAILY_OCC.length) continue;
+    const occ = DAILY_OCC[d.dayIdx];
+    if (d.rooms   != null && !isNaN(d.rooms))    { occ.rooms    = +d.rooms;    changed++; }
+    if (d.occ     != null && !isNaN(d.occ))       occ.occ      = +d.occ;
+    if (d.transient!= null && !isNaN(d.transient)) occ.transient= +d.transient;
+    if (d.group   != null && !isNaN(d.group))      occ.group    = +d.group;
+    if (d.event   != null && d.event !== '')        occ.event    = String(d.event);
+  }
+  if (changed > 0) {
+    // Rebuild baseline; preserve manual POR edits (init_por_mod/run_por_mod flags)
+    for (const [name, meta] of Object.entries(OUTLET_META)) {
+      const cur     = ADJ_STATE[name];
+      const newBase = DAILY_OCC.map(d => buildPerDayRow(name, meta, d));
+      ADJ_BASE[name] = newBase;
+      ADJ_STATE[name] = DAILY_OCC.map((d, i) => {
+        const nb = newBase[i];
+        const cb = cur[i];
+        // Preserve manual POR overrides
+        if (cb.init_por_mod)      nb.init_por      = cb.init_por;
+        if (cb.run_por_mod)       nb.run_por       = cb.run_por;
+        if (cb.init_covers_mod)   nb.init_covers   = cb.init_covers;
+        if (cb.run_covers_mod)    nb.run_covers    = cb.run_covers;
+        nb.init_por_mod      = cb.init_por_mod;
+        nb.run_por_mod       = cb.run_por_mod;
+        nb.init_covers_mod   = cb.init_covers_mod;
+        nb.run_covers_mod    = cb.run_covers_mod;
+        // Deep-copy meals if present
+        if (cb.meals) nb.meals = cb.meals.map(m => ({...m}));
+        return nb;
+      });
+    }
+  }
+  return changed;
+}
+
+function applyForecastReport(parsed) {
+  // Store run_rooms per day in ADJ_STATE (all outlets share same occupancy)
+  let changed = 0;
+  for (const d of parsed.days) {
+    if (d.dayIdx < 0 || d.dayIdx >= DAILY_OCC.length) continue;
+    if (d.rooms != null && !isNaN(d.rooms) && d.rooms > 0) {
+      for (const name of Object.keys(OUTLET_META)) {
+        ADJ_STATE[name][d.dayIdx].run_rooms = +d.rooms;
+        ADJ_BASE[name][d.dayIdx].run_rooms  = +d.rooms;
+      }
+      // Also update DAILY_OCC occ/transient/group if present
+      if (d.occPct    != null) DAILY_OCC[d.dayIdx].occ       = +d.occPct;
+      if (d.transientRN!=null) DAILY_OCC[d.dayIdx].transient = +d.transientRN;
+      if (d.groupRN   != null) DAILY_OCC[d.dayIdx].group     = +d.groupRN;
+      changed++;
+    }
+  }
+  return changed;
+}
+
+function applyPropertyLevel(parsed) {
+  ACTUALS = {};
+  for (const name of Object.keys(OUTLET_META)) {
+    const rev = parsed.revenue[name] || {};
+    const cov = parsed.covers[name]  || {};
+    ACTUALS[name] = {
+      mtd_rev:    rev.mtd   || 0,
+      ly_rev:     rev.ly    || 0,
+      today_rev:  rev.today || 0,
+      mtd_covers: cov.mtd   || 0,
+      ly_covers:  cov.ly    || 0,
+      today_covers: cov.today || 0,
+    };
+  }
+}
+
+// ─────────────────────────────────────────────────────
+// ZONE FILE HANDLER (entry point)
+// ─────────────────────────────────────────────────────
+function handleZoneDrop(event, zone) {
+  event.preventDefault();
+  document.getElementById('zone-'+zone).classList.remove('dragover');
+  if (event.dataTransfer && event.dataTransfer.files[0]) {
+    handleZoneFile(event.dataTransfer.files[0], zone);
+  }
+}
+
+function handleZoneFile(file, zone) {
+  if (!file) return;
+  const dotEl  = document.getElementById('dot-'+zone);
+  const resEl  = document.getElementById('res-'+zone);
+  const zoneEl = document.getElementById('zone-'+zone);
+
+  dotEl.textContent = '⏳ Parsing…';
+  zoneEl.classList.remove('loaded');
+  resEl.style.display = 'none';
+
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const wb = XLSX.read(new Uint8Array(ev.target.result), {type:'array', cellDates:false});
+      let parsed, summary;
+
+      if (zone === 'dbd') {
+        parsed = parseDayByDayTemplate(wb);
+        if (parsed.error) throw new Error(parsed.error);
+        UPLOADED.dbd = parsed;
+        const n = applyDayByDay(parsed);
+        summary = `<strong style="color:var(--green)">✅ Initial Forecast updated</strong><br>
+          File: <em>${file.name}</em><br>
+          Sheet: ${parsed.sheet}<br>
+          Days matched: ${parsed.days.length} / ${DAILY_OCC.length}<br>
+          Data rows found: ${parsed.rowsFound.join(', ')}`;
+        dotEl.textContent = `✅ ${parsed.days.length} days loaded`;
+
+      } else if (zone === 'frt') {
+        parsed = parseForecastReport(wb);
+        if (parsed.error) throw new Error(parsed.error);
+        UPLOADED.frt = parsed;
+        const n = applyForecastReport(parsed);
+        summary = `<strong style="color:var(--green)">✅ Running Forecast updated</strong><br>
+          File: <em>${file.name}</em><br>
+          Sheet: ${parsed.sheet}<br>
+          Days matched: ${parsed.days.length} / ${DAILY_OCC.length}<br>
+          Data rows found: ${parsed.rowsFound.join(', ')}`;
+        dotEl.textContent = `✅ ${parsed.days.length} days loaded`;
+
+      } else if (zone === 'plr') {
+        parsed = parsePropertyLevel(wb);
+        if (parsed.error) throw new Error(parsed.error);
+        UPLOADED.plr = parsed;
+        applyPropertyLevel(parsed);
+        summary = `<strong style="color:var(--green)">✅ Actuals & STLY loaded</strong><br>
+          File: <em>${file.name}</em><br>
+          Sheet: ${parsed.sheet}<br>
+          Outlets with data: ${parsed.loadedOutlets.join(', ')||'—'}`;
+        dotEl.textContent = `✅ ${parsed.loadedOutlets.length} outlets loaded`;
+      }
+
+      zoneEl.classList.add('loaded');
+      resEl.style.display = 'block';
+      resEl.innerHTML = summary;
+
+      // Refresh all charts
+      refreshAfterEdit(CUR_OUTLET);
+      updateUploadSummary();
+
+    } catch(err) {
+      dotEl.textContent = '❌ Error';
+      resEl.style.display = 'block';
+      resEl.innerHTML = `<strong style="color:var(--red)">❌ Parse error</strong><br>${err.message}<br>
+        <span style="color:var(--text-dim)">Check that you've selected the correct template file for this zone.</span>`;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ─── Update loaded data summary card ───
+function updateUploadSummary() {
+  const card = document.getElementById('upload-summary-card');
+  const content = document.getElementById('upload-summary-content');
+  const any = UPLOADED.dbd || UPLOADED.frt || UPLOADED.plr;
+  if (!any) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  const sections = [];
+
+  if (UPLOADED.dbd) {
+    const d = UPLOADED.dbd;
+    sections.push(`<div>
+      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">📅 Initial Forecast Occupancy</div>
+      ${d.days.slice(0,5).map(x=>`<div>${x.dateStr}: ${x.rooms??'—'} rooms (${x.occ??'—'}% occ)</div>`).join('')}
+      <div style="color:var(--text-dim);margin-top:4px">…${d.days.length} days total</div>
+    </div>`);
+  } else {
+    sections.push(`<div style="color:var(--text-dim)">📅 Day by Day — not loaded</div>`);
+  }
+
+  if (UPLOADED.frt) {
+    const d = UPLOADED.frt;
+    sections.push(`<div>
+      <div style="font-weight:700;color:var(--accent);margin-bottom:6px">📈 Running Forecast Occupancy</div>
+      ${d.days.slice(0,5).map(x=>`<div>${x.dateStr}: ${x.rooms??'—'} rooms (${x.adr?'ADR $'+x.adr.toFixed(0):''}) </div>`).join('')}
+      <div style="color:var(--text-dim);margin-top:4px">…${d.days.length} days total</div>
+    </div>`);
+  } else {
+    sections.push(`<div style="color:var(--text-dim)">📈 Forecast Report — not loaded</div>`);
+  }
+
+  if (UPLOADED.plr) {
+    const outlets = UPLOADED.plr.loadedOutlets;
+    sections.push(`<div>
+      <div style="font-weight:700;color:var(--green);margin-bottom:6px">🏨 Actuals & STLY</div>
+      ${outlets.map(n => {
+        const a = ACTUALS[n];
+        return `<div>${n}: MTD $${Math.round(a.mtd_rev).toLocaleString()} · LY $${Math.round(a.ly_rev).toLocaleString()}</div>`;
+      }).join('')}
+    </div>`);
+  } else {
+    sections.push(`<div style="color:var(--text-dim)">🏨 Property Level — not loaded</div>`);
+  }
+
+  content.innerHTML = sections.join('');
+}
+
+// ─── Reset all uploaded data ───
+function resetUploadedData() {
+  UPLOADED = {dbd:null, frt:null, plr:null};
+  ACTUALS = {};
+  ['dbd','frt','plr'].forEach(z => {
+    document.getElementById('dot-'+z).textContent = '⬜ Not loaded';
+    document.getElementById('res-'+z).style.display = 'none';
+    document.getElementById('zone-'+z).classList.remove('loaded');
+  });
+  document.getElementById('upload-summary-card').style.display = 'none';
+  // Reset state to original data
+  initState();
+  refreshAfterEdit(CUR_OUTLET);
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  buildDashboardCharts();
+  buildOccupancyCharts();
+  buildForecastCharts();
+  buildOutletCharts();
+  buildSTLYCharts();
+  buildAdjPage();
+});
+</script>
+</body>
+</html>
