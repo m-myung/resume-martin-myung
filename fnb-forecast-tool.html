@@ -346,7 +346,7 @@ input[type=file].zone-input{display:none}
       </div>
       <div class="kpi-card amber">
         <div class="kpi-label">Forecasted Occ. Rooms</div>
-        <div class="kpi-value">34,577</div>
+        <div class="kpi-value">11,125</div>
         <div class="kpi-sub">Pre-month forecast</div>
       </div>
       <div class="kpi-card purple">
@@ -387,12 +387,12 @@ input[type=file].zone-input{display:none}
         </div>
         <div class="kpi-card accent">
           <div class="kpi-label">Total Outlet Covers</div>
-          <div class="kpi-value lg" id="kpi-covers">35,679</div>
+          <div class="kpi-value lg" id="kpi-covers">—</div>
           <div class="kpi-sub">Forecast for month</div>
         </div>
         <div class="kpi-card purple">
           <div class="kpi-label">Adj. Occupancy</div>
-          <div class="kpi-value lg">67.1%</div>
+          <div class="kpi-value lg">74.2%</div>
           <div class="kpi-sub">After OOO removal</div>
         </div>
       </div>
@@ -422,9 +422,9 @@ input[type=file].zone-input{display:none}
     <div class="section-title">Occupancy &amp; Room Demand</div>
     <div class="section-sub">April 2026 · Day-by-day forecasted occupancy with event overlay</div>
     <div class="grid grid-4" style="margin-bottom:16px">
-      <div class="kpi-card accent"><div class="kpi-label">Total Forecast Rooms</div><div class="kpi-value">34,577</div><div class="kpi-sub">Pre-month forecast</div></div>
-      <div class="kpi-card green"><div class="kpi-label">21-Day Adj. Rooms</div><div class="kpi-value">15,040</div><div class="kpi-sub">Running forecast adj.</div></div>
-      <div class="kpi-card amber"><div class="kpi-label">Avg Daily Occ</div><div class="kpi-value">67.1%</div><div class="kpi-sub">Monthly average</div></div>
+      <div class="kpi-card accent"><div class="kpi-label">Total Forecast Rooms</div><div class="kpi-value">11,125</div><div class="kpi-sub">Pre-month forecast</div></div>
+      <div class="kpi-card green"><div class="kpi-label">21-Day Adj. Rooms</div><div class="kpi-value">8,020</div><div class="kpi-sub">Running forecast adj.</div></div>
+      <div class="kpi-card amber"><div class="kpi-label">Avg Daily Occ</div><div class="kpi-value">74.2%</div><div class="kpi-sub">Monthly average</div></div>
       <div class="kpi-card purple"><div class="kpi-label">Peak Day</div><div class="kpi-value">99.8%</div><div class="kpi-sub">Apr 4 (Sat)</div></div>
     </div>
     <div class="grid grid-2" style="margin-bottom:16px">
@@ -620,9 +620,9 @@ input[type=file].zone-input{display:none}
     <div class="section-title">Same Time Last Year</div>
     <div class="section-sub">April 2026 vs April 2025</div>
     <div class="grid grid-4" style="margin-bottom:16px">
-      <div class="kpi-card accent"><div class="kpi-label">TY Forecast Rooms</div><div class="kpi-value">34,577</div><div class="kpi-sub">April 2026</div></div>
-      <div class="kpi-card green"><div class="kpi-label">LY Occupied Rooms</div><div class="kpi-value">20,868</div><div class="kpi-sub">April 2025 actual</div></div>
-      <div class="kpi-card amber"><div class="kpi-label">Room Growth</div><div class="kpi-value" style="color:var(--green)">+65.7%</div><div class="kpi-sub">TY vs LY forecast</div></div>
+      <div class="kpi-card accent"><div class="kpi-label">TY Forecast Rooms</div><div class="kpi-value">11,125</div><div class="kpi-sub">April 2026</div></div>
+      <div class="kpi-card green"><div class="kpi-label">LY Occupied Rooms</div><div class="kpi-value">10,236</div><div class="kpi-sub">April 2025 actual</div></div>
+      <div class="kpi-card amber"><div class="kpi-label">Room Growth</div><div class="kpi-value" style="color:var(--green)">+8.7%</div><div class="kpi-sub">TY vs LY forecast</div></div>
       <div class="kpi-card purple"><div class="kpi-label">LY Total Revenue</div><div class="kpi-value">—</div><div class="kpi-sub">Est. from STLY data</div></div>
     </div>
     <div class="card" style="margin-bottom:16px"><div class="card-header"><div class="card-title">Daily Rooms — TY Forecast vs LY Actual</div></div><div class="chart-wrap" style="height:280px"><canvas id="stlyChart"></canvas></div></div>
@@ -1281,7 +1281,7 @@ function buildSTLYCharts() {
     type:'line',
     data:{labels:dates,datasets:[
       {label:'TY Occ %',data:DAILY_OCC.map(d=>d.occ),       borderColor:'#22d3a0',backgroundColor:'rgba(34,211,160,.08)',fill:true,borderWidth:2,tension:.4,pointRadius:2},
-      {label:'LY Occ %',data:STLY_ROOMS.slice(0,30).map(r=>+(r/1611*100).toFixed(1)),borderColor:'#a78bfa',backgroundColor:'transparent',borderDash:[5,4],fill:false,borderWidth:1.5,tension:.4,pointRadius:2},
+      {label:'LY Occ %',data:STLY_ROOMS.slice(0,30).map(r=>+(r/500*100).toFixed(1)),borderColor:'#a78bfa',backgroundColor:'transparent',borderDash:[5,4],fill:false,borderWidth:1.5,tension:.4,pointRadius:2},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:true,labels:{color:c.tm,boxWidth:10}},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}},
